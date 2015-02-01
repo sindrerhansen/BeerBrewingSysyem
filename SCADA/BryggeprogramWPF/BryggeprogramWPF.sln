@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryggeprogramWPF", "BryggeprogramWPF.csproj", "{F82C68AB-AF41-4998-BFF9-09B09B374BCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech4WPF", "..\Tech4WPF\Tech4WPF.csproj", "{8209D4ED-1090-40ED-BE46-1F450D184C1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F82C68AB-AF41-4998-BFF9-09B09B374BCD}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Win32.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

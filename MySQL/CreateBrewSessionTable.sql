@@ -1,0 +1,1 @@
+CREATE TABLE bryggelogg.b8_pale_ale LIKE bryggelogg.bryggtest; INSERT b8_pale_ale SELECT * FROM bryggelogg.bryggtest;

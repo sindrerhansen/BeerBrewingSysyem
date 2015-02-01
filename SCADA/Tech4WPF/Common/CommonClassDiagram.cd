@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Tech4WPF.TechUtils">
+    <Position X="7.75" Y="2.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="Tech4WPF.TechUtils.MathRoundingMode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\TechUtils.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAACAgAAAAAAABAA=</HashCode>
+      <FileName>Common\TechUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tech4WPF.Common.TryAngleChangeEventArgs">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Common\TryAngleChange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tech4WPF.Common.RoundScalePart">
+    <Position X="3.5" Y="5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>kAgECECAkAwACBAQBQgAEgIAIEkECJAgQREpgYAAARM=</HashCode>
+      <FileName>Common\RoundScalePart.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tech4WPF.Common.ScaleAngleConverter">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\ScaleAngleConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tech4WPF.Common.AbstractRotatePointer">
+    <Position X="0.5" Y="5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>EAJAAAAEAAAAAAAJAIAAAAABgAgAAAAAAEAgEAAAAAA=</HashCode>
+      <FileName>Common\AbstractRotatePointer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Tech4WPF.Common.IRoundScale">
+    <Position X="5.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAAEAACAgAQACAAAAAgAAAIAAAEAAIAgQBAIAIAAAAA=</HashCode>
+      <FileName>Common\IRoundScale.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Tech4WPF.Common.IRotatePointer">
+    <Position X="7.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAABAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Common\IRotatePointer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Delegate Name="Tech4WPF.Common.TryAngleChangeHandler">
+    <Position X="3" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAABAA=</HashCode>
+      <FileName>Common\TryAngleChange.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

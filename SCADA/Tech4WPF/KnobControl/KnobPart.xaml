@@ -1,0 +1,20 @@
+﻿<common:AbstractRotatePointer x:Class="Tech4WPF.KnobControl.KnobPart" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:common="clr-namespace:Tech4WPF.Common"
+             x:Name="knobPart"
+             mc:Ignorable="d">
+    <Viewbox >
+		<Grid Width="75" Height="75">
+			<Ellipse x:Name="ellipse" StrokeThickness="5"
+                     Stroke="{Binding ElementName=knobPart, Path=PointerStroke}"
+                     Fill="{Binding ElementName=knobPart, Path=PointerFill}" />
+			<Path x:Name="arrow" Data="M51.5,48.000013 L51.5,69.000675" Stretch="Fill" 
+                  Stroke="{Binding ElementName=knobPart, Path=PointerStroke}" 
+                  StrokeThickness="5" RenderTransformOrigin="0.429,1.48" Margin="34,0,34,50"/>
+            
+		</Grid>
+	</Viewbox>
+</common:AbstractRotatePointer>

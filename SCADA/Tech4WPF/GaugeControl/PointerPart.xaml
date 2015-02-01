@@ -1,0 +1,23 @@
+﻿<common:AbstractRotatePointer x:Class="Tech4WPF.GaugeControl.PointerPart" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Tech4WPF.GaugeControl"
+             xmlns:common="clr-namespace:Tech4WPF.Common"
+             mc:Ignorable="d" 
+             x:Name="pointerPart"
+             d:DesignHeight="60" d:DesignWidth="10" RenderTransformOrigin="0.5,0.833">
+    <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+		<Grid Height="60" Width="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Path x:Name="arrow" Data="M149.5,-0.5 L-0.5,299.5 149.5,274.5 299.5,299.5 z" 
+                  Fill="{Binding ElementName=pointerPart, Path=PointerFill}" 
+                  Stroke="{Binding ElementName=pointerPart, Path=PointerStroke}"
+                  Stretch="Fill" RenderTransformOrigin="0.5,0.833"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Ellipse x:Name="circle" Height="4" Margin="3,0,3,8" VerticalAlignment="Bottom"
+                     Fill="{Binding ElementName=pointerPart, Path=PointerFill}" 
+                     Stroke="{Binding ElementName=pointerPart, Path=PointerStroke}"/>
+        </Grid>
+	</Viewbox>
+</common:AbstractRotatePointer>
