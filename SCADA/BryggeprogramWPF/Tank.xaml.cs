@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,28 @@ namespace BryggeprogramWPF
                 }
 	        }
         }
+
+        private void TextActuelTemp_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double actTemp, setTemp;
+            double.TryParse(TextActuelTemp.Text, out actTemp);
+            double.TryParse(TextSetTemp.Text, out setTemp);
+            if (actTemp>(setTemp-0.2)&&actTemp<(setTemp+0.2))
+            {
+                indicatorOnSetpoint.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                indicatorOnSetpoint.Fill = new SolidColorBrush(Colors.LightGray);
+            }
+        }
+
+        private void GauageActTemp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+        }
+
+
 
     }
 }

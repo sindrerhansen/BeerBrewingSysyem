@@ -26,67 +26,75 @@
                     <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"  x:Name="textBoxError" HorizontalAlignment="Left" Height="121" Margin="10,256,0,0" TextWrapping="Wrap" Text="Error" VerticalAlignment="Top" Width="314"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Brewing" Margin="8,0,-22,-5">
+            <TabItem Header="Brewing" Margin="8,-1,-8,-4" HorizontalAlignment="Left" Width="81">
                 <Grid Background="#FFE5E5E5">
                     <Canvas x:Name="btnStoreSettings" Background="#FFF0F0F0" Width="314" Height="394" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
                         <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="Brewing Parameters" Canvas.Top="10" FontSize="14" FontWeight="Bold" Width="304" TextAlignment="Center"/>
                         <TextBox x:Name="TxtMashInTemp" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="36" Width="39"/>
                         <Label Content="Mash intemperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="34"/>
-                        <Label Content="Mash in volume" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="60" Canvas.Left="10"/>
-                        <TextBox x:Name="TxtMashInVolume" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="62" Width="39"/>
-                        <Label Content="Mash step1 temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="86"/>
-                        <TextBox x:Name="TxtMashStep1Temperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="88" Width="39"/>
-                        <Label Content="Mash step1 time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="112" Canvas.Left="10"/>
-                        <Label Content="Mash step2 temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="138" RenderTransformOrigin="0.653,2.885"/>
-                        <TextBox x:Name="TxtMashStep1Time" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="114" Width="39"/>
-                        <TextBox x:Name="TxtMashStep2Temperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="140" Width="39"/>
-                        <Label Content="Mash step2 time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="164" RenderTransformOrigin="0.653,2.885"/>
-                        <TextBox x:Name="TxtMashStep2Time" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="166" Width="39"/>
-                        <Label Content="Sparge Temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="190" RenderTransformOrigin="0.653,2.885"/>
-                        <TextBox x:Name="TxtSpargeTemperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="192" Width="39"/>
-                        <Label Content="Sparge Volume" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="216" RenderTransformOrigin="0.653,2.885"/>
-                        <TextBox x:Name="TxtSpargeVolume" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="218" Width="39"/>
+                        <Label Content="Mash in volume" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="92" Canvas.Left="10"/>
+                        <TextBox x:Name="TxtMashInVolume" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="94" Width="39"/>
+                        <Label Content="Mash step1 temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="115"/>
+                        <TextBox x:Name="TxtMashStep1Temperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="117" Width="39"/>
+                        <Label Content="Mash step1 time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="138" Canvas.Left="10"/>
+                        <Label Content="Mash step2 temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="164" RenderTransformOrigin="0.653,2.885"/>
+                        <TextBox x:Name="TxtMashStep1Time" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="140" Width="39"/>
+                        <TextBox x:Name="TxtMashStep2Temperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="166" Width="39"/>
+                        <Label Content="Mash step2 time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="190" RenderTransformOrigin="0.653,2.885"/>
+                        <TextBox x:Name="TxtMashStep2Time" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="192" Width="39"/>
+                        <Label Content="Sparge Temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="216" RenderTransformOrigin="0.653,2.885"/>
+                        <TextBox x:Name="TxtSpargeTemperature" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="218" Width="39"/>
+                        <Label Content="Sparge Volume" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="242" RenderTransformOrigin="0.653,2.885"/>
+                        <TextBox x:Name="TxtSpargeVolume" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="244" Width="39"/>
                         <Label Content="C" Canvas.Left="245" Canvas.Top="34"/>
-                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="60"/>
-                        <Label Content="C" Canvas.Left="245" Canvas.Top="86"/>
-                        <Label Content="C" Canvas.Left="245" Canvas.Top="138"/>
-                        <Label Content="C" Canvas.Left="245" Canvas.Top="190"/>
-                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="112"/>
-                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="164"/>
-                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="216"/>
-                        <Label Content="Boil Time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="242" RenderTransformOrigin="0.653,2.885"/>
-                        <TextBox x:Name="TxtBoilTime" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="244" Width="39"/>
+                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="92"/>
+                        <Label Content="C" Canvas.Left="245" Canvas.Top="115"/>
+                        <Label Content="C" Canvas.Left="245" Canvas.Top="164"/>
+                        <Label Content="C" Canvas.Left="245" Canvas.Top="216"/>
+                        <Label Content="Min" Canvas.Left="245" Canvas.Top="138"/>
+                        <Label Content="Min" Canvas.Left="245" Canvas.Top="190"/>
+                        <Label Content="Liter" Canvas.Left="245" Canvas.Top="242"/>
+                        <Label Content="Boil Time" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="268" RenderTransformOrigin="0.653,2.885"/>
+                        <TextBox x:Name="TxtBoilTime" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="270" Width="39"/>
                         <Button x:Name="btnPrepareSystem" Content="Prepare" Canvas.Left="114" Canvas.Top="364" Width="75"/>
                         <Button x:Name="btnStartBrewing" Content="Start Brewing" Canvas.Left="217" Canvas.Top="364" Width="87"/>
                         <Button x:Name="btnDownloadSettings" Content="Download" Canvas.Left="10" Canvas.Top="364" Width="75" Click="btnDownloadSettings_Click"/>
-                        <Button Content="Store settings" Canvas.Left="187" Canvas.Top="282" Width="75"/>
-                        <Button x:Name="btnGetSettings" Content="Get settings" Canvas.Left="187" Canvas.Top="307" Width="75"/>
+                        <Button x:Name="btnStoreSettings1" Content="Store settings" Canvas.Left="114" Canvas.Top="339" Width="75" Click="btnStoreSettings_Click"/>
+                        <Button x:Name="btnGetSettings" Content="Get settings" Canvas.Left="217" Canvas.Top="339" Width="75" Click="btnGetSettings_Click"/>
+                        <TextBox x:Name="TxtMashInHltTemp" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="201" Canvas.Top="59" Width="39"/>
+                        <Label Content="Mash in HLT Temperature" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="57"/>
+                        <Label Content="C" Canvas.Left="245" Canvas.Top="57"/>
+                        <Label Content="Min" Canvas.Left="245" Canvas.Top="268"/>
 
                     </Canvas>
                 </Grid>
             </TabItem>
         </TabControl>
         <Canvas x:Name="SystemParameters" HorizontalAlignment="Left" Height="447" Margin="914,10,0,0" VerticalAlignment="Top" Width="330" Background="#FFF0F0F0">
-            <TextBlock Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="10" Height="19" Width="196" FontSize="14" FontWeight="Bold" TextAlignment="Center"><Run Text="System Parameters"/><LineBreak/><Run/></TextBlock>
+            <TextBlock Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="5" Height="19" Width="149" FontSize="14" FontWeight="Bold" TextAlignment="Center"><Run Text="System Parameters"/><LineBreak/><Run/></TextBlock>
             <TextBox x:Name="SystemState" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="System State" Canvas.Top="50" Width="98" Background="#FFE6E6E6" IsReadOnly="True"/>
             <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="System State" Canvas.Top="34"/>
             <Ellipse x:Name="indConnected" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="42" Stroke="Black" VerticalAlignment="Top" Width="42" Canvas.Left="245" Canvas.Top="34"/>
-            <Button Content="Prepare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="10" Canvas.Top="98"/>
-            <Button Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="131" Canvas.Top="98"/>
+            <Button x:Name="btnPrepareBrewing" Content="Prepare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="10" Canvas.Top="98" Click="btnPrepareBrewing_Click"/>
+            <Button x:Name="btnStartBrewing1" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="131" Canvas.Top="98" Click="btnStartBrewing_Click"/>
             <Button Content="Pause" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="245" Canvas.Top="98">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
-                        
+
                     </Style>
                 </Button.Style>
             </Button>
-
-            <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="Message from system" Canvas.Top="133" Height="86" Width="310" Background="White"/>
-            <Button Content="Confirm" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="131" Canvas.Top="224"/>
+            <Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="131" Canvas.Top="166" Click="btnConfirm_Click"/>
+            <TextBox x:Name="txtProsesInfo" Height="176" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="261" Width="310"/>
+            <TextBox x:Name="txtTimer" Height="23" Canvas.Left="131" TextWrapping="Wrap" Canvas.Top="50" Width="100"/>
+            <ProgressBar x:Name="progressBar" Height="18" Canvas.Left="10" Canvas.Top="215" Width="310"/>
+            <TextBox x:Name="TxtMessageFromSystem" Height="38" Canvas.Left="10" TextWrapping="Wrap" Text="Message from system" IsReadOnly="True" Canvas.Top="123" Width="310" TextChanged="TxtMessageFromSystem_TextChanged" Background="White"/>
+            <TextBox x:Name="txtAmbientTemp" Height="23" Canvas.Left="269" TextWrapping="Wrap" Text="12" Canvas.Top="5" Width="51" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Canvas.Left="180" TextWrapping="Wrap" Canvas.Top="9" Height="19" Width="89" FontSize="12" FontWeight="Bold" Text="Ambient Temp"/>
         </Canvas>
         <local:Tank x:Name="MashTank" Margin="544,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <local:Tank x:Name="BoilTank" Margin="729,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <local:Tank x:Name="HLT" Margin="359,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="400"/>
+        <local:Tank x:Name="HLT" Margin="359,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="425"/>
         <TextBlock HorizontalAlignment="Left" Margin="359,19,0,0" TextWrapping="Wrap" Text="Hot Liquid Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="544,19,0,0" TextWrapping="Wrap" Text="Mesh Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>

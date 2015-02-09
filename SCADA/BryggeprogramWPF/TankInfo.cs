@@ -12,6 +12,7 @@ namespace BryggeprogramWPF
 
         public double TemperatureActual { get; set; }
         public double TemperatureSetpoint {get; set;}
+        public double Volume { get; set; }
         public double HeatingElementReturTemperature { get; set; }
         public bool HeatingElementOn{get; set;}
         public bool CirculationPumpRunning {get; set;}
@@ -20,10 +21,11 @@ namespace BryggeprogramWPF
 
         public TankInfo() { }
 
-        public TankInfo(double temperatureActual, double temperatureSetpoint, double heatingElementReturTemperature, bool heatingElementOn, bool circulationPumpRunning, bool transferPumpRunning, bool drainValveOpen)
+        public TankInfo(double temperatureActual, double temperatureSetpoint, double volume, double heatingElementReturTemperature, bool heatingElementOn, bool circulationPumpRunning, bool transferPumpRunning, bool drainValveOpen)
         {
             TemperatureActual = temperatureActual;
             TemperatureSetpoint = temperatureSetpoint;
+            Volume = volume;
             HeatingElementReturTemperature = heatingElementReturTemperature;
             HeatingElementOn = heatingElementOn;
             CirculationPumpRunning = circulationPumpRunning;
