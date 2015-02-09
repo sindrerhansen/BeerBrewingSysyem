@@ -4,48 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:GaugeControl="clr-namespace:Tech4WPF.GaugeControl;assembly=Tech4WPF" x:Class="BryggeprogramWPF.Tank" 
-             mc:Ignorable="d" Height="400" Width="180">
-    <Grid x:Name="Grid" HorizontalAlignment="Left" Height="390" VerticalAlignment="Top" Width="170" Background="#FFECECEC">
-        <TextBox x:Name="TextActuelTemp" HorizontalAlignment="Left" Height="23" Margin="99,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsReadOnly="True"   Background="#FFCFCFCF" TextAlignment="Right"/>
-        <TextBox x:Name="TextSetTemp" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsReadOnly="True" TextAlignment="Right"/>
+             mc:Ignorable="d" Height="425" Width="170">
+    <Grid x:Name="Grid" HorizontalAlignment="Left" Height="425" VerticalAlignment="Top" Width="170" Background="#FFECECEC">
+        <TextBox x:Name="TextActuelTemp" HorizontalAlignment="Left" Height="23" Margin="99,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" Background="#FFCFCFCF" TextAlignment="Right" TextChanged="TextActuelTemp_TextChanged" FontSize="16" FontWeight="Bold"/>
+        <TextBox x:Name="TextSetTemp" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" TextAlignment="Right" FontSize="16" FontWeight="Bold"/>
         <Label Content="Actual Temp" HorizontalAlignment="Left" Margin="90,5,0,0" VerticalAlignment="Top"/>
         <Label Content="Set Temp" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
-        <GaugeControl:GaugeControl x:Name="GauageActTemp" HorizontalAlignment="Left" Margin="0,59,0,0" VerticalAlignment="Top" Label="Temperature" MinorStep="1" Height="161" Width="166" Maximum="100" MajorStep="5"/>
+        <GaugeControl:GaugeControl x:Name="GauageActTemp" HorizontalAlignment="Left" Margin="0,59,0,0" VerticalAlignment="Top" Label="Temperature" MinorStep="1" Height="161" Width="166" Maximum="100" MajorStep="5" PropertyChanged="GauageActTemp_PropertyChanged"/>
         <Ellipse x:Name="indicatorOnSetpoint" Fill="LightGray" HorizontalAlignment="Left" Height="23" Margin="71,31,0,0" Stroke="Black" VerticalAlignment="Top" Width="23"/>
-        <Ellipse x:Name="indicatorHeatingElementOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="4,228,0,0" MouseRightButtonUp="indicatorHeatingElementOn_RightClick">
-            <Ellipse.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Ellipse.RenderTransform>
-        </Ellipse>
-        <Label x:Name="txtHeatingElementOn" Content="Heating Element On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="24,225,0,0" Background="Transparent"/>
-        <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="4,256,0,0">
-            <Ellipse.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Ellipse.RenderTransform>
-        </Ellipse>
-        <Label Content="Circulation Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="24,253,0,0"/>
-        <Ellipse x:Name="indicatorTransferPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="4,284,0,0">
-            <Ellipse.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Ellipse.RenderTransform>
-        </Ellipse>
-        <Label Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="24,281,0,0"/>
-        <ToggleButton x:Name="tglDrainValve" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="33" Margin="10,323,0,0">
+        <Grid Margin="4,264,22,135">
+            <Ellipse x:Name="indicatorHeatingElementOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseRightButtonUp="indicatorHeatingElementOn_RightClick">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Label x:Name="txtHeatingElementOn" Content="Heating Element On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,0,0,0" Background="Transparent"/>
+        </Grid>
+        <Grid Margin="4,318,22,77">
+            <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Label Content="Circulation Pump On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124"/>
+        </Grid>
+        <Grid Margin="4,348,22,47">
+            <Ellipse x:Name="indicatorTransferPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Label Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,0,0,0"/>
+        </Grid>
+        <ToggleButton x:Name="tglDrainValve" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="33" Margin="10,383,0,0">
             <ToggleButton.Style>
                 <Style TargetType="{x:Type ToggleButton}">
                     <Setter Property="Content" Value="Open Drain Valve"/>
@@ -59,5 +65,13 @@
                 </Style>
             </ToggleButton.Style>
         </ToggleButton>
+        <Canvas x:Name="canvTempAfterHeatingElement" Margin="4,295,9,107">
+            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="47" FontSize="16" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Temp after heater" VerticalAlignment="Top" Width="105" FontSize="12" Canvas.Left="52" Canvas.Top="8"/>
+        </Canvas>
+        <Canvas x:Name="canvTankVolume" Margin="4,220,9,182">
+            <TextBox x:Name="TxtTankVolume" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="47" FontSize="16" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tank volume (l)" VerticalAlignment="Top" Width="105" FontSize="12" Canvas.Left="52" Canvas.Top="8"/>
+        </Canvas>
     </Grid>
 </UserControl>
