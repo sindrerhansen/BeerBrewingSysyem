@@ -37,10 +37,6 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Sparrow.BulletGraph.Wpf.40">
       <HintPath>packages\Sparrow.BulletGraph.Wpf.13.1.0.118\lib\net40\Sparrow.BulletGraph.Wpf.40.dll</HintPath>
     </Reference>
@@ -76,8 +72,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BrewingData.cs" />
     <Compile Include="BrewingSettings.cs" />
+    <Compile Include="DialogResult.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="TankVM.cs" />
     <Page Include="MainWindow.xaml">

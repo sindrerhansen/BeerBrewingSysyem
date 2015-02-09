@@ -26,9 +26,7 @@ namespace BryggeprogramWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        BrewingData brewingData = new BrewingData();
-        
+      
         SerialPort mySerialPort = new SerialPort();
         TankInfo hotLiqureTank = new TankInfo();
         TankInfo mashTank = new TankInfo();
@@ -38,8 +36,6 @@ namespace BryggeprogramWPF
         TankVM HltVm = new TankVM();
 
         BrewingSettings brewingSettings = new BrewingSettings();
-        int systemState = 0;
-        double ambiantTemperature;
 
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
@@ -57,7 +53,8 @@ namespace BryggeprogramWPF
             DropDownBaudRate.Items.Add("9600");
             DropDownBaudRate.SelectedItem = "9600";
             DropDownComPorts.ItemsSource=SerialPort.GetPortNames();
-            btnConfirm.IsEnabled = false;
+
+ 
             
         }
 
@@ -85,11 +82,11 @@ namespace BryggeprogramWPF
         private void DataReceivedHandler(object sender,SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
-            if (mySerialPort.IsOpen)
-            {
-                string indata = sp.ReadLine();
-                Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
-            }         
+            string indata = sp.ReadLine();
+           
+            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+          
+           
         }
 
         private void WriteData(string text)
@@ -98,256 +95,24 @@ namespace BryggeprogramWPF
             text.Trim();
             string replacement = Regex.Replace(text, "\r", "");
             textBox.AppendText(replacement);
+          //  textBox.Text += replacement;
             textBox.ScrollToEnd();
             
             var textList = Regex.Split(replacement, "_");
             try
             {
-                foreach (var item in textList)
-                {
-                    if (item.StartsWith("STATE"))
-                    {
-                       
-                        int.TryParse(item.Remove(0, 5), out systemState);
-                        SystemState.Text = systemState.ToString();
-                    }
-                    else if (item.StartsWith("Messa"))
-                    {
-                        var message=item.Remove(0,5);
-                        TxtMessageFromSystem.Text= message;
-                    }
-
-                    else if (item.StartsWith("TimSp"))
-                    {
-                        int maxtTme;
-                        var message = item.Remove(0, 5);
-                        int.TryParse(message, out maxtTme);
-                        progressBar.Maximum = maxtTme;
-                    }
-
-                    else if (item.StartsWith("RemTi"))
-                    {
-                        int time;
-                        var message = item.Remove(0, 5);
-                        int.TryParse(message, out time);
-                        progressBar.Value = time;
-                        TimeSpan t = TimeSpan.FromSeconds(time);
-                        txtTimer.Text = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        t.Hours,
-                                        t.Minutes,
-                                        t.Seconds);
-                    }
-
-                    else if (item.StartsWith("AmbTe"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        ambiantTemperature = value;
-                        txtAmbientTemp.Text = value.ToString();
-                    }
-                                 
-                    else if (item.StartsWith("HltSp"))
-                    {
-                        double value;
-                        double.TryParse(item.Remove(0, 5).Replace(".",","), out value);
-                        hotLiqureTank.TemperatureSetpoint = value;
-                        HLT.TextSetTemp.Text = value.ToString();
-                        
-                    }
-                    else if (item.StartsWith("HltTe"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        hotLiqureTank.TemperatureActual = value;
-                        HLT.GauageActTemp.Value = value;
-                        HLT.TextActuelTemp.Text =value.ToString();
-                    }
-                    else if (item.StartsWith("HltE1"))
-                    {
-                        if (item.Remove(0,5).StartsWith("1"))
-                        {
-                            hotLiqureTank.HeatingElementOn = true;
-                            HLT.indicatorHeatingElementOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            hotLiqureTank.HeatingElementOn = false;
-                            HLT.indicatorHeatingElementOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("HltCp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            hotLiqureTank.CirculationPumpRunning = true;
-                            HLT.indicatorCirculationPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            hotLiqureTank.CirculationPumpRunning = false;
-                            HLT.indicatorCirculationPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("HltTp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            hotLiqureTank.TransferPumpRunning = true;
-                            HLT.indicatorTransferPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            hotLiqureTank.TransferPumpRunning = false;
-                            HLT.indicatorTransferPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("HltVo"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        hotLiqureTank.Volume = value;
-                        HLT.TxtTankVolume.Text = value.ToString();
-                    }
-
-                    else if (item.StartsWith("MatTe"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        mashTank.TemperatureActual = value;
-                        MashTank.GauageActTemp.Value = value;
-                        MashTank.TextActuelTemp.Text = value.ToString();
-                    }
-                    else if (item.StartsWith("MatSp"))
-                    {
-                        double value;
-                        double.TryParse(item.Remove(0, 5).Replace(".", ","), out value);
-                        mashTank.TemperatureSetpoint = value;
-                        MashTank.TextSetTemp.Text = value.ToString();
-
-                    }
-                    else if (item.StartsWith("MatE1"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            mashTank.HeatingElementOn = true;
-                            MashTank.indicatorHeatingElementOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            mashTank.HeatingElementOn = false;
-                            MashTank.indicatorHeatingElementOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("MatCp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            mashTank.CirculationPumpRunning = true;
-                            MashTank.indicatorCirculationPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            mashTank.CirculationPumpRunning = false;
-                            MashTank.indicatorCirculationPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("MatTp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            mashTank.TransferPumpRunning = true;
-                            MashTank.indicatorTransferPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            mashTank.TransferPumpRunning = false;
-                            MashTank.indicatorTransferPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("MatVo"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        mashTank.Volume = value;
-                        MashTank.TxtTankVolume.Text = value.ToString();
-                    }
-
-                    else if (item.StartsWith("BotTe"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        boilTank.TemperatureActual = value;
-                        BoilTank.GauageActTemp.Value = value;
-                        BoilTank.TextActuelTemp.Text = value.ToString();
-                    }
-                    else if (item.StartsWith("BotSp"))
-                    {
-                        double value;
-                        double.TryParse(item.Remove(0, 5).Replace(".", ","), out value);
-                        boilTank.TemperatureSetpoint = value;
-                        BoilTank.TextSetTemp.Text = value.ToString();
-
-                    }
-                    else if (item.StartsWith("BotE1"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            boilTank.HeatingElementOn = true;
-                            BoilTank.indicatorHeatingElementOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            boilTank.HeatingElementOn = false;
-                            BoilTank.indicatorHeatingElementOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("BotCp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            boilTank.CirculationPumpRunning = true;
-                            BoilTank.indicatorCirculationPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            boilTank.CirculationPumpRunning = false;
-                            BoilTank.indicatorCirculationPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("BotTp"))
-                    {
-                        if (item.Remove(0, 5).StartsWith("1"))
-                        {
-                            boilTank.TransferPumpRunning = true;
-                            BoilTank.indicatorTransferPumpOn.Fill = myRedBrush;
-                        }
-                        else
-                        {
-                            boilTank.TransferPumpRunning = false;
-                            BoilTank.indicatorTransferPumpOn.Fill = myGrayBrush;
-                        }
-                    }
-                    else if (item.StartsWith("BotVo"))
-                    {
-                        double value;
-                        var trimmed = item.Remove(0, 5).Replace(".", ",");
-                        double.TryParse(trimmed, out value);
-                        boilTank.Volume = value;
-                        BoilTank.TxtTankVolume.Text = value.ToString();
-                    }
-
-
-                }                
+                //  Value from the Arduino are in the order: 
+                //  [0] SequenseState, [1] TotaleVolumeAdded, [2] HLT TempActual, [3] HLT TempSetpoint, [4] HLT HeatingElementOn, [5] HLT CirculationPumpOn, [6] HLT TransferPumpOn, [7] HLT DrainValveOpen, [8] MeshTank TempActual, [9] MeshTank TempSetpoint, [10] MeshTank CirculationPumpOn, [11] MeshTank TransferPumpOn, [12] MeshTank DrainValveOpen, [13] BoilTank TempActual, [14] BoilTank TempSetpoint, [15] BoilTank CirculationPumpOn, [16] BoilTank TransferPumpOn, [17] BoilTank DrainValveOpen
+                
+                hotLiqureTank.TemperatureActual = Convert.ToDouble(textList[0], CultureInfo.InvariantCulture);
+                HLT.GauageActTemp.Value = hotLiqureTank.TemperatureActual;
+               
+                mashTank.TemperatureActual = Convert.ToDouble(textList[1], CultureInfo.InvariantCulture);
+                MashTank.GauageActTemp.Value = mashTank.TemperatureActual;
             }
 
             catch (Exception ex) {
-                textBoxError.Text = ex.ToString();
+                textBoxError.AppendText(ex.ToString());
             }
         }
 
@@ -356,12 +121,29 @@ namespace BryggeprogramWPF
             mySerialPort.WriteLine(textBoxSend.Text);
         }
 
+        private void ValveOpen(object sender, RoutedEventArgs e)
+        {
+         //   ValveShow.Fill = System.Windows.Media.Brushes.Green;
+            if (mySerialPort.IsOpen)
+            {
+                mySerialPort.WriteLine("start");
+            }
+        }
+
+        private void ValveClose(object sender, RoutedEventArgs e)
+        {
+         //   ValveShow.Fill = System.Windows.Media.Brushes.Gray;
+            if (mySerialPort.IsOpen)
+            {
+                mySerialPort.WriteLine("stop");
+            }
+        }
+
         private void btnDownloadSettings_Click(object sender, RoutedEventArgs e)
         {
             string sendString="";
 
             sendString += Functions.GenerateSendValue(TxtMashInTemp.Text,"MITe");
-            sendString += Functions.GenerateSendValue(TxtMashInHltTemp.Text, "MIHT");
             sendString += Functions.GenerateSendValue(TxtMashInVolume.Text, "MIVo");
             sendString += Functions.GenerateSendValue(TxtMashStep1Temperature.Text, "M1Te");
             sendString += Functions.GenerateSendValue(TxtMashStep1Time.Text, "M1Ti");
@@ -420,103 +202,6 @@ namespace BryggeprogramWPF
                     mySerialPort.Dispose();
                 }
                 
-            }
-        }
-
-        private void SetBrewingData(BrewingData data)
-        {
-            TxtMashInTemp.Text = data.MashInTemperature.ToString();
-            TxtMashInHltTemp.Text = data.MashInHltTemperature.ToString();
-            TxtMashInVolume.Text = data.MashInVolume.ToString();
-            TxtMashStep1Temperature.Text = data.MashStep1Temperature.ToString();
-            TxtMashStep1Time.Text = data.MashStep1Time.ToString();
-            TxtMashStep2Temperature.Text = data.MashStep2Temperature.ToString();
-            TxtMashStep2Time.Text = data.MashStep2Time.ToString();
-            TxtSpargeTemperature.Text = data.SpargeTemperature.ToString();
-            TxtSpargeVolume.Text = data.SpargeVolume.ToString();
-            TxtBoilTime.Text = data.BoilTime.ToString();
-        }
-
-        private void btnConfirm_Click(object sender, RoutedEventArgs e)
-        {
-            if (mySerialPort.IsOpen)
-            {
-                mySerialPort.WriteLine("CONFIRMED");
-            }
-            else { MessageBox.Show("No connection to arduino", "Connection info", MessageBoxButton.OK, MessageBoxImage.Exclamation); }
-        }
-
-        private void btnGetSettings_Click(object sender, RoutedEventArgs e)
-        {
-            var brewData = brewingData.ReadData();
-            SetBrewingData(brewData);
-        }
-
-        private void btnPrepareBrewing_Click(object sender, RoutedEventArgs e)
-        {
-            if (mySerialPort.IsOpen)
-            {
-                mySerialPort.WriteLine("CMD10");
-            }
-        }
-
-        private void btnStartBrewing_Click(object sender, RoutedEventArgs e)
-        {
-            if (mySerialPort.IsOpen)
-            {
-                mySerialPort.WriteLine("CMD20");
-            }
-        }
-
-        private void btnStoreSettings_Click(object sender, RoutedEventArgs e)
-        {
-            BrewingData brewingData = new BrewingData();
-            double dvalue;
-            int ivalue;
-            if (double.TryParse(TxtMashInHltTemp.Text.Replace(".", ","), out dvalue))
-            { brewingData.MashInHltTemperature = dvalue; }
-
-            if (double.TryParse(TxtMashInTemp.Text.Replace(".", ","), out dvalue))
-            { brewingData.MashInTemperature = dvalue; }
-
-            if (int.TryParse(TxtMashInVolume.Text.Replace(".", ","), out ivalue))
-            { brewingData.MashInVolume = ivalue; }
-
-            if (double.TryParse(TxtMashStep1Temperature.Text.Replace(".", ","), out dvalue))
-            { brewingData.MashStep1Temperature = dvalue; }
-
-            if (int.TryParse(TxtMashStep1Time.Text.Replace(".", ","), out ivalue))
-            { brewingData.MashStep1Time = ivalue; }
-
-            if (double.TryParse(TxtMashStep2Temperature.Text.Replace(".", ","), out dvalue))
-            { brewingData.MashStep2Temperature = dvalue; }
-
-            if (int.TryParse(TxtMashStep2Time.Text.Replace(".", ","), out ivalue))
-            { brewingData.MashStep2Time = ivalue; }
-
-            if (double.TryParse(TxtSpargeTemperature.Text.Replace(".", ","), out dvalue))
-            { brewingData.SpargeTemperature = dvalue; }
-
-            if (double.TryParse(TxtSpargeVolume.Text.Replace(".", ","), out dvalue))
-            { brewingData.SpargeVolume = dvalue; }
-
-            if (int.TryParse(TxtBoilTime.Text.Replace(".", ","), out ivalue))
-            { brewingData.BoilTime = ivalue; }
-
-            brewingData.SaveData(brewingData);
-        }
-
-        private void TxtMessageFromSystem_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TxtMessageFromSystem.Text!="")
-            {
-                TxtMessageFromSystem.Background = new SolidColorBrush(Colors.Yellow);
-                btnConfirm.IsEnabled = true;
-            }
-            else
-            {
-                btnConfirm.IsEnabled = false;
-                TxtMessageFromSystem.Background = new SolidColorBrush(Colors.White);
             }
         }
 

@@ -17,7 +17,7 @@ namespace BryggeprogramWPF
             var _string = inn.Replace(".", ",");
             if (double.TryParse(_string, out number))
             {
-                var _return = hedder+ number.ToString()+ systemDevider;
+                var _return = Convert.ToString(number / 10) +hedder+ systemDevider;
                 return _return;
             }
             else
