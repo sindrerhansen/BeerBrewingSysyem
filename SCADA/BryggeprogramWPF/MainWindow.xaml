@@ -22,7 +22,7 @@
                 <Grid Background="#FFE5E5E5" >
                     <TextBox x:Name="textBoxSend" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="321"/>
                     <Button x:Name="send" Content="Send" HorizontalAlignment="Left" Margin="256,54,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="send_Click"/>
-                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"  x:Name="textBox" HorizontalAlignment="Left" Height="121" Margin="10,96,0,0" TextWrapping="Wrap" Text="Data From Arduino" VerticalAlignment="Top" Width="314"/>
+                    <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"  x:Name="textBox" HorizontalAlignment="Left" Height="121" Margin="10,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="314"/>
                     <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto"  x:Name="textBoxError" HorizontalAlignment="Left" Height="121" Margin="10,256,0,0" TextWrapping="Wrap" Text="Error" VerticalAlignment="Top" Width="314"/>
                 </Grid>
             </TabItem>

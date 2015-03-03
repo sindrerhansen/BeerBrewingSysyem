@@ -72,6 +72,8 @@ bool messageConfirmd = false;
 String inputString = "";
 String sensorString = "";
 String sensorStringAll = "";
+static String systemDevider = "_";
+static String valueDevider = ":";
 boolean input_stringcomplete = false;
 boolean sensor_stringcomplete = false;
 String resivedItems[20];
@@ -86,7 +88,7 @@ bool oneTimeCase33 = true;
 
 void setup() {
 	Serial.begin(9600);
-	Serial.setTimeout(2000);
+//	Serial.setTimeout(10000);
 	Serial1.begin(38400);
 	
 	inputString.reserve(100);
@@ -144,7 +146,6 @@ void setup() {
 	pinMode(BoilTank.LevelOverHatingElementLevelPin, INPUT);
 	pinMode(BoilTank.LevelHighPin, INPUT);
 
-
 	timez = millis();
 
 	TemperatureSensors.begin();
@@ -198,7 +199,6 @@ void loop() {
 		inputString.trim();
 		int index = 0;
 		int deviderIndex = 0;
-		String systemDevider = "_";
 		
 		if (inputString.startsWith("CMD"))
 		{
@@ -235,6 +235,7 @@ void loop() {
 		}
 		else if (inputString.startsWith("SET"))
 		{
+			inputString.remove(0, 3);
 			for (unsigned int i = 0; i <= inputString.length(); i++)
 			{
 				if (inputString.substring(i, i + 1) == systemDevider)
@@ -247,23 +248,43 @@ void loop() {
 
 			}
 
-			for (int i = 0; i < 20; i++)
-			{
-				Serial.println(resivedItems[i]);
-			}
-			resivedItems[0].toFloat=MashInn.TemperatureSP;						//"MITe"
-			resivedItems[1].toFloat = MashInn.HltTemperatureSP;					//"MIHT"
-			resivedItems[2].toFloat = MashInn.AddVolumeSP;						//"MIVo"
-			resivedItems[3].toFloat = MashStep1.TemperatureSP;					//"M1Te"
-			resivedItems[4].toFloat = MashStep1.TimeMinutsSP;					//"M1Ti"
-			resivedItems[5].toFloat = MashStep2.TemperatureSP;					//"M2Te"
-			resivedItems[6].toFloat = MashStep2.TimeMinutsSP;					//"M2Ti"
-			resivedItems[7].toFloat = MashStep3.TemperatureSP;					//"M3Te"
-			resivedItems[8].toFloat = MashStep3.TimeMinutsSP;					//"M3Ti"
-			resivedItems[9].toFloat = Sparge.TemperatureSP;						//"SpTe"
+			//for (int i = 0; i < 12; i++)
+			//{
+			//	Serial.print(i);
+			//	Serial.print(":");
+			//	Serial.print(resivedItems[i]);
+			//	Serial.println("  ");
+			//}
+			MashInn.TemperatureSP = resivedItems[0].toFloat();					//"MITe"
+			MashInn.HltTemperatureSP = resivedItems[1].toFloat();				//"MIHT"
+			MashInn.AddVolumeSP = resivedItems[2].toFloat();					//"MIVo"
+			MashStep1.TemperatureSP = resivedItems[3].toFloat();				//"M1Te"
+			MashStep1.TimeMinutsSP = resivedItems[4].toFloat();					//"M1Ti"
+			MashStep2.TemperatureSP = resivedItems[5].toFloat();				//"M2Te"
+			MashStep2.TimeMinutsSP = resivedItems[6].toFloat();					//"M2Ti"
+			MashStep3.TemperatureSP = resivedItems[7].toFloat();				//"M3Te"
+			MashStep3.TimeMinutsSP = resivedItems[8].toFloat();					//"M3Ti"
+			Sparge.TemperatureSP = resivedItems[9].toFloat();					//"SpTe"
+			Sparge.AddVolumeSP = resivedItems[10].toFloat();					//"SpVo"
+			Boil.TimeMinutsSP = resivedItems[11].toFloat();						//"BoTi"
+
 			Sparge.HltTemperatureSP = Sparge.TemperatureSP;
-			resivedItems[10].toFloat = Sparge.AddVolumeSP;						//"SpVo"
-			resivedItems[11].toFloat = Boil.TimeMinutsSP;						//"BoTi"
+
+			sendMessage += "ConSe";
+			sendMessage += String(MashInn.TemperatureSP) + valueDevider;
+			sendMessage += String(MashInn.HltTemperatureSP) + valueDevider;
+			sendMessage += String(MashInn.AddVolumeSP) + valueDevider;
+			sendMessage += String(MashStep1.TemperatureSP) + valueDevider;
+			sendMessage += String(MashStep1.TimeMinutsSP) + valueDevider;
+			sendMessage += String(MashStep2.TemperatureSP) + valueDevider;
+			sendMessage += String(MashStep2.TimeMinutsSP) + valueDevider;
+			sendMessage += String(MashStep3.TemperatureSP) + valueDevider;
+			sendMessage += String(MashStep3.TimeMinutsSP) + valueDevider;
+			sendMessage += String(Sparge.TemperatureSP) + valueDevider;
+			sendMessage += String(Sparge.AddVolumeSP) + valueDevider;
+			sendMessage += String(Boil.TimeMinutsSP) + valueDevider;
+			sendMessage += systemDevider;
+			
 		}
 		inputString = "";                                                        //clear the string:
 		input_stringcomplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
@@ -290,17 +311,17 @@ void loop() {
 		sensor_stringcomplete = false;                                          //reset the flag used to tell if we have received a completed string from the Atlas Scientific product
 	}
 
-	//Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	//sendMessage += "HltTe" + String(Hlt.TemperatureTank) + "_";
-	//MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
-	//sendMessage += "MatTe" + String(MashTank.TemperatureTank) + "_";
-	//MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
-	//sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + "_";
-	//BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(3);
-	//sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + "_";
-	//ambientTemperature = TemperatureSensors.getTempCByIndex(4);
-	sendMessage += "AmbTe" + String(ambientTemperature) + "_";
-	sendMessage += "STATE" + String(state) + "_";
+	Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
+	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
+	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
+	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
+	MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
+	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
+	BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(3);
+	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
+	ambientTemperature = TemperatureSensors.getTempCByIndex(4);
+	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
+	sendMessage += "STATE" + String(state) + systemDevider;
 
 	switch (state)
 	{
@@ -366,7 +387,7 @@ void loop() {
 
 		if (oneTimeCase30)
 		{
-			sendMessage += "TimSp" + String(timeSpan) + "_";
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 		}
 		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
 		{
@@ -396,6 +417,12 @@ void loop() {
 		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		Hlt.CirculationPump = true;
+
+		if (oneTimeCase31)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		}
+
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
 			Hlt.HeatingElement1 = true;
@@ -419,8 +446,16 @@ void loop() {
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
+		timeSpan = MashStep3.TimeMinutsSP * 60;
+		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		Hlt.CirculationPump = true;
+
+		if (oneTimeCase32)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		}
+
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
 			Hlt.HeatingElement1 = true;
@@ -432,7 +467,7 @@ void loop() {
 			MashTank.HeatingElement1 = true;
 		}
 
-		if (elapsedTimeSeconds >= (MashStep3.TimeMinutsSP * 60))
+		if (remainingTime <= 0)
 		{
 			refTime = millis();
 			state = 33;
@@ -444,8 +479,16 @@ void loop() {
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
+		timeSpan = MashStep4.TimeMinutsSP * 60;
+		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		Hlt.CirculationPump = true;
+
+		if (oneTimeCase33)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		}
+
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
 			Hlt.HeatingElement1 = true;
@@ -457,7 +500,7 @@ void loop() {
 			MashTank.HeatingElement1 = true;
 		}
 
-		if (elapsedTimeSeconds >= (MashStep4.TimeMinutsSP * 60))
+		if (remainingTime <= 0)
 		{
 			refTime = millis();
 			state = 40;
@@ -467,6 +510,10 @@ void loop() {
 	case 40: // Sparge
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
+		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
+		timeSpan = Sparge.TimeMinutsSP * 60;
+		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
@@ -503,27 +550,27 @@ void loop() {
 		break;
 	}
 
-	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + "_";
-	sendMessage += "HltE1" + String(Hlt.HeatingElement1) + "_";
-	sendMessage += "HltCp" + String(Hlt.CirculationPump) + "_";
-	sendMessage += "HltTp" + String(Hlt.TransferPump) + "_";
+	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
+	sendMessage += "HltE1" + String(Hlt.HeatingElement1) + systemDevider;
+	sendMessage += "HltCp" + String(Hlt.CirculationPump) + systemDevider;
+	sendMessage += "HltTp" + String(Hlt.TransferPump) + systemDevider;
 
-	sendMessage += "MatSp" + String(MashTank.TemperatureTankSetPoint) + "_";
-	sendMessage += "MatE1" + String(MashTank.HeatingElement1) + "_";
-	sendMessage += "MatCp" + String(MashTank.CirculationPump) + "_";
-	sendMessage += "MatTp" + String(MashTank.TransferPump) + "_";
-	sendMessage += "MatVo" + String(MashTank.Volume) + "_";
+	sendMessage += "MatSp" + String(MashTank.TemperatureTankSetPoint) + systemDevider;
+	sendMessage += "MatE1" + String(MashTank.HeatingElement1) + systemDevider;
+	sendMessage += "MatCp" + String(MashTank.CirculationPump) + systemDevider;
+	sendMessage += "MatTp" + String(MashTank.TransferPump) + systemDevider;
+	sendMessage += "MatVo" + String(MashTank.Volume) + systemDevider;
 
-	sendMessage += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + "_";
-	sendMessage += "BotE1" + String(BoilTank.HeatingElement1) + "_";
-	sendMessage += "BotCp" + String(BoilTank.CirculationPump) + "_";
-	sendMessage += "BotTp" + String(BoilTank.TransferPump) + "_";
-	sendMessage += "BotVo" + String(BoilTank.Volume) + "_";
+	sendMessage += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
+	sendMessage += "BotE1" + String(BoilTank.HeatingElement1) + systemDevider;
+	sendMessage += "BotCp" + String(BoilTank.CirculationPump) + systemDevider;
+	sendMessage += "BotTp" + String(BoilTank.TransferPump) + systemDevider;
+	sendMessage += "BotVo" + String(BoilTank.Volume) + systemDevider;
 
-	sendMessage += "Timer" + String(elapsedTimeSeconds) + "_";
-	sendMessage += "RemTi" + String(remainingTime) + "_";
+	sendMessage += "Timer" + String(elapsedTimeSeconds) + systemDevider;
+	sendMessage += "RemTi" + String(remainingTime) + systemDevider;
 
-//	Serial.println(sendMessage);
+	Serial.println(sendMessage);
 	sendMessage = "";
 
 	digitalWrite(Hlt.CirculationPumpPin, Hlt.CirculationPump);

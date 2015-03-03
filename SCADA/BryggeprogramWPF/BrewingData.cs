@@ -10,20 +10,6 @@ namespace BryggeprogramWPF
     [Serializable]
     public class BrewingData
     {
-        //double mashInTemperature;
-        //int mashInVolume;
-        //double mashInHltTemperature;
-        //double mashStep1Temperature;
-        //int mashStep1Time;
-        //double mashStep2Temperature;
-        //int mashStep2Time;
-        //double mashStep3Temperature;
-        //int mashStep3Time;
-        //double mashStep4Temperature;
-        //int mashStep4Time;
-        //double spargeTemperature;
-        //int spargeVolume;
-        //int boilTime;
         
         public double MashInTemperature { get; set; }
         public int MashInVolume { get; set; }

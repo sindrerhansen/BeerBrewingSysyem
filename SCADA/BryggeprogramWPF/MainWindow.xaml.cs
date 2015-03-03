@@ -92,8 +92,17 @@ namespace BryggeprogramWPF
             SerialPort sp = (SerialPort)sender;
             if (mySerialPort.IsOpen)
             {
-                string indata = sp.ReadLine();
-                Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+                try
+                {
+                    string indata = sp.ReadLine();
+                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+               
             }         
         }
 
@@ -111,8 +120,7 @@ namespace BryggeprogramWPF
                 foreach (var item in textList)
                 {
                     if (item.StartsWith("STATE"))
-                    {
-                       
+                    {                     
                         int.TryParse(item.Remove(0, 5), out systemState);
                         SystemState.Text = systemState.ToString();
                     }
@@ -347,6 +355,18 @@ namespace BryggeprogramWPF
                         BoilTank.TxtTankVolume.Text = value.ToString();
                     }
 
+                    else if (item.StartsWith("ConSe"))
+                    {
+                        //var values = new List<string>();
+                        var ConSe = Regex.Split(item, ":");
+                        //for (int i = 0; i <= ConSe.Length; i++ )
+                        //{
+                        //    values[i] = ConSe[i];
+                        //}
+
+
+                    }
+
 
                 }                
             }
@@ -363,34 +383,32 @@ namespace BryggeprogramWPF
 
         private void btnDownloadSettings_Click(object sender, RoutedEventArgs e)
         {
-            string sendString1="";
-            string sendString2 = "";
+            string sendString="";
+            
 
-            sendString1 = "SET";
-            sendString1 += TxtMashInTemp.Text + "_";                //MITe
-            sendString1 += TxtMashInHltTemp.Text + "_";             //MIHT
-            sendString1 += TxtMashInVolume.Text + "_";              //MIVo
-            sendString1 += TxtMashStep1Temperature.Text + "_";      //M1Te
-            sendString1 += TxtMashStep1Time.Text + "_";             //M1Ti
-            sendString1 += TxtMashStep2Temperature.Text + "_";      //M2Te
-            sendString1 += TxtMashStep2Time.Text + "_";             //M2Ti
-            sendString1 += TxtMashStep3Temperature.Text + "_";      //M3Te
-            sendString1 += TxtMashStep3Time.Text + "_";             //M3Ti
-            sendString1 += TxtSpargeTemperature.Text + "_";         //SpTe
-            sendString1 += TxtSpargeVolume.Text + "_";              //SpVo
-            sendString1 += TxtBoilTime.Text + "_";                  //BoTi
+            sendString = "SET";
+            sendString += TxtMashInTemp.Text + "_";                //MITe
+            sendString += TxtMashInHltTemp.Text + "_";             //MIHT
+            sendString += TxtMashInVolume.Text + "_";              //MIVo
+            sendString += TxtMashStep1Temperature.Text + "_";      //M1Te
+            sendString += TxtMashStep1Time.Text + "_";             //M1Ti
+            sendString += TxtMashStep2Temperature.Text + "_";      //M2Te
+            sendString += TxtMashStep2Time.Text + "_";             //M2Ti
+            sendString += TxtMashStep3Temperature.Text + "_";      //M3Te
+            sendString += TxtMashStep3Time.Text + "_";             //M3Ti
+            sendString += TxtSpargeTemperature.Text + "_";         //SpTe
+            sendString += TxtSpargeVolume.Text + "_";              //SpVo
+            sendString += TxtBoilTime.Text + "_";                  //BoTi
 
             if (mySerialPort.IsOpen)
             {
-                mySerialPort.WriteLine(sendString1);
-   //             mySerialPort.WriteLine(sendString2);
-                
+                mySerialPort.WriteLine(sendString);      
             }
             else
             {
                 MessageBox.Show("Connect to Arduino before download");
             }
-            sendString1 = "";
+            sendString = "";
         }
 
 
@@ -398,14 +416,13 @@ namespace BryggeprogramWPF
         {
             try
             {
-                BoilTankVm.SetOn();
-                HltVm.SetOn();
                 mySerialPort.PortName = DropDownComPorts.SelectedItem.ToString();
                 mySerialPort.BaudRate = Convert.ToInt32(DropDownBaudRate.SelectedItem.ToString());
                 mySerialPort.Parity = Parity.None;
                 mySerialPort.StopBits = StopBits.One;
                 mySerialPort.DataBits = 8;
                 mySerialPort.Handshake = Handshake.None;
+ //               mySerialPort.WriteTimeout = 500;
                 mySerialPort.Open();
                 mySerialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
                 mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
