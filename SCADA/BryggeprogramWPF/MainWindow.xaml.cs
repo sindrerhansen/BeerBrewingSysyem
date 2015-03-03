@@ -63,13 +63,18 @@ namespace BryggeprogramWPF
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            
             if (mySerialPort.IsOpen)
             {
                 indConnected.Fill = myGreenBrush;
+                btnStartBrewing.IsEnabled = true;
+                btnPrepareBrewing.IsEnabled = true;
             }
             else
             {
                 indConnected.Fill = myGrayBrush;
+                btnStartBrewing.IsEnabled = false;
+                btnPrepareBrewing.IsEnabled = false;
             }
         }
         
@@ -358,29 +363,34 @@ namespace BryggeprogramWPF
 
         private void btnDownloadSettings_Click(object sender, RoutedEventArgs e)
         {
-            string sendString="";
+            string sendString1="";
+            string sendString2 = "";
 
-            sendString += Functions.GenerateSendValue(TxtMashInTemp.Text,"MITe");
-            sendString += Functions.GenerateSendValue(TxtMashInHltTemp.Text, "MIHT");
-            sendString += Functions.GenerateSendValue(TxtMashInVolume.Text, "MIVo");
-            sendString += Functions.GenerateSendValue(TxtMashStep1Temperature.Text, "M1Te");
-            sendString += Functions.GenerateSendValue(TxtMashStep1Time.Text, "M1Ti");
-            sendString += Functions.GenerateSendValue(TxtMashStep2Temperature.Text, "M2Te");
-            sendString += Functions.GenerateSendValue(TxtMashStep2Time.Text, "M2Ti");
-            sendString += Functions.GenerateSendValue(TxtSpargeTemperature.Text, "SpTe");
-            sendString += Functions.GenerateSendValue(TxtSpargeVolume.Text, "SpVo");
-            sendString += Functions.GenerateSendValue(TxtBoilTime.Text, "BoTi");
+            sendString1 = "SET";
+            sendString1 += TxtMashInTemp.Text + "_";                //MITe
+            sendString1 += TxtMashInHltTemp.Text + "_";             //MIHT
+            sendString1 += TxtMashInVolume.Text + "_";              //MIVo
+            sendString1 += TxtMashStep1Temperature.Text + "_";      //M1Te
+            sendString1 += TxtMashStep1Time.Text + "_";             //M1Ti
+            sendString1 += TxtMashStep2Temperature.Text + "_";      //M2Te
+            sendString1 += TxtMashStep2Time.Text + "_";             //M2Ti
+            sendString1 += TxtMashStep3Temperature.Text + "_";      //M3Te
+            sendString1 += TxtMashStep3Time.Text + "_";             //M3Ti
+            sendString1 += TxtSpargeTemperature.Text + "_";         //SpTe
+            sendString1 += TxtSpargeVolume.Text + "_";              //SpVo
+            sendString1 += TxtBoilTime.Text + "_";                  //BoTi
 
             if (mySerialPort.IsOpen)
             {
-                mySerialPort.WriteLine(sendString);
+                mySerialPort.WriteLine(sendString1);
+   //             mySerialPort.WriteLine(sendString2);
                 
             }
             else
             {
                 MessageBox.Show("Connect to Arduino before download");
             }
-            sendString = "";
+            sendString1 = "";
         }
 
 
@@ -425,16 +435,24 @@ namespace BryggeprogramWPF
 
         private void SetBrewingData(BrewingData data)
         {
-            TxtMashInTemp.Text = data.MashInTemperature.ToString();
-            TxtMashInHltTemp.Text = data.MashInHltTemperature.ToString();
-            TxtMashInVolume.Text = data.MashInVolume.ToString();
-            TxtMashStep1Temperature.Text = data.MashStep1Temperature.ToString();
-            TxtMashStep1Time.Text = data.MashStep1Time.ToString();
-            TxtMashStep2Temperature.Text = data.MashStep2Temperature.ToString();
-            TxtMashStep2Time.Text = data.MashStep2Time.ToString();
-            TxtSpargeTemperature.Text = data.SpargeTemperature.ToString();
-            TxtSpargeVolume.Text = data.SpargeVolume.ToString();
-            TxtBoilTime.Text = data.BoilTime.ToString();
+            try
+            {
+                TxtMashInTemp.Text = data.MashInTemperature.ToString();
+                TxtMashInHltTemp.Text = data.MashInHltTemperature.ToString();
+                TxtMashInVolume.Text = data.MashInVolume.ToString();
+                TxtMashStep1Temperature.Text = data.MashStep1Temperature.ToString();
+                TxtMashStep1Time.Text = data.MashStep1Time.ToString();
+                TxtMashStep2Temperature.Text = data.MashStep2Temperature.ToString();
+                TxtMashStep2Time.Text = data.MashStep2Time.ToString();
+                TxtMashStep3Temperature.Text = data.MashStep3Temperature.ToString();
+                TxtMashStep3Time.Text = data.MashStep3Time.ToString();
+                TxtSpargeTemperature.Text = data.SpargeTemperature.ToString();
+                TxtSpargeVolume.Text = data.SpargeVolume.ToString();
+                TxtBoilTime.Text = data.BoilTime.ToString();
+            }
+            catch
+            {}
+
         }
 
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
@@ -494,6 +512,12 @@ namespace BryggeprogramWPF
             if (int.TryParse(TxtMashStep2Time.Text.Replace(".", ","), out ivalue))
             { brewingData.MashStep2Time = ivalue; }
 
+            if (double.TryParse(TxtMashStep3Temperature.Text.Replace(".", ","), out dvalue))
+            { brewingData.MashStep3Temperature = dvalue; }
+
+            if (int.TryParse(TxtMashStep3Time.Text.Replace(".", ","), out ivalue))
+            { brewingData.MashStep3Time = ivalue; }
+
             if (double.TryParse(TxtSpargeTemperature.Text.Replace(".", ","), out dvalue))
             { brewingData.SpargeTemperature = dvalue; }
 
@@ -517,6 +541,15 @@ namespace BryggeprogramWPF
             {
                 btnConfirm.IsEnabled = false;
                 TxtMessageFromSystem.Background = new SolidColorBrush(Colors.White);
+            }
+        }
+
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (mySerialPort.IsOpen)
+            {
+                mySerialPort.WriteLine("CMD0");
             }
         }
 

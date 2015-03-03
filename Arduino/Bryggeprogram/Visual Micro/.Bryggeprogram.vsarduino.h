@@ -17,7 +17,7 @@
 #define __avr__
 #define F_CPU 16000000L
 #define __cplusplus
-#define GCC_VERSION 40301
+#define GCC_VERSION 40801
 #define ARDUINO_ARCH_AVR
 #define ARDUINO_AVR_MEGA2560
 #define __inline__

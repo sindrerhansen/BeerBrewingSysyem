@@ -42,7 +42,6 @@ struct TankInfo
 	bool InnValve;
 };
 
-
 TankInfo Hlt;
 TankInfo MashTank;
 TankInfo BoilTank;
@@ -60,20 +59,19 @@ float ambientTemperature = 0;
 unsigned long refTime = 0;
 unsigned long refTime2 = 0;
 unsigned long elapsedTimeMinutes = 0;
-unsigned long elapsedTimeSeconds =0;
+unsigned long elapsedTimeSeconds = 0;
 unsigned long timeSpan = 0;
 unsigned long remainingTime = 0;
-unsigned long timez =0;
-unsigned long serialOutputTime = 500; 										
-float lastTotVolume=0; 
+unsigned long timez = 0;
+unsigned long serialOutputTime = 500;
+float lastTotVolume = 0;
 int state = 0;
 bool startBrewing = false;
 bool messageConfirmd = false;
 
-String inputRAW ="";
-String inputString = "";                                                   
+String inputString = "";
 String sensorString = "";
-String sensorStringAll="";
+String sensorStringAll = "";
 boolean input_stringcomplete = false;
 boolean sensor_stringcomplete = false;
 String resivedItems[20];
@@ -86,31 +84,32 @@ bool oneTimeCase31 = true;
 bool oneTimeCase32 = true;
 bool oneTimeCase33 = true;
 
-void setup() {                                                                 
-	Serial.begin(9600); 
-	Serial1.begin(38400);  
-	inputRAW.reserve(5);
-    inputString.reserve(50);
-	sensorString.reserve(30);                                                  //set aside some bytes for receiving data from Atlas Scientific product
+void setup() {
+	Serial.begin(9600);
+	Serial.setTimeout(2000);
+	Serial1.begin(38400);
 	
+	inputString.reserve(100);
+	sensorString.reserve(30);                                                  //set aside some bytes for receiving data from Atlas Scientific product
+
 	// Setting the HLT inn and out pins 
-	Hlt.CirculationPumpPin = 20;
-	Hlt.TransferPumpPin = 21;
-	Hlt.DrainValvePin = 23;
-	Hlt.HeatingElement1Pin = 24;
-	Hlt.HeatingElement2Pin = 25;
+	Hlt.CirculationPumpPin = 4;
+	Hlt.TransferPumpPin = 5;
+	Hlt.DrainValvePin = 22;
+	Hlt.HeatingElement1Pin = 20;
+	Hlt.HeatingElement2Pin = 21;
 	Hlt.LevelOverHatingElementLevelPin = 26;
 	Hlt.LevelHighPin = 27;
 	// Setting the HLT inn and out
-	pinMode(Hlt.CirculationPumpPin,OUTPUT);
-	pinMode(Hlt.TransferPumpPin,OUTPUT);
-	pinMode(Hlt.DrainValvePin,OUTPUT);
+	pinMode(Hlt.CirculationPumpPin, OUTPUT);
+	pinMode(Hlt.TransferPumpPin, OUTPUT);
+	pinMode(Hlt.DrainValvePin, OUTPUT);
 	pinMode(Hlt.HeatingElement1Pin, OUTPUT);
-	pinMode(Hlt.HeatingElement2Pin,OUTPUT);
+	pinMode(Hlt.HeatingElement2Pin, OUTPUT);
 	pinMode(Hlt.LevelOverHatingElementLevelPin, INPUT);
 	pinMode(Hlt.LevelHighPin, INPUT);
 	// Setting the  MashTank inn and out pins 
-	
+
 	MashTank.CirculationPumpPin = 30;
 	MashTank.TransferPumpPin = 31;
 	MashTank.DrainValvePin = 32;
@@ -127,7 +126,7 @@ void setup() {
 	pinMode(MashTank.LevelOverHatingElementLevelPin, INPUT);
 	pinMode(MashTank.LevelHighPin, INPUT);
 
-	
+
 	// Setting the BoilTank inn and out pins 
 	BoilTank.CirculationPumpPin = 40;
 	BoilTank.TransferPumpPin = 41;
@@ -144,30 +143,32 @@ void setup() {
 	pinMode(BoilTank.HeatingElement2Pin, OUTPUT);
 	pinMode(BoilTank.LevelOverHatingElementLevelPin, INPUT);
 	pinMode(BoilTank.LevelHighPin, INPUT);
-	
-	
-	timez=millis(); 
-	
+
+
+	timez = millis();
+
 	TemperatureSensors.begin();
 }
 
-void serialEvent() {      
-	String inString = Serial.readString();                                        
-	inputString += inString;
-	if(inputString.endsWith("\n")) {
-	input_stringcomplete = true;      
-	}                           
+void serialEvent() {
+	String inString = Serial.readString();
+	inputString = inString;
+	if (inputString.endsWith("\n")) {
+		input_stringcomplete = true;
+	}
 }
- 
-void serialEvent1() {														
-	String sensString = Serial1.readString();                                         
+
+void serialEvent1() {
+	String sensString = Serial1.readString();
 	sensorString = sensString;
-	if(sensorString.endsWith ("\r")) {
-	sensor_stringcomplete = true;     
-	}                           
+	if (sensorString.endsWith("\r")) {
+		sensor_stringcomplete = true;
+	}
 }
 
 void loop() {
+	// Getting Temperatures
+	TemperatureSensors.requestTemperatures();
 
 	Hlt.HeatingElement1 = false;
 	Hlt.HeatingElement2 = false;
@@ -186,31 +187,41 @@ void loop() {
 	BoilTank.CirculationPump = false;
 	BoilTank.TransferPump = false;
 	BoilTank.InnValve = false;
-	
+
 	timeSpan = 0;
 	remainingTime = 0;
 
+
+
 	if (input_stringcomplete)
 	{
-        inputString.trim();
+		inputString.trim();
 		int index = 0;
 		int deviderIndex = 0;
 		String systemDevider = "_";
+		
 		if (inputString.startsWith("CMD"))
 		{
 			inputString.remove(0, 3);
 			int CMD = inputString.toInt();
-			
-			if ((CMD = 10 && state < 10))
+			if (CMD==0)
 			{
+				state = 0;
+				startBrewing = false;
+			}
+			
+		else if ((CMD == 10) && (state < 10))
+			{
+				Serial.println("CMD = 10");
 				state = 10;
 			}
-			else if ((CMD = 20))
+			else if (CMD == 20)
 			{
 				startBrewing = true;
+				Serial.println("CMD = 20");
 			}
 		}
-		
+
 		else if (inputString.startsWith("CONFIRMED"))
 		{
 			messageConfirmd = true;
@@ -222,7 +233,7 @@ void loop() {
 			int STA = inputString.toInt();
 			state = STA;
 		}
-		else
+		else if (inputString.startsWith("SET"))
 		{
 			for (unsigned int i = 0; i <= inputString.length(); i++)
 			{
@@ -231,150 +242,152 @@ void loop() {
 					resivedItems[index] = inputString.substring(deviderIndex, i);
 					index++;
 					deviderIndex = i + 1;
+
 				}
+
 			}
 
-			for (int i = 0; i < 10; i++)
-			{				
-				interfaceConvertion(&MashInn.TemperatureSP, resivedItems[i], "MITe");
-				interfaceConvertion(&MashInn.HltTemperatureSP, resivedItems[i], "MIHT");
-				interfaceConvertion(&MashInn.AddVolumeSP, resivedItems[i], "MIVo");
-				interfaceConvertion(&MashStep1.TemperatureSP, resivedItems[i], "M1Te");
-				interfaceConvertion(&MashStep1.TimeMinutsSP, resivedItems[i], "M1Ti");
-				interfaceConvertion(&MashStep2.TemperatureSP, resivedItems[i], "M2Te");
-				interfaceConvertion(&MashStep2.TimeMinutsSP, resivedItems[i], "M2Ti");
-				interfaceConvertion(&Sparge.TemperatureSP, resivedItems[i], "SpTe");
-				Sparge.HltTemperatureSP = Sparge.TemperatureSP;
-				interfaceConvertion(&Sparge.AddVolumeSP, resivedItems[i], "SpVo");
-				interfaceConvertion(&Boil.TimeMinutsSP, resivedItems[i], "BoTi");
+			for (int i = 0; i < 20; i++)
+			{
+				Serial.println(resivedItems[i]);
 			}
-			
+			resivedItems[0].toFloat=MashInn.TemperatureSP;						//"MITe"
+			resivedItems[1].toFloat = MashInn.HltTemperatureSP;					//"MIHT"
+			resivedItems[2].toFloat = MashInn.AddVolumeSP;						//"MIVo"
+			resivedItems[3].toFloat = MashStep1.TemperatureSP;					//"M1Te"
+			resivedItems[4].toFloat = MashStep1.TimeMinutsSP;					//"M1Ti"
+			resivedItems[5].toFloat = MashStep2.TemperatureSP;					//"M2Te"
+			resivedItems[6].toFloat = MashStep2.TimeMinutsSP;					//"M2Ti"
+			resivedItems[7].toFloat = MashStep3.TemperatureSP;					//"M3Te"
+			resivedItems[8].toFloat = MashStep3.TimeMinutsSP;					//"M3Ti"
+			resivedItems[9].toFloat = Sparge.TemperatureSP;						//"SpTe"
+			Sparge.HltTemperatureSP = Sparge.TemperatureSP;
+			resivedItems[10].toFloat = Sparge.AddVolumeSP;						//"SpVo"
+			resivedItems[11].toFloat = Boil.TimeMinutsSP;						//"BoTi"
 		}
 		inputString = "";                                                        //clear the string:
 		input_stringcomplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
-  
-  	if (sensor_stringcomplete){                                                //if a string from the Atlas Scientific product has been received in its entirety
-		sensorStringAll=sensorString;
+
+	if (sensor_stringcomplete){                                                //if a string from the Atlas Scientific product has been received in its entirety
+		sensorStringAll = sensorString;
 		int commaPosition = sensorString.indexOf(',');
-		if(commaPosition != -1)
+		if (commaPosition != -1)
 		{
-			String totalVolume = sensorString.substring(0,commaPosition);
+			String totalVolume = sensorString.substring(0, commaPosition);
 			char floatbuf[32];
 			totalVolume.toCharArray(floatbuf, sizeof(floatbuf));
 			float totVolumeTemp = atof(floatbuf);
-			
-			if (abs(lastTotVolume-totVolumeTemp)<0.3)
+
+			if (abs(lastTotVolume - totVolumeTemp)<0.3)
 			{
-				MashTank.Volume=totVolumeTemp;
+				MashTank.Volume = totVolumeTemp;
 			}
-			lastTotVolume= totVolumeTemp;
+			lastTotVolume = totVolumeTemp;
 
 		}
 		sensorString = "";                                                      //clear the string:
 		sensor_stringcomplete = false;                                          //reset the flag used to tell if we have received a completed string from the Atlas Scientific product
 	}
-	
-	// Getting Temperatures
-	TemperatureSensors.requestTemperatures();
 
-	Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	sendMessage += "HltTe" + String(Hlt.TemperatureTank)+"_";
-	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
-	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + "_";
-	MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
-	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + "_";
-	BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(3);
-	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + "_";
-	ambientTemperature = TemperatureSensors.getTempCByIndex(4);
+	//Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
+	//sendMessage += "HltTe" + String(Hlt.TemperatureTank) + "_";
+	//MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
+	//sendMessage += "MatTe" + String(MashTank.TemperatureTank) + "_";
+	//MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
+	//sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + "_";
+	//BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(3);
+	//sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + "_";
+	//ambientTemperature = TemperatureSensors.getTempCByIndex(4);
 	sendMessage += "AmbTe" + String(ambientTemperature) + "_";
 	sendMessage += "STATE" + String(state) + "_";
-	
+
 	switch (state)
 	{
-		case 0:
-			// ideal state nothing is happening 
-		break; 
-  
-		case 10:
-			Hlt.CirculationPump = true;
-			Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+	case 0:
+		// ideal state nothing is happening 
+		break;
 
-			if ((Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint))
-			{
-				Hlt.HeatingElement1 = true;
-				Hlt.HeatingElement2 = true;
-			}
-			if (startBrewing){			
-				state = 20;
-			}
-		break;  
-    
-		case 20:// Meshing in
-			
-			Hlt.TransferPump = true;   
-			MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
-			Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
-			if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-			{
-				Hlt.HeatingElement1 = true;
-			}
+	case 10:
+		Hlt.CirculationPump = true;
+		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 
-			if (MashTank.Volume > 15)
-			{
-				MashTank.CirculationPump = true;
-				if (MashTank.TemperatureTank<MashTank.TemperatureTankSetPoint)
-				{
-					MashTank.HeatingElement1 = true;
-				}
-			}
-			if (MashTank.Volume >= MashInn.AddVolumeSP)
-			{
-				sendMessage += "MessaAdd corn_";
-				if (messageConfirmd)
-				{
-					state = 30;
-					refTime = millis();    // start timer 
-					messageConfirmd = false;
-					sendMessage += "Messa_"; // Clering message				
-				}
-			}                   
-		break;     
-  
-		case 30:
+		if ((Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint))
+		{
+			Hlt.HeatingElement1 = true;
+			Hlt.HeatingElement2 = true;
+		}
+		if (startBrewing){
+			state = 20;
+		}
+		break;
 
-			elapsedTimeSeconds = (millis()-refTime)/1000;
-			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-			MashTank.TemperatureTankSetPoint = MashStep1.TemperatureSP;
-			timeSpan = MashStep1.TimeMinutsSP * 60;
-			remainingTime = timeSpan - elapsedTimeSeconds;
-			Hlt.CirculationPump = true;
+	case 20:// Meshing in
 
-			if (oneTimeCase30)
-			{
-				sendMessage += "TimSp" + String(timeSpan) + "_";
-			}
-			if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
-			{
-				Hlt.HeatingElement1 = true;
-				Hlt.HeatingElement2 = true;
-			}
+		Hlt.TransferPump = true;
+		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
+		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
+		{
+			Hlt.HeatingElement1 = true;
+		}
 
+		if (MashTank.Volume > 15)
+		{
 			MashTank.CirculationPump = true;
-			if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
+			if (MashTank.TemperatureTank<MashTank.TemperatureTankSetPoint)
+			{
 				MashTank.HeatingElement1 = true;
 			}
-		
-			if (remainingTime <= 0)
+		}
+		if (MashTank.Volume >= MashInn.AddVolumeSP)
+		{
+			Hlt.TransferPump = false;
+			sendMessage += "MessaAdd corn_";
+			if (messageConfirmd)
 			{
-				refTime = millis();
-				state = 31;
+				state = 30;
+				refTime = millis();    // start timer 
+				messageConfirmd = false;
+				sendMessage += "Messa_"; // Clering message				
 			}
+		}
+		break;
+
+	case 30:
+
+		elapsedTimeSeconds = (millis() - refTime) / 1000;
+		elapsedTimeMinutes = elapsedTimeSeconds / 60;
+		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+		MashTank.TemperatureTankSetPoint = MashStep1.TemperatureSP;
+		timeSpan = MashStep1.TimeMinutsSP * 60;
+		remainingTime = timeSpan - elapsedTimeSeconds;
+		Hlt.CirculationPump = true;
+
+		if (oneTimeCase30)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + "_";
+		}
+		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
+		{
+			Hlt.HeatingElement1 = true;
+			Hlt.HeatingElement2 = true;
+		}
+
+		MashTank.CirculationPump = true;
+		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
+			MashTank.HeatingElement1 = true;
+		}
+
+		if (remainingTime <= 0)
+		{
+			refTime = millis();
+			state = 31;
+		}
 
 		break;
-  
-		case 31:
+
+	case 31:
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -401,94 +414,94 @@ void loop() {
 		}
 		break;
 
-		case 32:
-			elapsedTimeSeconds = (millis() - refTime) / 1000;
-			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-			MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
+	case 32:
+		elapsedTimeSeconds = (millis() - refTime) / 1000;
+		elapsedTimeMinutes = elapsedTimeSeconds / 60;
+		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
 
-			Hlt.CirculationPump = true;
-			if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-			{
-				Hlt.HeatingElement1 = true;
-				Hlt.HeatingElement2 = true;
-			}
+		Hlt.CirculationPump = true;
+		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
+		{
+			Hlt.HeatingElement1 = true;
+			Hlt.HeatingElement2 = true;
+		}
 
-			MashTank.CirculationPump = true;
-			if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-				MashTank.HeatingElement1 = true;
-			}
+		MashTank.CirculationPump = true;
+		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
+			MashTank.HeatingElement1 = true;
+		}
 
-			if (elapsedTimeSeconds >= (MashStep3.TimeMinutsSP * 60))
-			{
-				refTime = millis();
-				state = 33;
-			}
-			break;
+		if (elapsedTimeSeconds >= (MashStep3.TimeMinutsSP * 60))
+		{
+			refTime = millis();
+			state = 33;
+		}
+		break;
 
-		case 33:
-			elapsedTimeSeconds = (millis() - refTime) / 1000;
-			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-			MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
+	case 33:
+		elapsedTimeSeconds = (millis() - refTime) / 1000;
+		elapsedTimeMinutes = elapsedTimeSeconds / 60;
+		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
 
-			Hlt.CirculationPump = true;
-			if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-			{
-				Hlt.HeatingElement1 = true;
-				Hlt.HeatingElement2 = true;
-			}
+		Hlt.CirculationPump = true;
+		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
+		{
+			Hlt.HeatingElement1 = true;
+			Hlt.HeatingElement2 = true;
+		}
 
-			MashTank.CirculationPump = true;
-			if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-				MashTank.HeatingElement1 = true;
-			}
+		MashTank.CirculationPump = true;
+		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
+			MashTank.HeatingElement1 = true;
+		}
 
-			if (elapsedTimeSeconds >= (MashStep4.TimeMinutsSP * 60))
-			{
-				refTime = millis();
-				state = 40;
-			}
-			break;
+		if (elapsedTimeSeconds >= (MashStep4.TimeMinutsSP * 60))
+		{
+			refTime = millis();
+			state = 40;
+		}
+		break;
 
-		case 40: // Sparge
-			elapsedTimeSeconds = (millis() - refTime) / 1000;
-			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			
-			if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-			{
-				Hlt.HeatingElement1 = true;
-				Hlt.HeatingElement2 = true;
-			}
-			MashTank.TransferPump = true;
+	case 40: // Sparge
+		elapsedTimeSeconds = (millis() - refTime) / 1000;
+		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 
-			if (elapsedTimeSeconds >= prePumpeTimeSparge)
-			{
-				Hlt.TransferPump = true;
-			}
+		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
+		{
+			Hlt.HeatingElement1 = true;
+			Hlt.HeatingElement2 = true;
+		}
+		MashTank.TransferPump = true;
 
-			if (MashTank.Volume<(MashInn.AddVolumeSP+Sparge.AddVolumeSP))
-			{
-				Hlt.TransferPump = true;
-			}
-			else if (elapsedTimeSeconds>(MashTank.Volume))
-			{
+		if (elapsedTimeSeconds >= prePumpeTimeSparge)
+		{
+			Hlt.TransferPump = true;
+		}
 
-			}
+		if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+		{
+			Hlt.TransferPump = true;
+		}
+		else if (elapsedTimeSeconds>(MashTank.Volume))
+		{
 
-			if (BoilTank.LevelOverHatingElementLevel)
-			{
-				BoilTank.HeatingElement1 = true;
-				BoilTank.HeatingElement2 = true;
-			}
+		}
+
+		if (BoilTank.LevelOverHatingElementLevel)
+		{
+			BoilTank.HeatingElement1 = true;
+			BoilTank.HeatingElement2 = true;
+		}
 
 
 		break;
 
-		default:
-			state=0;
+	default:
+		state = 0;
 		break;
-	} 
+	}
 
 	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + "_";
 	sendMessage += "HltE1" + String(Hlt.HeatingElement1) + "_";
@@ -510,8 +523,13 @@ void loop() {
 	sendMessage += "Timer" + String(elapsedTimeSeconds) + "_";
 	sendMessage += "RemTi" + String(remainingTime) + "_";
 
-	Serial.println(sendMessage);
+//	Serial.println(sendMessage);
 	sendMessage = "";
+
+	digitalWrite(Hlt.CirculationPumpPin, Hlt.CirculationPump);
+	digitalWrite(Hlt.TransferPumpPin, Hlt.TransferPump);
+	digitalWrite(Hlt.HeatingElement1Pin, Hlt.HeatingElement1);
+
 }
 
 void interfaceConvertion(float *value, String _string, String hedder)
