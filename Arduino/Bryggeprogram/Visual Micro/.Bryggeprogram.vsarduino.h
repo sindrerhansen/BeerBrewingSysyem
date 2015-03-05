@@ -43,7 +43,6 @@ extern "C" void __cxa_pure_virtual() {;}
 void serialEvent();
 void serialEvent1();
 //
-void interfaceConvertion(float *value, String _string, String hedder);
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega\pins_arduino.h" 
