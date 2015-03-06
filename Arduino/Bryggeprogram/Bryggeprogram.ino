@@ -1,10 +1,13 @@
 // This code is for a Arduino Mega. By Sindre
-#pragma region Init
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
-
+#pragma region Init
 const int ONE_WIRE_BUS = 2;
 const unsigned long prePumpeTimeSparge = 60;
+const int flowOfSet = 0.3;
+
+#pragma endregion Init
 // Setup a oneWire instance to communicate with any OneWire devices 
 // (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -89,7 +92,6 @@ unsigned long elapsedTimeSeconds = 0;
 unsigned long timeSpan = 0;
 unsigned long remainingTime = 0;
 unsigned long timez = 0;
-unsigned long serialOutputTime = 500;
 float lastTotVolume = 0;
 int state = 0;
 bool startBrewing = false;
@@ -110,12 +112,15 @@ bool oneTimeCase30 = true;
 bool oneTimeCase31 = true;
 bool oneTimeCase32 = true;
 bool oneTimeCase33 = true;
-#pragma endregion Init
+
 void setup() {
 	Serial.begin(9600);
 
 	Serial1.begin(38400);	
 	inputString.reserve(100);
+
+	timez = millis();
+	TemperatureSensors.begin();
 
 #pragma region Init_HLT
 	// Setting the HLT inn and out pins 
@@ -174,8 +179,6 @@ void setup() {
 	pinMode(BoilTank.LevelHigh.InputPin, INPUT);
 #pragma endregion Init_BoilTank
 
-	timez = millis();
-	TemperatureSensors.begin();
 }
 
 void serialEvent() {
@@ -187,9 +190,15 @@ void serialEvent() {
 }
 
 void serialEvent1() {
-	String sensString = Serial1.readStringUntil('\r');
-	String totalVolume = sensString.substring(0, 5);
-	MashTank.Volume = totalVolume.toFloat();
+	String _sensString = Serial1.readStringUntil('\r');
+	String _totalVolume = _sensString.substring(0, 5);
+	_totalVolume.trim();
+	float _volume = _totalVolume.toFloat();
+	if (abs(lastTotVolume - _volume) < 0.5)
+	{
+		MashTank.Volume = _volume;
+	}
+	lastTotVolume = _volume;
 }
 
 void loop() {
@@ -271,13 +280,6 @@ void loop() {
 
 			}
 
-			//for (int i = 0; i < 12; i++)
-			//{
-			//	Serial.print(i);
-			//	Serial.print(":");
-			//	Serial.print(resivedItems[i]);
-			//	Serial.println("  ");
-			//}
 			MashInn.TemperatureSP = resivedItems[0].toFloat();					//"MITe"
 			MashInn.HltTemperatureSP = resivedItems[1].toFloat();				//"MIHT"
 			MashInn.AddVolumeSP = resivedItems[2].toFloat();					//"MIVo"
@@ -364,7 +366,7 @@ void loop() {
 				MashTank.Element1.Value = true;
 			}
 		}
-		if (MashTank.Volume >= MashInn.AddVolumeSP)
+		if ((MashTank.Volume+flowOfSet) >= MashInn.AddVolumeSP)
 		{
 			Hlt.TransferPump.Value = false;
 			sendMessage += "MessaAdd corn_";
