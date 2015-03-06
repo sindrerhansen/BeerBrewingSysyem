@@ -24,10 +24,10 @@ struct TankInfo
 	struct Pump
 	{
 		int OutputPin;
-		int Value;
-		int ValueOverride;
+		bool Value;
+		bool ValueOverride;
 		bool OverrideEnable;
-		int ValueOut;
+		bool ValueOut;
 	};
 	struct HeatingElement
 	{
@@ -70,7 +70,7 @@ struct TankInfo
 TankInfo Hlt;
 TankInfo MashTank;
 TankInfo BoilTank;
-TankInfo AllTanks[3] = { Hlt, MashTank, BoilTank };
+TankInfo AllTanks[3];
 
 Sequence MashInn;
 Sequence MashStep1;
@@ -138,8 +138,8 @@ void setup() {
 
 #pragma region Init_MashTank
 	// Setting the  MashTank inn and out pins 
-	MashTank.CirculationPump.OutputPin = 30;
-	MashTank.TransferPump.OutputPin = 31;
+	MashTank.CirculationPump.OutputPin = 6;
+	MashTank.TransferPump.OutputPin = 7;
 	MashTank.DrainValve.OutputPin = 32;
 	MashTank.Element1.OutputPin = 33;
 	MashTank.Element2.OutputPin = 34;
@@ -198,20 +198,20 @@ void loop() {
 
 	Hlt.Element1.Value = false;
 	Hlt.Element2.Value = false;
-	Hlt.CirculationPump.Value = 0;
-	Hlt.TransferPump.Value = 0;
+	Hlt.CirculationPump.Value = false;
+	Hlt.TransferPump.Value = false;
 	Hlt.InnValve.Value = false;
 
 	MashTank.Element1.Value = false;
 	MashTank.Element2.Value = false;
-	MashTank.CirculationPump.Value = 0;
-	MashTank.TransferPump.Value = 0;
+	MashTank.CirculationPump.Value = false;
+	MashTank.TransferPump.Value = false;
 	MashTank.InnValve.Value = false;
 
 	BoilTank.Element1.Value = false;
 	BoilTank.Element2.Value = false;
-	BoilTank.CirculationPump.Value = 0;
-	BoilTank.TransferPump.Value = 0;
+	BoilTank.CirculationPump.Value = false;
+	BoilTank.TransferPump.Value = false;
 	BoilTank.InnValve.Value = false;
 
 	timeSpan = 0;
@@ -312,7 +312,8 @@ void loop() {
 		inputString = "";                                                        //clear the string:
 		input_stringcomplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
-
+//	int devises = TemperatureSensors.getDeviceCount();
+//	Serial.println(devises);
 	Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
 	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
 	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
@@ -578,7 +579,11 @@ void loop() {
 #pragma endregion SendingMessageToSerial
 
 #pragma region Setting_Outputs 
-	for (int tank = 1; tank <= (sizeof(AllTanks) / sizeof(int)); tank++)
+	AllTanks[1] = Hlt;
+	AllTanks[2] = MashTank;
+	AllTanks[3]= BoilTank;
+
+	for (int tank = 1; tank <= (sizeof(AllTanks) / sizeof(TankInfo)); tank++)
 	{
 		if (AllTanks[tank].Element1.OverrideEnable){ AllTanks[tank].Element1.ValueOut = AllTanks[tank].Element1.ValueOverride; }
 		else{ AllTanks[tank].Element1.ValueOut = AllTanks[tank].Element1.Value; }
@@ -600,9 +605,9 @@ void loop() {
 		else{ AllTanks[tank].DrainValve.ValueOut = AllTanks[tank].DrainValve.Value; }
 		digitalWrite(AllTanks[tank].DrainValve.OutputPin, AllTanks[tank].DrainValve.ValueOut);
 
-		if (AllTanks[tank].InnValve.OverrideEnable){ AllTanks[tank].InnValve.ValueOut = AllTanks[tank].InnValve.ValueOverride; }
-		else { AllTanks[tank].InnValve.ValueOut = AllTanks[tank].InnValve.Value; }
-		digitalWrite(AllTanks[tank].InnValve.OutputPin, AllTanks[tank].InnValve.ValueOut);
+		//if (AllTanks[tank].InnValve.OverrideEnable){ AllTanks[tank].InnValve.ValueOut = AllTanks[tank].InnValve.ValueOverride; }
+		//else { AllTanks[tank].InnValve.ValueOut = AllTanks[tank].InnValve.Value; }
+		//digitalWrite(AllTanks[tank].InnValve.OutputPin, AllTanks[tank].InnValve.ValueOut);
 	}
 #pragma endregion Setting_Outputs
 
