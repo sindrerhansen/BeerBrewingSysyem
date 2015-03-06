@@ -22,37 +22,24 @@ namespace BryggeprogramWPF
     public partial class Tank : UserControl
     {
 
-        public event EventHandler DoStuff;
+        public event EventHandler SendOverrideCommandHeatingElement;
+        public event EventHandler SendOverrideCommandCirculationPump;
+        public event EventHandler SendOverrideCommandTransferElement;
+        TankInfo _tank = new TankInfo();
+        
+
         public Tank()
         {
             InitializeComponent();
         }
-        
-        bool heatingElementOverride = false;
+           
 
-        private void indicatorHeatingElementOn_RightClick(object sender, MouseButtonEventArgs e)
+        private void GauageActTemp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-          if (!heatingElementOverride)
-          {
-              
-            var mbRes = MessageBox.Show("Enable override heating element?", "Important Question", MessageBoxButton.YesNoCancel);
-            if (mbRes == MessageBoxResult.Yes)
-            {
-              heatingElementOverride = true;
-              txtHeatingElementOn.Background = new SolidColorBrush(Colors.Red);
-            }
-          }
-          else if (heatingElementOverride)
-	        {
-                var mbRes = MessageBox.Show("Disable override heating element?", "Important Question", MessageBoxButton.YesNoCancel);
-                if (mbRes == MessageBoxResult.Yes)
-                {
-                    heatingElementOverride = false;
-                    
-                    txtHeatingElementOn.Background = new SolidColorBrush(Colors.Transparent);
-                }
-	        }
+
         }
+
+ 
 
         private void TextActuelTemp_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -69,19 +56,99 @@ namespace BryggeprogramWPF
             }
         }
 
-        private void GauageActTemp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void indicatorHeatingElementOn_LeftClick(object tank, MouseButtonEventArgs e)
         {
-
+            SendOverrideCommandHeatingElement(this._tank, e);
         }
 
-        private void indicatorCirculationPumpOn_Click(object sender, MouseButtonEventArgs e)
+        private void indicatorHeatingElementOn_RightClick(object sender, MouseButtonEventArgs e)
         {
 
-            DoStuff(this, EventArgs.Empty);
+            if (_tank.HeatingElement.Override)
+            {
+                var mbRes = MessageBox.Show("Disable override heating element?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.HeatingElement.Override = false;
+
+                    txtHeatingElement.Background = new SolidColorBrush(Colors.Transparent);
+                }
+            }
+
+            else
+            {
+
+                var mbRes = MessageBox.Show("Enable override heating element?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.HeatingElement.Override = true;
+                    txtHeatingElement.Background = new SolidColorBrush(Colors.Red);
+                }
+            }
         }
 
+        private void indicatorCirculationPumpOn_LeftClick(object sender, MouseButtonEventArgs e)
+        {
+            SendOverrideCommandCirculationPump(this._tank, e);
+        }
+
+        private void indicatorCirculationPumpOn_RightClick(object sender, MouseButtonEventArgs e)
+        {
+            
+            if (_tank.CirculationPump.Override)
+            {
+                var mbRes = MessageBox.Show("Disable override circulation pump?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.CirculationPump.Override = false;
+
+                    txtCirculationPump.Background=new SolidColorBrush(Colors.Transparent);
+         
+                }
+            }
+            else
+            {
+
+                var mbRes = MessageBox.Show("Enable override circulation pump?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.CirculationPump.Override = true;
+                    txtCirculationPump.Background = new SolidColorBrush(Colors.Red);
+                }
+            }
+        }
+
+        private void indicatorTransferPumpOn_LeftClick(object sender, MouseButtonEventArgs e)
+        {
+            SendOverrideCommandTransferElement(this._tank, e);
+        }
+
+        private void indicatorTransferPumpOn_RightClick(object sender, MouseButtonEventArgs e)
+        {
+            if (_tank.TransferPump.Override)
+            {
+                var mbRes = MessageBox.Show("Disable override transfer pump?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.TransferPump.Override = false;
 
 
+                    txtTransferPump.Background = new SolidColorBrush(Colors.Transparent);
+
+                }
+            }
+
+            else
+            {
+
+                var mbRes = MessageBox.Show("Enable override transfer pump?", "Important Question", MessageBoxButton.YesNoCancel);
+                if (mbRes == MessageBoxResult.Yes)
+                {
+                    _tank.TransferPump.Override = true;
+                    txtTransferPump.Background = new SolidColorBrush(Colors.Red);
+                }
+            }
+        }
 
     }
 }

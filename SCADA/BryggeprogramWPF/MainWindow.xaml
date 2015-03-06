@@ -124,9 +124,9 @@
                 </Button.Style>
             </Button>
         </Canvas>
-        <local:Tank x:Name="MashTank" Margin="544,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <local:Tank x:Name="BoilTank" Margin="729,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <local:Tank x:Name="HLT" Margin="359,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="425" DoStuff="Test"/>
+        <local:Tank x:Name="MashTank" Margin="544,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
+        <local:Tank x:Name="BoilTank" Margin="729,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
+        <local:Tank x:Name="HLT" Margin="359,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="425" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
         <TextBlock HorizontalAlignment="Left" Margin="359,19,0,0" TextWrapping="Wrap" Text="Hot Liquid Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="544,19,0,0" TextWrapping="Wrap" Text="Mesh Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>

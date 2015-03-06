@@ -12,25 +12,37 @@ namespace BryggeprogramWPF
         public double TemperatureSetpoint {get; set;}
         public double Volume { get; set; }
         public double HeatingElementReturTemperature { get; set; }
-        public bool HeatingElementOn{get; set;}
-        public bool HeatingElementOverride { get; set; }
-        public bool HeatingElementOverrideValue { get; set; }
-        public bool CirculationPumpRunning {get; set;}
-        public bool TransferPumpRunning {get; set;}
+        public TankElement HeatingElement { get; set; }
+        public TankElement CirculationPump { get; set; }
+        public TankElement TransferPump { get; set; }
         public bool DrainValveOpen {get; set;}
 
-        public TankInfo() { }
-
-        public TankInfo(double temperatureActual, double temperatureSetpoint, double volume, double heatingElementReturTemperature, bool heatingElementOn, bool circulationPumpRunning, bool transferPumpRunning, bool drainValveOpen)
+        public TankInfo() 
         {
-            TemperatureActual = temperatureActual;
-            TemperatureSetpoint = temperatureSetpoint;
-            Volume = volume;
-            HeatingElementReturTemperature = heatingElementReturTemperature;
-            HeatingElementOn = heatingElementOn;
-            CirculationPumpRunning = circulationPumpRunning;
-            TransferPumpRunning = transferPumpRunning;
-            DrainValveOpen = drainValveOpen;
+            TemperatureActual = 0;
+            TemperatureSetpoint = 0;
+            Volume = 0;
+            HeatingElementReturTemperature = 0;
+            DrainValveOpen = false;
+            HeatingElement = new TankElement();
+            CirculationPump = new TankElement();
+            TransferPump = new TankElement();
         }
+
+
+    }
+    class TankElement
+    {
+        public bool On{get;set;}
+        public bool Override{get;set;}
+        public bool OverrideValue{get;set;}
+
+        public TankElement()
+        {
+            On = false;
+            Override = false;
+            OverrideValue = false;
+        }
+
     }
 }

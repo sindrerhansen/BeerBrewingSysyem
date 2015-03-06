@@ -23,10 +23,10 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label x:Name="txtHeatingElementOn" Content="Heating Element On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0" Background="Transparent"/>
+            <Label x:Name="txtHeatingElement" Content="Heating Element On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0" Background="Transparent" MouseRightButtonUp="indicatorHeatingElementOn_RightClick"/>
         </Grid>
         <Grid Margin="4,318,22,77">
-            <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseLeftButtonUp="indicatorCirculationPumpOn_Click">
+            <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseLeftButtonUp="indicatorCirculationPumpOn_LeftClick" MouseRightButtonUp="indicatorCirculationPumpOn_RightClick">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -36,10 +36,10 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label Content="Circulation Pump On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0"/>
+            <Label x:Name="txtCirculationPump" Content="Circulation Pump On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0" MouseRightButtonUp="indicatorCirculationPumpOn_RightClick"/>
         </Grid>
         <Grid Margin="4,348,22,47">
-            <Ellipse x:Name="indicatorTransferPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0">
+            <Ellipse x:Name="indicatorTransferPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseLeftButtonUp="indicatorTransferPumpOn_LeftClick" MouseRightButtonUp="indicatorTransferPumpOn_RightClick">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -49,7 +49,7 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,2,0,0"/>
+            <Label x:Name="txtTransferPump" Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,2,0,0"/>
         </Grid>
         <ToggleButton x:Name="tglDrainValve" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="33" Margin="10,383,0,0">
             <ToggleButton.Style>

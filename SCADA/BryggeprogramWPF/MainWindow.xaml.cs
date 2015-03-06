@@ -184,12 +184,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0,5).StartsWith("1"))
                         {
-                            hotLiqureTank.HeatingElementOn = true;
+                            hotLiqureTank.HeatingElement.On = true;
                             HLT.indicatorHeatingElementOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            hotLiqureTank.HeatingElementOn = false;
+                            hotLiqureTank.HeatingElement.On = false;
                             HLT.indicatorHeatingElementOn.Fill = myGrayBrush;
                         }
                     }
@@ -197,12 +197,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            hotLiqureTank.CirculationPumpRunning = true;
+                            hotLiqureTank.CirculationPump.On = true;
                             HLT.indicatorCirculationPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            hotLiqureTank.CirculationPumpRunning = false;
+                            hotLiqureTank.CirculationPump.On = false;
                             HLT.indicatorCirculationPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -210,12 +210,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            hotLiqureTank.TransferPumpRunning = true;
+                            hotLiqureTank.TransferPump.On = true;
                             HLT.indicatorTransferPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            hotLiqureTank.TransferPumpRunning = false;
+                            hotLiqureTank.TransferPump.On = false;
                             HLT.indicatorTransferPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -249,12 +249,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            mashTank.HeatingElementOn = true;
+                            mashTank.HeatingElement.On = true;
                             MashTank.indicatorHeatingElementOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            mashTank.HeatingElementOn = false;
+                            mashTank.HeatingElement.On = false;
                             MashTank.indicatorHeatingElementOn.Fill = myGrayBrush;
                         }
                     }
@@ -262,12 +262,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            mashTank.CirculationPumpRunning = true;
+                            mashTank.CirculationPump.On = true;
                             MashTank.indicatorCirculationPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            mashTank.CirculationPumpRunning = false;
+                            mashTank.CirculationPump.On = false;
                             MashTank.indicatorCirculationPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -275,12 +275,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            mashTank.TransferPumpRunning = true;
+                            mashTank.TransferPump.On = true;
                             MashTank.indicatorTransferPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            mashTank.TransferPumpRunning = false;
+                            mashTank.TransferPump.On = false;
                             MashTank.indicatorTransferPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -314,12 +314,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            boilTank.HeatingElementOn = true;
+                            boilTank.HeatingElement.On = true;
                             BoilTank.indicatorHeatingElementOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            boilTank.HeatingElementOn = false;
+                            boilTank.HeatingElement.On = false;
                             BoilTank.indicatorHeatingElementOn.Fill = myGrayBrush;
                         }
                     }
@@ -327,12 +327,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            boilTank.CirculationPumpRunning = true;
+                            boilTank.CirculationPump.On = true;
                             BoilTank.indicatorCirculationPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            boilTank.CirculationPumpRunning = false;
+                            boilTank.CirculationPump.On = false;
                             BoilTank.indicatorCirculationPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -340,12 +340,12 @@ namespace BryggeprogramWPF
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
                         {
-                            boilTank.TransferPumpRunning = true;
+                            boilTank.TransferPump.On = true;
                             BoilTank.indicatorTransferPumpOn.Fill = myRedBrush;
                         }
                         else
                         {
-                            boilTank.TransferPumpRunning = false;
+                            boilTank.TransferPump.On = false;
                             BoilTank.indicatorTransferPumpOn.Fill = myGrayBrush;
                         }
                     }
@@ -574,10 +574,22 @@ namespace BryggeprogramWPF
         }
 
 
-        public void Test(object sender, EventArgs args)
+        public void SendOverrideCommandHeatingElement(object sender, EventArgs args)
         {
-
+            var tank = (TankInfo)sender;
+            MessageBox.Show(tank.HeatingElement.Override.ToString());
         }
 
+        public void SendOverrideCommandCirculationPump(object sender, EventArgs args)
+        {
+            var tank = (TankInfo)sender;
+            MessageBox.Show(tank.CirculationPump.Override.ToString());
+        }
+
+        public void SendOverrideCommandTransferPump(object sender, EventArgs args)
+        {
+            var tank = (TankInfo)sender;
+            MessageBox.Show(tank.TransferPump.Override.ToString());
+        }
     }
 }
