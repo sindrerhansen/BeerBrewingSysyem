@@ -265,6 +265,7 @@ void loop() {
 			int STA = inputString.toInt();
 			state = STA;
 		}
+
 		else if (inputString.startsWith("SET"))
 		{
 			inputString.remove(0, 3);
@@ -311,6 +312,32 @@ void loop() {
 			sendMessage += systemDevider;
 			
 		}
+
+		else if (inputString.startsWith("OVERRIDE"))
+		{
+			inputString.remove(0, 8);
+			inputString.trim();
+			int _overrideCMD = inputString.toInt();
+			if (_overrideCMD<10)
+			{
+
+			}
+			else if (_overrideCMD>=10 && _overrideCMD<20)
+			{
+
+			}
+
+			else if (_overrideCMD>=20 && _overrideCMD<30)
+			{
+
+			}
+
+			else if (_overrideCMD >= 30 && _overrideCMD<40)
+			{
+
+			}
+		}
+
 		inputString = "";                                                        //clear the string:
 		input_stringcomplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}

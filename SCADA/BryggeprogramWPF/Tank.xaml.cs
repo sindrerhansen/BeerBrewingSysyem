@@ -21,6 +21,8 @@ namespace BryggeprogramWPF
     /// </summary>
     public partial class Tank : UserControl
     {
+
+        public event EventHandler DoStuff;
         public Tank()
         {
             InitializeComponent();
@@ -32,6 +34,7 @@ namespace BryggeprogramWPF
         {
           if (!heatingElementOverride)
           {
+              
             var mbRes = MessageBox.Show("Enable override heating element?", "Important Question", MessageBoxButton.YesNoCancel);
             if (mbRes == MessageBoxResult.Yes)
             {
@@ -70,6 +73,13 @@ namespace BryggeprogramWPF
         {
 
         }
+
+        private void indicatorCirculationPumpOn_Click(object sender, MouseButtonEventArgs e)
+        {
+
+            DoStuff(this, EventArgs.Empty);
+        }
+
 
 
 

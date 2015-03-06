@@ -8,13 +8,13 @@ namespace BryggeprogramWPF
 {
     class TankInfo
     {
-
-
         public double TemperatureActual { get; set; }
         public double TemperatureSetpoint {get; set;}
         public double Volume { get; set; }
         public double HeatingElementReturTemperature { get; set; }
         public bool HeatingElementOn{get; set;}
+        public bool HeatingElementOverride { get; set; }
+        public bool HeatingElementOverrideValue { get; set; }
         public bool CirculationPumpRunning {get; set;}
         public bool TransferPumpRunning {get; set;}
         public bool DrainValveOpen {get; set;}

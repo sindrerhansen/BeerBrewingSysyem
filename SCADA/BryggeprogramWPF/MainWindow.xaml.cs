@@ -26,7 +26,7 @@ namespace BryggeprogramWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        
         BrewingData brewingData = new BrewingData();
         
         SerialPort mySerialPort = new SerialPort();
@@ -59,7 +59,10 @@ namespace BryggeprogramWPF
             DropDownComPorts.ItemsSource=SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
             
+            
         }
+
+        
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -568,6 +571,12 @@ namespace BryggeprogramWPF
             {
                 mySerialPort.WriteLine("CMD0");
             }
+        }
+
+
+        public void Test(object sender, EventArgs args)
+        {
+
         }
 
     }

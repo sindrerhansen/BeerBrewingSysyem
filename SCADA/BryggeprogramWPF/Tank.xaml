@@ -13,7 +13,7 @@
         <GaugeControl:GaugeControl x:Name="GauageActTemp" HorizontalAlignment="Left" Margin="0,59,0,0" VerticalAlignment="Top" Label="Temperature" MinorStep="1" Height="161" Width="166" Maximum="100" MajorStep="5" PropertyChanged="GauageActTemp_PropertyChanged"/>
         <Ellipse x:Name="indicatorOnSetpoint" Fill="LightGray" HorizontalAlignment="Left" Height="23" Margin="71,31,0,0" Stroke="Black" VerticalAlignment="Top" Width="23"/>
         <Grid Margin="4,264,22,135">
-            <Ellipse x:Name="indicatorHeatingElementOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseRightButtonUp="indicatorHeatingElementOn_RightClick">
+            <Ellipse x:Name="indicatorHeatingElementOn" Fill="LightGray" HorizontalAlignment="Left" Stroke="Black" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseRightButtonUp="indicatorHeatingElementOn_RightClick" Height="20" VerticalAlignment="Top" MouseLeftButtonUp="indicatorHeatingElementOn_LeftClick">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -23,10 +23,10 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label x:Name="txtHeatingElementOn" Content="Heating Element On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,0,0,0" Background="Transparent"/>
+            <Label x:Name="txtHeatingElementOn" Content="Heating Element On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0" Background="Transparent"/>
         </Grid>
         <Grid Margin="4,318,22,77">
-            <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0">
+            <Ellipse x:Name="indicatorCirculationPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0" MouseLeftButtonUp="indicatorCirculationPumpOn_Click">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -36,7 +36,7 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label Content="Circulation Pump On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124"/>
+            <Label Content="Circulation Pump On" HorizontalAlignment="Right" VerticalAlignment="Top" Width="124" Margin="0,2,0,0"/>
         </Grid>
         <Grid Margin="4,348,22,47">
             <Ellipse x:Name="indicatorTransferPumpOn" Fill="LightGray" HorizontalAlignment="Left" Height="20" Stroke="Black" VerticalAlignment="Top" Width="20" RenderTransformOrigin="0.5,0.5" Margin="0,3,0,0">
@@ -49,7 +49,7 @@
                     </TransformGroup>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Label Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,0,0,0"/>
+            <Label Content="Tranfer Pump On" HorizontalAlignment="Left" VerticalAlignment="Top" Width="124" Margin="20,2,0,0"/>
         </Grid>
         <ToggleButton x:Name="tglDrainValve" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="33" Margin="10,383,0,0">
             <ToggleButton.Style>
