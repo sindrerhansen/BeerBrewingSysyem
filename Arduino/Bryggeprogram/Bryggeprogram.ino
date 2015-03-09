@@ -1,11 +1,12 @@
 // This code is for a Arduino Mega. By Sindre
-
+float tempVolume;
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #pragma region Init
 const int ONE_WIRE_BUS = 2;
-const unsigned long prePumpeTimeSparge = 60;
-const int flowOfSet = 0.3;
+const long prePumpeTimeSparge = 20;
+const int flowOfSet = 0.2;
+const int MashCirculationStartTreshold = 2;
 
 #pragma endregion Init
 // Setup a oneWire instance to communicate with any OneWire devices 
@@ -85,13 +86,13 @@ Sequence Boil;
 
 float ambientTemperature = 0;
 
-unsigned long refTime = 0;
-unsigned long refTime2 = 0;
-unsigned long elapsedTimeMinutes = 0;
-unsigned long elapsedTimeSeconds = 0;
-unsigned long timeSpan = 0;
-unsigned long remainingTime = 0;
-unsigned long timez = 0;
+long refTime = 0;
+long refTime2 = 0;
+long elapsedTimeMinutes = 0;
+long elapsedTimeSeconds = 0;
+long timeSpan = 0;
+long remainingTime = 0;
+long timez = 0;
 float lastTotVolume = 0;
 int state = 0;
 bool startBrewing = false;
@@ -126,9 +127,9 @@ void setup() {
 	// Setting the HLT inn and out pins 
 	Hlt.CirculationPump.OutputPin = 4;
 	Hlt.TransferPump.OutputPin = 5;
-	Hlt.DrainValve.OutputPin = 22;
 	Hlt.Element1.OutputPin = 20;
 	Hlt.Element2.OutputPin = 21;
+	Hlt.DrainValve.OutputPin = 22;
 	Hlt.LevelOverHeatingElements.InputPin = 26;
 	Hlt.LevelHigh.InputPin = 27;
 	// Setting the HLT inn and out
@@ -145,9 +146,9 @@ void setup() {
 	// Setting the  MashTank inn and out pins 
 	MashTank.CirculationPump.OutputPin = 6;
 	MashTank.TransferPump.OutputPin = 7;
+	MashTank.Element1.OutputPin = 30;
+	MashTank.Element2.OutputPin = 31;
 	MashTank.DrainValve.OutputPin = 32;
-	MashTank.Element1.OutputPin = 33;
-	MashTank.Element2.OutputPin = 34;
 	MashTank.LevelOverHeatingElements.InputPin = 35;
 	MashTank.LevelHigh.InputPin = 36;
 	// Setting the MashTank inn and out
@@ -162,11 +163,11 @@ void setup() {
 
 #pragma region Init_BoilTank
 	// Setting the BoilTank inn and out pins 
-	BoilTank.CirculationPump.OutputPin = 40;
-	BoilTank.TransferPump.OutputPin = 41;
+	BoilTank.CirculationPump.OutputPin = 8;
+	BoilTank.TransferPump.OutputPin = 9;
+	BoilTank.Element1.OutputPin = 40;
+	BoilTank.Element2.OutputPin = 41;
 	BoilTank.DrainValve.OutputPin = 42;
-	BoilTank.Element1.OutputPin = 43;
-	BoilTank.Element2.OutputPin = 44;
 	BoilTank.LevelOverHeatingElements.InputPin = 45;
 	BoilTank.LevelHigh.InputPin = 46;
 	// Setting the BoilTank inn and out
@@ -310,7 +311,7 @@ void loop() {
 			sendMessage += String(Sparge.AddVolumeSP) + valueDevider;
 			sendMessage += String(Boil.TimeMinutsSP) + valueDevider;
 			sendMessage += systemDevider;
-			
+		//	Serial.println(sendMessage);
 		}
 
 		else if (inputString.startsWith("OVERRIDE"))
@@ -376,7 +377,7 @@ void loop() {
 		break;
 
 	case 20:// Meshing in
-
+		Hlt.CirculationPump.Value = true;
 		Hlt.TransferPump.Value = true;
 		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
@@ -385,7 +386,7 @@ void loop() {
 			Hlt.Element1.Value = true;
 		}
 
-		if (MashTank.Volume > 15)
+		if (MashTank.Volume > MashCirculationStartTreshold)
 		{
 			MashTank.CirculationPump.Value = true;
 			if (MashTank.TemperatureTank<MashTank.TemperatureTankSetPoint)
@@ -408,7 +409,7 @@ void loop() {
 		break;
 
 	case 30:
-
+		if (MashStep1.TimeMinutsSP <= 0){ state = 31; }
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -441,6 +442,7 @@ void loop() {
 		break;
 
 	case 31:
+		if (MashStep2.TimeMinutsSP <= 0){ state = 32; }
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -474,6 +476,9 @@ void loop() {
 		break;
 
 	case 32:
+		
+		if (MashStep3.TimeMinutsSP <= 0){state = 33;}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -507,6 +512,7 @@ void loop() {
 		break;
 
 	case 33:
+		if (MashStep4.TimeMinutsSP <= 0){ state = 34; }
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -553,19 +559,15 @@ void loop() {
 			Hlt.Element2.Value = true;
 		}
 		MashTank.TransferPump.Value = true;
-
+		Serial.println(tempVolume);
 		if (elapsedTimeSeconds >= prePumpeTimeSparge)
 		{
-			Hlt.TransferPump.Value = true;
-		}
-
-		if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
-		{
-			Hlt.TransferPump.Value = true;
-		}
-		else if (elapsedTimeSeconds>(MashTank.Volume))
-		{
-
+			
+			if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+			{
+				Hlt.TransferPump.Value = true;
+			}
+			
 		}
 
 		if (BoilTank.LevelOverHeatingElements.State)

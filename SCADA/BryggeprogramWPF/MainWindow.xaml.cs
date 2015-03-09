@@ -362,12 +362,6 @@ namespace BryggeprogramWPF
                     {
                         //var values = new List<string>();
                         var ConSe = Regex.Split(item, ":");
-                        //for (int i = 0; i <= ConSe.Length; i++ )
-                        //{
-                        //    values[i] = ConSe[i];
-                        //}
-
-
                     }
 
 
@@ -576,8 +570,17 @@ namespace BryggeprogramWPF
 
         public void SendOverrideCommandHeatingElement(object sender, EventArgs args)
         {
+            string _overrideMessage = "OVERRIDE";
             var tank = (TankInfo)sender;
             MessageBox.Show(tank.HeatingElement.Override.ToString());
+  
+            int o = tank.HeatingElement.Override ? 1 : 0;
+            
+
+            _overrideMessage += 20 + o;
+   
+	      
+            
         }
 
         public void SendOverrideCommandCirculationPump(object sender, EventArgs args)
