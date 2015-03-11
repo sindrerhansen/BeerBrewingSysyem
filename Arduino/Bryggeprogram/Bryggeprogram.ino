@@ -346,13 +346,13 @@ void loop() {
 //	Serial.println(devises);
 	Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
 	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
-	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(1);
+	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(2);
 	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
-	MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
+	MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
 	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
-	BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(3);
+	BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(4);
 	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
-	ambientTemperature = TemperatureSensors.getTempCByIndex(4);
+	ambientTemperature = TemperatureSensors.getTempCByIndex(3);
 	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
 	sendMessage += "STATE" + String(state) + systemDevider;
 

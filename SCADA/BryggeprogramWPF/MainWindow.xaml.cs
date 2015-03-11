@@ -237,6 +237,15 @@ namespace BryggeprogramWPF
                         MashTank.GauageActTemp.Value = value;
                         MashTank.TextActuelTemp.Text = value.ToString();
                     }
+
+                    else if (item.StartsWith("MarTe"))
+                    {
+                                              double value;
+                        var trimmed = item.Remove(0, 5).Replace(".", ",");
+                        double.TryParse(trimmed, out value);
+                        mashTank.HeatingElementReturTemperature = value;
+                        MashTank.txtTemperatureAfterHeate.Text = value.ToString();
+                    }
                     else if (item.StartsWith("MatSp"))
                     {
                         double value;

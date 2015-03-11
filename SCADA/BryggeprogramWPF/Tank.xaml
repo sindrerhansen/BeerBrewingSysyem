@@ -66,7 +66,7 @@
             </ToggleButton.Style>
         </ToggleButton>
         <Canvas x:Name="canvTempAfterHeatingElement" Margin="4,295,9,107">
-            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="47" FontSize="16" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBox x:Name="txtTemperatureAfterHeate" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="47" FontSize="16" FontWeight="Bold" TextAlignment="Right"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Temp after heater" VerticalAlignment="Top" Width="105" FontSize="12" Canvas.Left="52" Canvas.Top="8"/>
         </Canvas>
         <Canvas x:Name="canvTankVolume" Margin="4,220,9,182">
