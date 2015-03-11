@@ -248,10 +248,10 @@ void loop() {
 				Serial.println("CMD = 10");
 				state = 10;
 			}
-			else if (CMD == 20)
+		else if ((CMD == 20) && (state<20))
 			{
 				startBrewing = true;
-				Serial.println("CMD = 20");
+				state = 20;
 			}
 		}
 
@@ -360,6 +360,7 @@ void loop() {
 	{
 	case 0:
 		// ideal state nothing is happening 
+		sendMessage += "Messa_"; // Clering message	
 		break;
 
 	case 10:
