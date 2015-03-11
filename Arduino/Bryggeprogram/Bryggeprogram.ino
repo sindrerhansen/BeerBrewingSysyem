@@ -395,7 +395,7 @@ void loop() {
 				MashTank.Element1.Value = true;
 			}
 		}
-		if ((MashTank.Volume+flowOfSet) >= MashInn.AddVolumeSP)
+		if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
 		{
 			Hlt.TransferPump.Value = false;
 			sendMessage += "MessaAdd corn_";
