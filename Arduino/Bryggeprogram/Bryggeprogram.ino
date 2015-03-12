@@ -390,7 +390,7 @@ void loop() {
 
 	case 20: // Transfering water from HLT to Mash tank, waiting for grain
 		Hlt.CirculationPump.Value = true;
-		Hlt.TransferPump.Value = true;
+		
 		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
@@ -406,9 +406,15 @@ void loop() {
 				MashTank.Element1.Value = true;
 			}
 		}
+		if (MashTank.Volume + flowOfSet < MashInn.AddVolumeSP)
+		{
+			Hlt.TransferPump.Value = true;
+		}
+
+
 		if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
 		{
-			Hlt.TransferPump.Value = false;
+			
 			sendMessage += "MessaAdd grain_";
 			if (messageConfirmd)
 			{
