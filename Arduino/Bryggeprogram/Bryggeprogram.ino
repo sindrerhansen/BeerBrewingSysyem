@@ -121,6 +121,8 @@ bool oneTimeCase36 = true;
 bool oneTimeCase37 = true;
 bool oneTimeCase38 = true;
 bool oneTimeCase39 = true;
+bool oneTimeCase40 = true;
+bool oneTimeCase41 = true;
 
 bool oneTimeCase51 = true;
 
@@ -671,6 +673,12 @@ void loop() {
 		timeSpan = MashTank.Volume * 10;
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		
+		if (oneTimeCase40)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+			oneTimeCase40 = false;
+		}
+
 		Hlt.CirculationPump.Value = true;
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
@@ -695,6 +703,12 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
 		timeSpan = totalAddedVolume * 30;
 		remainingTime = timeSpan - elapsedTimeSeconds;
+
+		if (oneTimeCase41)
+		{
+			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+			oneTimeCase41 = false;
+		}
 
 		MashTank.TransferPump.Value = true;
 		Serial.println(tempVolume);
