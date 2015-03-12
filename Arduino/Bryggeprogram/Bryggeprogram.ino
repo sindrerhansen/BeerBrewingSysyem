@@ -739,6 +739,8 @@ void loop() {
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;	
 		remainingTime = - elapsedTimeSeconds;
+		Boil.TemperatureSP = BoilTempThreshold;
+		BoilTank.TemperatureTankSetPoint = Boil.TemperatureSP;
 		
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
@@ -746,7 +748,7 @@ void loop() {
 			BoilTank.Element2.Value = true;
 		}
 
-		if (BoilTank.TemperatureTank>BoilTempThreshold)
+		if (BoilTank.TemperatureTank>Boil.TemperatureSP)
 		{
 			refTime = millis();
 			state = 51;
