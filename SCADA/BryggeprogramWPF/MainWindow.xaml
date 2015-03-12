@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:Controls="clr-namespace:Yuhan.WPF.Controls;assembly=Yuhan.WPF.GaugeBar" xmlns:sparrowToolkit="http://sparrowtoolkit.codeplex.com/wpf" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:GaugeControl="clr-namespace:Tech4WPF.GaugeControl;assembly=Tech4WPF" xmlns:KnobControl="clr-namespace:Tech4WPF.KnobControl;assembly=Tech4WPF" xmlns:ChartControl="clr-namespace:Tech4WPF.ChartControl;assembly=Tech4WPF"
         Closing="DataWindow_Closing" 
+        xmlns:oxy="http://oxyplot.org/wpf"
         x:Class="BryggeprogramWPF.MainWindow"
         xmlns:local="clr-namespace:BryggeprogramWPF"
-        Title="MainWindow" Height="494.432" Width="1261.602">
+        Title="MainWindow" Height="878.432" Width="1261.602">
     <Grid>
         <TabControl HorizontalAlignment="Left" Height="447" Margin="10,10,0,0" VerticalAlignment="Top" Width="344">
             <TabItem x:Name="ConnectionTab" Header="Connection" Margin="0,0,-4,-4">
@@ -130,6 +131,14 @@
         <TextBlock HorizontalAlignment="Left" Margin="359,19,0,0" TextWrapping="Wrap" Text="Hot Liquid Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="544,19,0,0" TextWrapping="Wrap" Text="Mesh Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
+        <Grid HorizontalAlignment="Left" Height="360" Margin="10,481,0,0" VerticalAlignment="Top" Width="1234">
+            <oxy:Plot Title="{Binding Title}" Name="Plot">
+                <oxy:Plot.Series>
+                    <oxy:LineSeries ItemsSource="{Binding Points}"/>
+                </oxy:Plot.Series>
+            </oxy:Plot>
+            <Button x:Name="btnAddPoint" Content="Add Point to chart" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" Width="124" Click="btnAddPoint_Click"/>
+        </Grid>
 
 
 

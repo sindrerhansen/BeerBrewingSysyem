@@ -17,6 +17,7 @@ using System.IO.Ports;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using OxyPlot;
 
 
 namespace BryggeprogramWPF
@@ -26,7 +27,9 @@ namespace BryggeprogramWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
+        MainViewModel chart = new MainViewModel();
+
         BrewingData brewingData = new BrewingData();
         
         SerialPort mySerialPort = new SerialPort();
@@ -44,11 +47,12 @@ namespace BryggeprogramWPF
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
-
+        int point = new int();
         public MainWindow()
         {
             InitializeComponent();
-
+            this.DataContext = chart;
+            point = 0;
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -374,7 +378,10 @@ namespace BryggeprogramWPF
                     }
 
 
-                }                
+                }
+                chart.Points.Add(new DataPoint(point, ambiantTemperature));
+                Plot.InvalidatePlot();
+                point++;
             }
 
             catch (Exception ex) {
@@ -602,6 +609,15 @@ namespace BryggeprogramWPF
         {
             var tank = (TankInfo)sender;
             MessageBox.Show(tank.TransferPump.Override.ToString());
+        }
+
+        private void btnAddPoint_Click(object sender, RoutedEventArgs e)
+        {
+            Random r = new Random();
+
+            chart.Points.Add(new DataPoint(point, r.Next(0, 100)));
+            Plot.InvalidatePlot();
+            point++;
         }
     }
 }
