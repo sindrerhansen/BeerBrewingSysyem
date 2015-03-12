@@ -678,7 +678,7 @@ void loop() {
 			Hlt.Element2.Value = true;
 		}
 
-		break;
+		
 		MashTank.TransferPump.Value = true;
 
 		if (remainingTime < 0)
@@ -686,6 +686,7 @@ void loop() {
 			refTime = millis();
 			state = 41;
 		}
+		break;
 
 	case 41: // Sparge
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
