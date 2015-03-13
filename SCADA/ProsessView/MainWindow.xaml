@@ -8,8 +8,14 @@
 
     <Grid>
         <oxy:Plot Title="{Binding Title}" Name="Plot">
+            <oxy:Plot.Axes>
+                <oxy:DateTimeAxis Position="Bottom">
+                </oxy:DateTimeAxis>
+                <oxy:LinearAxis Position="Left"></oxy:LinearAxis>
+            </oxy:Plot.Axes>
             <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}"/>
+                <oxy:LineSeries ItemsSource="{Binding Line1}"/>
+                <oxy:LineSeries ItemsSource="{Binding Line2}"/>
             </oxy:Plot.Series>
         </oxy:Plot>
         <Button x:Name="btnAddValue" Content="Button" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" Width="75" Click="btnAddValue_Click"/>

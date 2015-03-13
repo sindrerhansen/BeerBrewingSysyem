@@ -10,11 +10,13 @@ namespace ProsessView
         public MainViewModel()
         {
             this.Title = "Test";
-            this.Points = new List<DataPoint>();
+            this.Line1 = new List<DataPoint>();
+            this.Line2 = new List<DataPoint>();
         }
 
         public string Title { get; private set; }
 
-        public List<DataPoint> Points { get; set; }
+        public List<DataPoint> Line1 { get; set; }
+        public List<DataPoint> Line2 { get; set; }
     }
 }

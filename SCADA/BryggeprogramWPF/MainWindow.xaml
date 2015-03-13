@@ -17,6 +17,7 @@
                     <Label Content="COM Port" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                     <Label Content="Baud Rate" HorizontalAlignment="Left" Margin="110,10,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="110,57,0,0" VerticalAlignment="Top" Width="85" Click="btnDisconnect_Click" RenderTransformOrigin="0.717,2.302"/>
+                    <Button x:Name="btnProsessView" Content="ProsessView" Margin="225,357,34,36" Click="btnProsessView_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Commans" Margin="4,0,-8,-4">
@@ -133,8 +134,15 @@
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <Grid HorizontalAlignment="Left" Height="360" Margin="10,481,0,0" VerticalAlignment="Top" Width="1234">
             <oxy:Plot Title="{Binding Title}" Name="Plot">
+                <oxy:Plot.Axes>
+                    <oxy:DateTimeAxis Position="Bottom">
+                    </oxy:DateTimeAxis>
+                    <oxy:LinearAxis Position="Left"></oxy:LinearAxis>
+                </oxy:Plot.Axes>
                 <oxy:Plot.Series>
-                    <oxy:LineSeries ItemsSource="{Binding Points}"/>
+                    <oxy:LineSeries ItemsSource="{Binding HLT}"/>
+                    <oxy:LineSeries ItemsSource="{Binding MashTank}"/>
+                    <oxy:LineSeries ItemsSource="{Binding BoilTank}"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
             <Button x:Name="btnAddPoint" Content="Add Point to chart" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" Width="124" Click="btnAddPoint_Click"/>

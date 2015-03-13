@@ -11,12 +11,16 @@ namespace BryggeprogramWPF
     {
         public MainViewModel()
         {
-            this.Title = "Test";
-            this.Points = new List<DataPoint>();
+            this.Title = "";
+            this.HLT = new List<DataPoint>();
+            this.MashTank = new List<DataPoint>();
+            this.BoilTank = new List<DataPoint>();
         }
 
         public string Title { get; private set; }
 
-        public List<DataPoint> Points { get; set; }
+        public List<DataPoint> HLT { get; set; }
+        public List<DataPoint> MashTank { get; set; }
+        public List<DataPoint> BoilTank { get; set; }
     }
 }

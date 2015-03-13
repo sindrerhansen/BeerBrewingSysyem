@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OxyPlot;
+using OxyPlot.Axes;
+
 
 namespace ProsessView
 {
@@ -22,22 +24,25 @@ namespace ProsessView
     public partial class MainWindow : Window
     {
         MainViewModel mod = new MainViewModel();
-        int point = new int();
+        
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = mod;
-            point = 0;
+            
+            
         }
 
         private void btnAddValue_Click(object sender, RoutedEventArgs e)
         {
-            Random r = new Random();
-
-            mod.Points.Add(new DataPoint(point, r.Next(0, 100)));
+            Random random = new Random();
+            
+            mod.Line1.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), random.Next(0, 100)));
+            mod.Line2.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), random.Next(0, 50)));
             Plot.InvalidatePlot();
-            point++;
+       
 
         }
+
     }
 }

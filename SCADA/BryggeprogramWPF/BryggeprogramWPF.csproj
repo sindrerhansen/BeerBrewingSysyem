@@ -114,6 +114,9 @@
     <Compile Include="Functions.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="TankVM.cs" />
+    <Compile Include="TrendWindow.xaml.cs">
+      <DependentUpon>TrendWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +135,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Tank.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TrendWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

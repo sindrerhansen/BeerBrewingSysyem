@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using OxyPlot;
+using OxyPlot.Axes;
 
 
 namespace BryggeprogramWPF
@@ -47,12 +48,12 @@ namespace BryggeprogramWPF
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
-        int point = new int();
+        
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = chart;
-            point = 0;
+            
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -70,7 +71,17 @@ namespace BryggeprogramWPF
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+
+            Random r = new Random();
+
+            var _now = DateTime.Now;
+            chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             
+            Plot.InvalidatePlot();
+
+
             if (mySerialPort.IsOpen)
             {
                 indConnected.Fill = myGreenBrush;
@@ -379,9 +390,12 @@ namespace BryggeprogramWPF
 
 
                 }
-                chart.Points.Add(new DataPoint(point, ambiantTemperature));
+                var _now = DateTime.Now;
+                chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), hotLiqureTank.TemperatureActual));
+                chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.TemperatureActual));
+                chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), boilTank.TemperatureActual));
                 Plot.InvalidatePlot();
-                point++;
+                
             }
 
             catch (Exception ex) {
@@ -615,9 +629,19 @@ namespace BryggeprogramWPF
         {
             Random r = new Random();
 
-            chart.Points.Add(new DataPoint(point, r.Next(0, 100)));
+            var _now = DateTime.Now;
+            chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             Plot.InvalidatePlot();
-            point++;
+            
+        }
+
+        private void btnProsessView_Click(object sender, RoutedEventArgs e)
+        {
+            TrendWindow trendWindow = new TrendWindow();
+            trendWindow.DataContext = chart;
+            trendWindow.Show();
         }
     }
 }
