@@ -135,6 +135,15 @@ void setup() {
 	timez = millis();
 	TemperatureSensors.begin();
 
+	// Set resolution
+
+	//int t = TemperatureSensors.getDeviceCount();
+	//for (int sensor = 0; sensor < t; sensor++)
+	//{
+	//	TemperatureSensors.getAddress(t);
+	//}
+	//TemperatureSensors.setResolution
+
 #pragma region Init_HLT
 	// Setting the HLT inn and out pins 
 	Hlt.CirculationPump.OutputPin = 4;
@@ -368,6 +377,9 @@ void loop() {
 	ambientTemperature = TemperatureSensors.getTempCByIndex(3);
 	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
 	sendMessage += "STATE" + String(state) + systemDevider;
+
+	// Reading sensors
+	BoilTank.LevelOverHeatingElements.State = digitalRead(BoilTank.LevelOverHeatingElements.InputPin);
 
 	switch (state)
 	{
@@ -755,7 +767,9 @@ void loop() {
 		}
 		break;
 
-	case 51:
+	case 51:  
+
+		
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		timeSpan = Boil.TimeMinutsSP * 60;
