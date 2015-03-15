@@ -15,6 +15,7 @@ namespace BryggeprogramWPF
             this.HLT = new List<DataPoint>();
             this.MashTank = new List<DataPoint>();
             this.BoilTank = new List<DataPoint>();
+            this.MashTankAddedVolume = new List<DataPoint>();
         }
 
         public string Title { get; private set; }
@@ -22,5 +23,6 @@ namespace BryggeprogramWPF
         public List<DataPoint> HLT { get; set; }
         public List<DataPoint> MashTank { get; set; }
         public List<DataPoint> BoilTank { get; set; }
+        public List<DataPoint> MashTankAddedVolume { get; set; }
     }
 }
