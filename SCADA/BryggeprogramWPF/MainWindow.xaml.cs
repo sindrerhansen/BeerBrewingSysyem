@@ -394,6 +394,7 @@ namespace BryggeprogramWPF
                 chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), hotLiqureTank.TemperatureActual));
                 chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.TemperatureActual));
                 chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), boilTank.TemperatureActual));
+                chart.MashTankAddedVolume.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.Volume));
                 Plot.InvalidatePlot();
                 
             }
@@ -633,6 +634,7 @@ namespace BryggeprogramWPF
             chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            chart.MashTankAddedVolume.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             Plot.InvalidatePlot();
             
         }

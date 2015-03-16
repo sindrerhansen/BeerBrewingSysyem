@@ -140,10 +140,10 @@
                     </oxy:LinearAxis>
                 </oxy:Plot.Axes>
                 <oxy:Plot.Series>
-                    <oxy:LineSeries Title="HLT" ItemsSource="{Binding HLT}" />
-                    <oxy:LineSeries Title="MashTank" ItemsSource="{Binding MashTank}"/>
-                    <oxy:LineSeries Title="BoilTank" ItemsSource="{Binding BoilTank}"/>
-                    <oxy:LineSeries Title="Mash Tank Volume" ItemsSource="{Binding MashTankAddedVolume}"/>
+                    <oxy:LineSeries Smooth="True" Title="HLT" ItemsSource="{Binding HLT}" />
+                    <oxy:LineSeries Smooth="True" Title="MashTank" ItemsSource="{Binding MashTank}"/>
+                    <oxy:LineSeries Smooth="True" Title="BoilTank" ItemsSource="{Binding BoilTank}"/>
+                    <oxy:LineSeries Smooth="True" Title="Mash Tank Volume" ItemsSource="{Binding MashTankAddedVolume}"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
             <Button x:Name="btnAddPoint" Content="Add Point to chart" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" Width="124" Click="btnAddPoint_Click"/>

@@ -24,5 +24,6 @@ namespace BryggeprogramWPF
         public List<DataPoint> MashTank { get; set; }
         public List<DataPoint> BoilTank { get; set; }
         public List<DataPoint> MashTankAddedVolume { get; set; }
+
     }
 }
