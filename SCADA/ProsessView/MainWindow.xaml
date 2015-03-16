@@ -9,9 +9,10 @@
     <Grid>
         <oxy:Plot Title="{Binding Title}" Name="Plot">
             <oxy:Plot.Axes>
-                <oxy:DateTimeAxis Position="Bottom">
+                <oxy:DateTimeAxis Position="Bottom" MajorGridlineStyle="Solid">
                 </oxy:DateTimeAxis>
-                <oxy:LinearAxis Position="Left"></oxy:LinearAxis>
+                <oxy:LinearAxis Position="Left" MajorGridlineStyle="Solid">
+                </oxy:LinearAxis>
             </oxy:Plot.Axes>
             <oxy:Plot.Series>
                 <oxy:LineSeries ItemsSource="{Binding Line1}"/>

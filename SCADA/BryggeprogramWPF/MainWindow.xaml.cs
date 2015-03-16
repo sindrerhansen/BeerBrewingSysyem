@@ -72,14 +72,14 @@ namespace BryggeprogramWPF
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
 
-            Random r = new Random();
+            //Random r = new Random();
 
-            var _now = DateTime.Now;
-            chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
-            chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
-            chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            //var _now = DateTime.Now;
+            //chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            //chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
+            //chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
             
-            Plot.InvalidatePlot();
+            //Plot.InvalidatePlot();
 
 
             if (mySerialPort.IsOpen)
@@ -637,11 +637,5 @@ namespace BryggeprogramWPF
             
         }
 
-        private void btnProsessView_Click(object sender, RoutedEventArgs e)
-        {
-            TrendWindow trendWindow = new TrendWindow();
-            trendWindow.DataContext = chart;
-            trendWindow.Show();
-        }
     }
 }
