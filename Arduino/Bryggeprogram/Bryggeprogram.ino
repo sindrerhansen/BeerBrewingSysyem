@@ -227,7 +227,7 @@ void loop() {
 	// Getting Temperatures
 	TemperatureSensors.requestTemperatures();
 
-	Hlt.Element1.Value = false;
+ 	Hlt.Element1.Value = false;
 	Hlt.Element2.Value = false;
 	Hlt.CirculationPump.Value = false;
 	Hlt.TransferPump.Value = false;
@@ -682,7 +682,7 @@ void loop() {
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
-		timeSpan = MashTank.Volume * 10;
+		timeSpan = MashTank.Volume * 2;
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		
 		if (oneTimeCase40)
@@ -723,7 +723,6 @@ void loop() {
 		}
 
 		MashTank.TransferPump.Value = true;
-		Serial.println(tempVolume);
 		if (elapsedTimeSeconds >= prePumpeTimeSparge)
 		{
 			
@@ -733,7 +732,7 @@ void loop() {
 			}
 			
 		}
-
+		
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
 			BoilTank.Element1.Value = true;

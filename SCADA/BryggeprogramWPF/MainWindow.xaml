@@ -146,7 +146,6 @@
                     <oxy:LineSeries Smooth="True" Title="Mash Tank Volume" ItemsSource="{Binding MashTankAddedVolume}"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
-            <Button x:Name="btnAddPoint" Content="Add Point to chart" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" Width="124" Click="btnAddPoint_Click"/>
         </Grid>
 
 
