@@ -713,7 +713,7 @@ void loop() {
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
-		timeSpan = totalAddedVolume * 30;
+		timeSpan = totalAddedVolume * 10;
 		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		if (oneTimeCase41)
@@ -772,7 +772,7 @@ void loop() {
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		timeSpan = Boil.TimeMinutsSP * 60;
-		remainingTime = Boil.TimeMinutsSP-elapsedTimeSeconds;
+		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
