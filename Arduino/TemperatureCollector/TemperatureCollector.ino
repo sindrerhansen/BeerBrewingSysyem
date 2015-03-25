@@ -1,7 +1,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 static int ONE_WIRE_BUS = 2;
-static String valueDivider = "_";
+static char systemDevider = '_';
+static char valueDevider = ':';
 
 
 // Setup a oneWire instance to communicate with any OneWire devices 
@@ -35,15 +36,15 @@ void loop()
 	sendMessage = "";
 	int numberOfSensors = TemperatureSensors.getDeviceCount();
 	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	sendMessage += String(HltTemperatureTank) + valueDivider;
+	sendMessage += String(HltTemperatureTank) + valueDevider;
 	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(2);
-	sendMessage += String(MashTankTemperatureTank) + valueDivider;
+	sendMessage += String(MashTankTemperatureTank) + valueDevider;
 	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
-	sendMessage += String(MashTankTemperatureHeatingRetur) + valueDivider;
+	sendMessage += String(MashTankTemperatureHeatingRetur) + valueDevider;
 	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(4);
-	sendMessage += String(BoilTankTemperatureTank) + valueDivider;
+	sendMessage += String(BoilTankTemperatureTank) + valueDevider;
 	float ambientTemperature = TemperatureSensors.getTempCByIndex(3);
-	sendMessage += String(ambientTemperature) + valueDivider;
+	sendMessage += String(ambientTemperature) + valueDevider;
 
 	Serial.println(sendMessage);
 	//Serial.println(numberOfSensors);

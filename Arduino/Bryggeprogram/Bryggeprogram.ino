@@ -106,9 +106,9 @@ boolean input_2_StringComplete = false;
 String input_3_String = "";
 boolean input_3_StringComplete = false;
 
-static String systemDevider = "_";
-static String valueDevider = ":";
-static char tempDevider = '|';
+static char systemDevider = '_';
+static char valueDevider = ':';
+
 String resivedItems[20];
 String sendMessage = "";
 
@@ -316,7 +316,7 @@ void loop() {
 			input_0_String.remove(0, 3);
 			for (unsigned int i = 0; i <= input_0_String.length(); i++)
 			{
-				if (input_0_String.substring(i, i + 1) == systemDevider)
+				if (systemDevider == input_0_String.charAt(i))
 				{
 					resivedItems[index] = input_0_String.substring(deviderIndex, i);
 					index++;
@@ -389,6 +389,7 @@ void loop() {
 
 	if (input_1_StringComplete)
 	{
+		input_1_String.trim();
 		String _totalVolume = input_1_String.substring(0, 5);
 		_totalVolume.trim();
 		float _volume = _totalVolume.toFloat();
@@ -397,34 +398,54 @@ void loop() {
 			MashTank.Volume = _volume;
 		}
 		lastTotVolume = _volume;
+		input_1_String = "";
 		input_1_StringComplete = false;
 	}
 
 	if (input_2_StringComplete)
 	{
-		int devider;
-
-		for (int i = 0; i < input_2_String.length; i++)
+		int valueStartIndex = 0;
+		int conter = 0;
+		String _resiveArray[5];
+		input_2_String.trim();
+		for (int i = 0; i <= input_2_String.length(); i++)
 		{ 
-			if (tempDevider = input_2_String.charAt(i))
+			if (valueDevider == input_2_String.charAt(i))
 			{
-				devider = i;
+				_resiveArray[conter] = input_2_String.substring(valueStartIndex, i);
+				valueStartIndex = i + 1;
+				conter++;
 			}
 		}
+		Hlt.TemperatureTank = _resiveArray[0].toFloat();
+		MashTank.TemperatureTank = _resiveArray[1].toFloat();
+		MashTank.TemperatureHeatingRetur = _resiveArray[2].toFloat();
+		BoilTank.TemperatureTank = _resiveArray[3].toFloat();
+		ambientTemperature = _resiveArray[4].toFloat();
+		input_2_String = "";
+		input_2_StringComplete = false;
 	}
 
-	//Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	//sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
-	//MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(2);
-	//sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
-	//MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
-	//sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
-	//BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(4);
-	//sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
-	//ambientTemperature = TemperatureSensors.getTempCByIndex(3);
-	//sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
-	//sendMessage += "STATE" + String(state) + systemDevider;
+	if (input_3_StringComplete)
+	{
+		int valueStartIndex = 0;
+		int conter = 0;
+		String _resiveArray[5];
+		input_3_String.trim();
+		for (int i = 0; i <= input_3_String.length(); i++)
+		{
+			if (valueDevider == input_3_String.charAt(i))
+			{
+				_resiveArray[conter] = input_2_String.substring(valueStartIndex, i);
+				valueStartIndex = i + 1;
+				conter++;
+			}
+		}
 
+		input_3_String = "";
+		input_3_StringComplete = false;
+	}
+	
 	// Reading sensors
 	BoilTank.LevelOverHeatingElements.State = digitalRead(BoilTank.LevelOverHeatingElements.InputPin);
 
@@ -845,6 +866,14 @@ void loop() {
 	}
 
 #pragma region SendingMessageToSerial 
+	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
+	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
+	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
+	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
+	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
+	
+	sendMessage += "STATE" + String(state) + systemDevider;
+
 	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
 	sendMessage += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
 	sendMessage += "HltCp" + String(Hlt.CirculationPump.Value) + systemDevider;
@@ -901,5 +930,5 @@ void loop() {
 		//digitalWrite(AllTanks[tank].InnValve.OutputPin, AllTanks[tank].InnValve.ValueOut);
 	}
 #pragma endregion Setting_Outputs
-
+	delay(500);
 }

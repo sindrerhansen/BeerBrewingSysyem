@@ -391,11 +391,21 @@ namespace BryggeprogramWPF
 
                 }
                 var _now = DateTime.Now;
-                chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), hotLiqureTank.TemperatureActual));
-                chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.TemperatureActual));
-                chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), boilTank.TemperatureActual));
-                chart.MashTankAddedVolume.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.Volume));
-                Plot.InvalidatePlot();
+                try
+                {
+                    chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), hotLiqureTank.TemperatureActual));
+                    chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.TemperatureActual));
+                    chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), boilTank.TemperatureActual));
+                    chart.MashTankAddedVolume.Add(new DataPoint(DateTimeAxis.ToDouble(_now), mashTank.Volume));
+                    Plot.InvalidatePlot();
+                }
+                catch (Exception e)
+                {
+                    String message = "Error in updating chart: " + e.ToString();
+                    MessageBox.Show( message);
+                    textBoxError.Text = message;
+                }
+
                 
             }
 
@@ -438,7 +448,6 @@ namespace BryggeprogramWPF
             }
             sendString = "";
         }
-
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
@@ -589,7 +598,6 @@ namespace BryggeprogramWPF
             }
         }
 
-
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
             if (mySerialPort.IsOpen)
@@ -597,7 +605,6 @@ namespace BryggeprogramWPF
                 mySerialPort.WriteLine("CMD0");
             }
         }
-
 
         public void SendOverrideCommandHeatingElement(object sender, EventArgs args)
         {
