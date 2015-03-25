@@ -21,5 +21,8 @@
     <ClInclude Include="Visual Micro\.SerialTesty.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Visual Micro\.SerialTest.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

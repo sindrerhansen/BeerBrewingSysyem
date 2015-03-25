@@ -1,7 +1,6 @@
 // This code is for a Arduino Mega. By Sindre
 float tempVolume;
-#include <OneWire.h>
-#include <DallasTemperature.h>
+
 #pragma region Init
 const int ONE_WIRE_BUS = 2;
 const long prePumpeTimeSparge = 20;
@@ -10,12 +9,7 @@ const int MashCirculationStartTreshold = 2;
 const float BoilTempThreshold = 97.0;
 
 #pragma endregion Init
-// Setup a oneWire instance to communicate with any OneWire devices 
-// (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
 
-// Pass our oneWire reference to Dallas Temperature.
-DallasTemperature TemperatureSensors(&oneWire);
 struct Sequence
 {
 	float AddVolumeSP;
@@ -100,12 +94,21 @@ int state = 0;
 bool startBrewing = false;
 bool messageConfirmd = false;
 
-String inputString = "";
-String sensorStringAll = "";
+String input_0_String = "";
+boolean input_0_StringComplete = false;
+
+String input_1_String = "";
+boolean input_1_StringComplete = false;
+
+String input_2_String = "";
+boolean input_2_StringComplete = false;
+
+String input_3_String = "";
+boolean input_3_StringComplete = false;
+
 static String systemDevider = "_";
 static String valueDevider = ":";
-boolean input_stringcomplete = false;
-boolean sensor_stringcomplete = false;
+static char tempDevider = '|';
 String resivedItems[20];
 String sendMessage = "";
 
@@ -127,22 +130,21 @@ bool oneTimeCase41 = true;
 bool oneTimeCase51 = true;
 
 void setup() {
+	
 	Serial.begin(9600);
+	input_0_String.reserve(200);
 
-	Serial1.begin(38400);	
-	inputString.reserve(100);
+	Serial1.begin(38400);
+	input_1_String.reserve(200);
+
+	Serial2.begin(9600);
+	input_2_String.reserve(200);
+
+	Serial3.begin(9600);
+	input_3_String.reserve(200);
 
 	timez = millis();
-	TemperatureSensors.begin();
 
-	// Set resolution
-
-	//int t = TemperatureSensors.getDeviceCount();
-	//for (int sensor = 0; sensor < t; sensor++)
-	//{
-	//	TemperatureSensors.getAddress(t);
-	//}
-	//TemperatureSensors.setResolution
 
 #pragma region Init_HLT
 	// Setting the HLT inn and out pins 
@@ -203,29 +205,49 @@ void setup() {
 
 }
 
-void serialEvent() {
-	String inString = Serial.readString();
-	inputString = inString;
-	if (inputString.endsWith("\n")) {
-		input_stringcomplete = true;
+void serialEvent(){
+	while (Serial.available()) {
+		char inChar = (char)Serial.read();
+		input_0_String += inChar;
+		if (inChar == '\n') {
+			input_0_StringComplete = true;
+		}
 	}
 }
 
-void serialEvent1() {
-	String _sensString = Serial1.readStringUntil('\r');
-	String _totalVolume = _sensString.substring(0, 5);
-	_totalVolume.trim();
-	float _volume = _totalVolume.toFloat();
-	if (abs(lastTotVolume - _volume) < 0.5)
-	{
-		MashTank.Volume = _volume;
+void serialEvent1(){
+	while (Serial1.available()) {
+		char inChar = (char)Serial1.read();
+		input_1_String += inChar;
+		if (inChar == '\n') {
+			input_1_StringComplete = true;
+		}
 	}
-	lastTotVolume = _volume;
+}
+
+void serialEvent2(){
+	while (Serial2.available()) {
+		char inChar = (char)Serial2.read();
+		input_2_String += inChar;
+		if (inChar == '\n') {
+			input_2_StringComplete = true;
+		}
+	}
+}
+
+void serialEvent3(){
+	while (Serial3.available()) {
+		char inChar = (char)Serial3.read();
+		input_3_String += inChar;
+		if (inChar == '\n') {
+			input_3_StringComplete = true;
+		}
+	}
 }
 
 void loop() {
 	// Getting Temperatures
-	TemperatureSensors.requestTemperatures();
+	
 
  	Hlt.Element1.Value = false;
 	Hlt.Element2.Value = false;
@@ -249,16 +271,16 @@ void loop() {
 	remainingTime = 0;
 	totalAddedVolume = MashInn.AddVolumeSP + MashStep1.AddVolumeSP + MashStep2.AddVolumeSP + MashStep3.AddVolumeSP + MashStep4.AddVolumeSP + Sparge.AddVolumeSP;
 
-	if (input_stringcomplete)
+	if (input_0_StringComplete)
 	{
-		inputString.trim();
+		input_0_String.trim();
 		int index = 0;
 		int deviderIndex = 0;
 		
-		if (inputString.startsWith("CMD"))
+		if (input_0_String.startsWith("CMD"))
 		{
-			inputString.remove(0, 3);
-			int CMD = inputString.toInt();
+			input_0_String.remove(0, 3);
+			int CMD = input_0_String.toInt();
 			if (CMD==0)
 			{
 				state = 0;
@@ -277,26 +299,26 @@ void loop() {
 			}
 		}
 
-		else if (inputString.startsWith("CONFIRMED"))
+		else if (input_0_String.startsWith("CONFIRMED"))
 		{
 			messageConfirmd = true;
 		}
 
-		else if (inputString.startsWith("STA"))
+		else if (input_0_String.startsWith("STA"))
 		{
-			inputString.remove(0, 3);
-			int STA = inputString.toInt();
+			input_0_String.remove(0, 3);
+			int STA = input_0_String.toInt();
 			state = STA;
 		}
 
-		else if (inputString.startsWith("SET"))
+		else if (input_0_String.startsWith("SET"))
 		{
-			inputString.remove(0, 3);
-			for (unsigned int i = 0; i <= inputString.length(); i++)
+			input_0_String.remove(0, 3);
+			for (unsigned int i = 0; i <= input_0_String.length(); i++)
 			{
-				if (inputString.substring(i, i + 1) == systemDevider)
+				if (input_0_String.substring(i, i + 1) == systemDevider)
 				{
-					resivedItems[index] = inputString.substring(deviderIndex, i);
+					resivedItems[index] = input_0_String.substring(deviderIndex, i);
 					index++;
 					deviderIndex = i + 1;
 
@@ -336,11 +358,11 @@ void loop() {
 		//	Serial.println(sendMessage);
 		}
 
-		else if (inputString.startsWith("OVERRIDE"))
+		else if (input_0_String.startsWith("OVERRIDE"))
 		{
-			inputString.remove(0, 8);
-			inputString.trim();
-			int _overrideCMD = inputString.toInt();
+			input_0_String.remove(0, 8);
+			input_0_String.trim();
+			int _overrideCMD = input_0_String.toInt();
 			if (_overrideCMD<10)
 			{
 
@@ -361,22 +383,47 @@ void loop() {
 			}
 		}
 
-		inputString = "";                                                        //clear the string:
-		input_stringcomplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
+		input_0_String = "";                                                        //clear the string:
+		input_0_StringComplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
-//	int devises = TemperatureSensors.getDeviceCount();
-//	Serial.println(devises);
-	Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
-	MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(2);
-	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
-	MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
-	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
-	BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(4);
-	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
-	ambientTemperature = TemperatureSensors.getTempCByIndex(3);
-	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
-	sendMessage += "STATE" + String(state) + systemDevider;
+
+	if (input_1_StringComplete)
+	{
+		String _totalVolume = input_1_String.substring(0, 5);
+		_totalVolume.trim();
+		float _volume = _totalVolume.toFloat();
+		if (abs(lastTotVolume - _volume) < 0.5)
+		{
+			MashTank.Volume = _volume;
+		}
+		lastTotVolume = _volume;
+		input_1_StringComplete = false;
+	}
+
+	if (input_2_StringComplete)
+	{
+		int devider;
+
+		for (int i = 0; i < input_2_String.length; i++)
+		{ 
+			if (tempDevider = input_2_String.charAt(i))
+			{
+				devider = i;
+			}
+		}
+	}
+
+	//Hlt.TemperatureTank = TemperatureSensors.getTempCByIndex(0);
+	//sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
+	//MashTank.TemperatureTank = TemperatureSensors.getTempCByIndex(2);
+	//sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
+	//MashTank.TemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
+	//sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
+	//BoilTank.TemperatureTank = TemperatureSensors.getTempCByIndex(4);
+	//sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
+	//ambientTemperature = TemperatureSensors.getTempCByIndex(3);
+	//sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
+	//sendMessage += "STATE" + String(state) + systemDevider;
 
 	// Reading sensors
 	BoilTank.LevelOverHeatingElements.State = digitalRead(BoilTank.LevelOverHeatingElements.InputPin);

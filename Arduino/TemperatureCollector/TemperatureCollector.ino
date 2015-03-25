@@ -16,6 +16,7 @@ String sendMessage;
 void setup()
 {
 	Serial.begin(9600);
+	TemperatureSensors.begin();
 
 }
 
@@ -32,6 +33,7 @@ void loop()
 	// Getting Temperatures
 	TemperatureSensors.requestTemperatures();
 	sendMessage = "";
+	int numberOfSensors = TemperatureSensors.getDeviceCount();
 	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(0);
 	sendMessage += String(HltTemperatureTank) + valueDivider;
 	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(2);
@@ -44,4 +46,5 @@ void loop()
 	sendMessage += String(ambientTemperature) + valueDivider;
 
 	Serial.println(sendMessage);
+	//Serial.println(numberOfSensors);
 }

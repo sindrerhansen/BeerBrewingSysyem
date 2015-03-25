@@ -3,7 +3,7 @@
 
 
 const int ONE_WIRE_BUS = 2;
-const String systemDevider = "_";
+const char systemDevider = '|';
 
 OneWire oneWire(ONE_WIRE_BUS);
 
@@ -23,15 +23,15 @@ void loop()
 	TemperatureSensors.requestTemperatures();
 	String sendMessage = "";
 	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	sendMessage += "HltTe" + String(HltTemperatureTank) + systemDevider;
+	sendMessage += String(HltTemperatureTank) + systemDevider;
 	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(2);
-	sendMessage += "MatTe" + String(MashTankTemperatureTank) + systemDevider;
+	sendMessage += String(MashTankTemperatureTank) + systemDevider;
 	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
-	sendMessage += "MarTe" + String(MashTankTemperatureHeatingRetur) + systemDevider;
+	sendMessage += String(MashTankTemperatureHeatingRetur) + systemDevider;
 	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(4);
-	sendMessage += "BotTe" + String(BoilTankTemperatureTank) + systemDevider;
+	sendMessage += String(BoilTankTemperatureTank) + systemDevider;
 	float ambientTemperature = TemperatureSensors.getTempCByIndex(3);
-	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
+	sendMessage += String(ambientTemperature) + systemDevider;
 	
 
 	Serial.println(sendMessage);
