@@ -219,7 +219,7 @@ void serialEvent1(){
 	while (Serial1.available()) {
 		char inChar = (char)Serial1.read();
 		input_1_String += inChar;
-		if (inChar == '\n') {
+		if (inChar == '\r') {
 			input_1_StringComplete = true;
 		}
 	}
