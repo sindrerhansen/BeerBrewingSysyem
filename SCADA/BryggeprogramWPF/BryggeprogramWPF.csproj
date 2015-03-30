@@ -111,7 +111,9 @@
     </ApplicationDefinition>
     <Compile Include="BrewingData.cs" />
     <Compile Include="BrewingSettings.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="Functions.cs" />
+    <Compile Include="GetValueFromArduinoString.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="TankVM.cs" />
     <Page Include="MainWindow.xaml">

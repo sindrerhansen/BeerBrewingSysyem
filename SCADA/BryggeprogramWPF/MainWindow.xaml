@@ -132,19 +132,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="544,19,0,0" TextWrapping="Wrap" Text="Mesh Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <Grid HorizontalAlignment="Left" Height="360" Margin="10,481,0,0" VerticalAlignment="Top" Width="1234">
-            <oxy:Plot Name="Plot" LegendPlacement="Outside" LegendPosition="RightTop" LegendOrientation="Vertical" Margin="0,0,10,0">
-                <oxy:Plot.Axes>
-                    <oxy:DateTimeAxis Position="Bottom" MajorGridlineStyle="Solid">
-                    </oxy:DateTimeAxis>
-                    <oxy:LinearAxis Position="Left" MajorGridlineStyle="Solid" Title="Value">
-                    </oxy:LinearAxis>
-                </oxy:Plot.Axes>
-                <oxy:Plot.Series>
-                    <oxy:LineSeries Smooth="True" Title="HLT" ItemsSource="{Binding HLT}" />
-                    <oxy:LineSeries Smooth="True" Title="MashTank" ItemsSource="{Binding MashTank}"/>
-                    <oxy:LineSeries Smooth="True" Title="BoilTank" ItemsSource="{Binding BoilTank}"/>
-                    <oxy:LineSeries Smooth="True" Title="Mash Tank Volume" ItemsSource="{Binding MashTankAddedVolume}"/>
-                </oxy:Plot.Series>
+            <oxy:Plot x:Name="Plot" Model="{Binding PlotModel}" Margin="0,0,10,0">
             </oxy:Plot>
         </Grid>
 

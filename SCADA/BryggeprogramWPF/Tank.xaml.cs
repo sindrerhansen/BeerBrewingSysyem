@@ -25,7 +25,7 @@ namespace BryggeprogramWPF
         public event EventHandler SendOverrideCommandHeatingElement;
         public event EventHandler SendOverrideCommandCirculationPump;
         public event EventHandler SendOverrideCommandTransferElement;
-        TankInfo _tank = new TankInfo();
+        TankData _tank = new TankData();
         
 
         public Tank()

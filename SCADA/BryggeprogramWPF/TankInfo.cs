@@ -6,38 +6,48 @@ using System.Threading.Tasks;
 
 namespace BryggeprogramWPF
 {
-    class TankInfo
+    public class Sensor{
+        public double SensorValue { get; set; }
+        public string SensorIdentifier { get; set; }
+
+        public Sensor()
+        {
+            SensorValue = 0;
+            SensorIdentifier = "";
+        }
+    }
+    public class TankData
     {
-        public double TemperatureActual { get; set; }
+        public Sensor TemperatureActual { get; set; }
         public double TemperatureSetpoint {get; set;}
-        public double Volume { get; set; }
-        public double HeatingElementReturTemperature { get; set; }
-        public TankElement HeatingElement { get; set; }
-        public TankElement CirculationPump { get; set; }
-        public TankElement TransferPump { get; set; }
+        public Sensor Volume { get; set; }
+        public Sensor HeatingElementReturTemperature { get; set; }
+        public HeatingElement HeatingElement { get; set; }
+        public Pump CirculationPump { get; set; }
+        public Pump TransferPump { get; set; }
         public bool DrainValveOpen {get; set;}
 
-        public TankInfo() 
+        public TankData() 
         {
-            TemperatureActual = 0;
+            TemperatureActual = new Sensor();
             TemperatureSetpoint = 0;
-            Volume = 0;
-            HeatingElementReturTemperature = 0;
+            Volume = new Sensor();
+            HeatingElementReturTemperature = new Sensor();
             DrainValveOpen = false;
-            HeatingElement = new TankElement();
-            CirculationPump = new TankElement();
-            TransferPump = new TankElement();
+            HeatingElement = new HeatingElement();
+            CirculationPump = new Pump();
+            TransferPump = new Pump();
         }
 
 
     }
-    class TankElement
+    public class BaseElement
     {
         public bool On{get;set;}
         public bool Override{get;set;}
         public bool OverrideValue{get;set;}
 
-        public TankElement()
+        public BaseElement()
         {
             On = false;
             Override = false;
@@ -45,4 +55,8 @@ namespace BryggeprogramWPF
         }
 
     }
+
+    public class HeatingElement : BaseElement{ }
+
+    public class Pump : BaseElement { }
 }
