@@ -128,7 +128,7 @@
     <Compile Include="Tank.xaml.cs">
       <DependentUpon>Tank.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TankInfo.cs" />
+    <Compile Include="TankData.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
