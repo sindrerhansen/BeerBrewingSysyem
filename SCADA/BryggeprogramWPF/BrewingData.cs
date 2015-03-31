@@ -12,7 +12,7 @@ namespace BryggeprogramWPF
     {
         
         public double MashInTemperature { get; set; }
-        public int MashInVolume { get; set; }
+        public double MashInVolume { get; set; }
         public double MashInHltTemperature { get; set; }
         public double MashStep1Temperature { get; set; }
         public int MashStep1Time { get; set; }

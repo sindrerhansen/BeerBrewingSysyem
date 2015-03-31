@@ -174,8 +174,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("AmbTe"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         values.Add(value);
                         ambiantTemperature = value;
                         txtAmbientTemp.Text = value.ToString();
@@ -185,7 +184,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("HltSp"))
                     {
                         double value;
-                        double.TryParse(item.Remove(0, 5).Replace(".",","), out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         hotLiqureTank.TemperatureSetpoint = value;
                         HLT.TextSetTemp.Text = value.ToString();
                         
@@ -193,8 +192,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("HltTe"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         values.Add(value);
                         hotLiqureTank.TemperatureActual.SensorValue = value;
                         HLT.GauageActTemp.Value = value;
@@ -242,8 +240,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("HltVo"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         hotLiqureTank.Volume.SensorValue = value;
                         HLT.TxtTankVolume.Text = value.ToString();
                     }
@@ -251,8 +248,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("MatTe"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         values.Add(value);
                         mashTank.TemperatureActual.SensorValue = value;
                         MashTank.GauageActTemp.Value = value;
@@ -261,16 +257,15 @@ namespace BryggeprogramWPF
 
                     else if (item.StartsWith("MarTe"))
                     {
-                                              double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        double value;
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         mashTank.HeatingElementReturTemperature.SensorValue = value;
                         MashTank.txtTemperatureAfterHeate.Text = value.ToString();
                     }
                     else if (item.StartsWith("MatSp"))
                     {
                         double value;
-                        double.TryParse(item.Remove(0, 5).Replace(',', '.'), out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         mashTank.TemperatureSetpoint = value;
                         MashTank.TextSetTemp.Text = value.ToString();
 
@@ -317,8 +312,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("MatVo"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         values.Add(value);
                         mashTank.Volume.SensorValue = value;
                         MashTank.TxtTankVolume.Text = value.ToString();
@@ -327,8 +321,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("BotTe"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         values.Add(value);
                         boilTank.TemperatureActual.SensorValue = value;
                         BoilTank.GauageActTemp.Value = value;
@@ -337,7 +330,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("BotSp"))
                     {
                         double value;
-                        double.TryParse(item.Remove(0, 5).Replace(',', '.'), out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         boilTank.TemperatureSetpoint = value;
                         BoilTank.TextSetTemp.Text = value.ToString();
 
@@ -384,8 +377,7 @@ namespace BryggeprogramWPF
                     else if (item.StartsWith("BotVo"))
                     {
                         double value;
-                        var trimmed = item.Remove(0, 5).Replace(',', '.');
-                        double.TryParse(trimmed, out value);
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         boilTank.Volume.SensorValue = value;
                         BoilTank.TxtTankVolume.Text = value.ToString();
                     }
@@ -435,18 +427,18 @@ namespace BryggeprogramWPF
             
 
             sendString = "SET";
-            sendString += TxtMashInTemp.Text + "_";                //MITe
-            sendString += TxtMashInHltTemp.Text + "_";             //MIHT
-            sendString += TxtMashInVolume.Text + "_";              //MIVo
-            sendString += TxtMashStep1Temperature.Text + "_";      //M1Te
-            sendString += TxtMashStep1Time.Text + "_";             //M1Ti
-            sendString += TxtMashStep2Temperature.Text + "_";      //M2Te
-            sendString += TxtMashStep2Time.Text + "_";             //M2Ti
-            sendString += TxtMashStep3Temperature.Text + "_";      //M3Te
-            sendString += TxtMashStep3Time.Text + "_";             //M3Ti
-            sendString += TxtSpargeTemperature.Text + "_";         //SpTe
-            sendString += TxtSpargeVolume.Text + "_";              //SpVo
-            sendString += TxtBoilTime.Text + "_";                  //BoTi
+            sendString += TxtMashInTemp.Text.Replace(',','.') + "_";                //MITe
+            sendString += TxtMashInHltTemp.Text.Replace(',','.') + "_";             //MIHT
+            sendString += TxtMashInVolume.Text.Replace(',', '.') + "_";              //MIVo
+            sendString += TxtMashStep1Temperature.Text.Replace(',', '.') + "_";      //M1Te
+            sendString += TxtMashStep1Time.Text.Replace(',', '.') + "_";             //M1Ti
+            sendString += TxtMashStep2Temperature.Text.Replace(',', '.') + "_";      //M2Te
+            sendString += TxtMashStep2Time.Text.Replace(',', '.') + "_";             //M2Ti
+            sendString += TxtMashStep3Temperature.Text.Replace(',', '.') + "_";      //M3Te
+            sendString += TxtMashStep3Time.Text.Replace(',', '.') + "_";             //M3Ti
+            sendString += TxtSpargeTemperature.Text.Replace(',', '.') + "_";         //SpTe
+            sendString += TxtSpargeVolume.Text.Replace(',', '.') + "_";              //SpVo
+            sendString += TxtBoilTime.Text.Replace(',', '.') + "_";                  //BoTi
 
             if (mySerialPort.IsOpen)
             {
@@ -553,43 +545,30 @@ namespace BryggeprogramWPF
         private void btnStoreSettings_Click(object sender, RoutedEventArgs e)
         {
             BrewingData brewingData = new BrewingData();
-            double dvalue;
-            int ivalue;
-            if (double.TryParse(TxtMashInHltTemp.Text.Replace(',', '.'), out dvalue))
-            { brewingData.MashInHltTemperature = dvalue; }
 
-            if (double.TryParse(TxtMashInTemp.Text.Replace(',', '.'), out dvalue))
-            { brewingData.MashInTemperature = dvalue; }
+            brewingData.MashInHltTemperature = double.Parse(TxtMashInHltTemp.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (int.TryParse(TxtMashInVolume.Text.Replace(',', '.'), out ivalue))
-            { brewingData.MashInVolume = ivalue; }
+            brewingData.MashInTemperature = double.Parse(TxtMashInTemp.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
 
-            if (double.TryParse(TxtMashStep1Temperature.Text.Replace(',', '.'), out dvalue))
-            { brewingData.MashStep1Temperature = dvalue; }
+            brewingData.MashInVolume = double.Parse(TxtMashInVolume.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (int.TryParse(TxtMashStep1Time.Text.Replace(',', '.'), out ivalue))
-            { brewingData.MashStep1Time = ivalue; }
+            brewingData.MashStep1Temperature = double.Parse(TxtMashStep1Temperature.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (double.TryParse(TxtMashStep2Temperature.Text.Replace(',', '.'), out dvalue))
-            { brewingData.MashStep2Temperature = dvalue; }
+            brewingData.MashStep1Time = int.Parse(TxtMashStep1Time.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (int.TryParse(TxtMashStep2Time.Text.Replace(',', '.'), out ivalue))
-            { brewingData.MashStep2Time = ivalue; }
+            brewingData.MashStep2Temperature = double.Parse(TxtMashStep2Temperature.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (double.TryParse(TxtMashStep3Temperature.Text.Replace(',', '.'), out dvalue))
-            { brewingData.MashStep3Temperature = dvalue; }
+            brewingData.MashStep2Time = int.Parse(TxtMashStep2Time.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (int.TryParse(TxtMashStep3Time.Text.Replace(',', '.'), out ivalue))
-            { brewingData.MashStep3Time = ivalue; }
+            brewingData.MashStep3Temperature = double.Parse(TxtMashStep2Time.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (double.TryParse(TxtSpargeTemperature.Text.Replace(',', '.'), out dvalue))
-            { brewingData.SpargeTemperature = dvalue; }
+            brewingData.MashStep3Time = int.Parse(TxtMashStep3Time.Text.Replace(',','.'),CultureInfo.InvariantCulture);
 
-            if (double.TryParse(TxtSpargeVolume.Text.Replace(',', '.'), out dvalue))
-            { brewingData.SpargeVolume = dvalue; }
+            brewingData.SpargeTemperature = double.Parse(TxtSpargeTemperature.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            if (int.TryParse(TxtBoilTime.Text.Replace(',', '.'), out ivalue))
-            { brewingData.BoilTime = ivalue; }
+            brewingData.SpargeVolume = double.Parse(TxtSpargeVolume.Text.Replace(',','.'), CultureInfo.InvariantCulture);
+
+            brewingData.BoilTime = int.Parse(TxtBoilTime.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
             brewingData.SaveData(brewingData);
         }
@@ -643,11 +622,6 @@ namespace BryggeprogramWPF
             MessageBox.Show(tank.TransferPump.Override.ToString());
         }
 
-        private void btnAddPoint_Click(object sender, RoutedEventArgs e)
-        {
-
-            
-        }
 
     }
 }
