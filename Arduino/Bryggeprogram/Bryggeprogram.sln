@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bryggeprogram", "Bryggeprog
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TemperatureCollector", "..\TemperatureCollector\TemperatureCollector.vcxproj", "{70D03241-75FC-4F5D-9A40-2D4B2EB73799}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlowSensor", "..\..\..\..\Arduino\FlowSensor\FlowSensor.vcxproj", "{790B7CDD-375E-4391-8444-0574C0F68EDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,16 @@ Global
 		{70D03241-75FC-4F5D-9A40-2D4B2EB73799}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{70D03241-75FC-4F5D-9A40-2D4B2EB73799}.Release|Win32.ActiveCfg = Release|Win32
 		{70D03241-75FC-4F5D-9A40-2D4B2EB73799}.Release|Win32.Build.0 = Release|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Debug|Win32.Build.0 = Debug|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Win32.ActiveCfg = Release|Win32
+		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

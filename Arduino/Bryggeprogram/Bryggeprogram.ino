@@ -1,15 +1,15 @@
 // This code is for a Arduino Mega. By Sindre
-float tempVolume;
 
-#pragma region Init
+#pragma region Constants
 const int ONE_WIRE_BUS = 2;
 const long prePumpeTimeSparge = 20;
 const int flowOfSet = 0.2;
 const int MashCirculationStartTreshold = 2;
 const float BoilTempThreshold = 97.0;
 
-#pragma endregion Init
+#pragma endregion Constants
 
+#pragma region Structs
 struct Sequence
 {
 	float AddVolumeSP;
@@ -65,12 +65,16 @@ struct TankInfo
 	LevelSwitch LevelHigh;
 	LevelSwitch LevelOverHeatingElements;
 };
+#pragma endregion Structs
 
+#pragma region Declering Tanks
 TankInfo Hlt;
 TankInfo MashTank;
 TankInfo BoilTank;
 TankInfo AllTanks[3];
+#pragma endregion Declering Tanks
 
+#pragma region Declering Sequences
 Sequence MashInn;
 Sequence MashStep1;
 Sequence MashStep2;
@@ -78,9 +82,10 @@ Sequence MashStep3;
 Sequence MashStep4;
 Sequence Sparge;
 Sequence Boil;
+#pragma endregion Declering Sequences
 
+#pragma region Declaring Variables
 float ambientTemperature = 0;
-
 long refTime = 0;
 long refTime2 = 0;
 long elapsedTimeMinutes = 0;
@@ -112,8 +117,6 @@ static char valueDevider = ':';
 String resivedItems[20];
 String sendMessage = "";
 
-// Case variables
-
 bool oneTimeCase30 = true;
 bool oneTimeCase31 = true;
 bool oneTimeCase32 = true;
@@ -126,8 +129,9 @@ bool oneTimeCase38 = true;
 bool oneTimeCase39 = true;
 bool oneTimeCase40 = true;
 bool oneTimeCase41 = true;
-
+bool oneTimeCase50 = true;
 bool oneTimeCase51 = true;
+#pragma endregion Declaring Variables
 
 void setup() {
 	
@@ -246,9 +250,7 @@ void serialEvent3(){
 }
 
 void loop() {
-	// Getting Temperatures
-	
-
+#pragma region Resetting outputs 
  	Hlt.Element1.Value = false;
 	Hlt.Element2.Value = false;
 	Hlt.CirculationPump.Value = false;
@@ -270,6 +272,7 @@ void loop() {
 	timeSpan = 0;
 	remainingTime = 0;
 	totalAddedVolume = MashInn.AddVolumeSP + MashStep1.AddVolumeSP + MashStep2.AddVolumeSP + MashStep3.AddVolumeSP + MashStep4.AddVolumeSP + Sparge.AddVolumeSP;
+#pragma endregion Resetting outputs
 
 	if (input_0_StringComplete)
 	{
@@ -457,6 +460,7 @@ void loop() {
 		break;
 
 	case 10: // Prepar HLT tank temperature
+
 		Hlt.CirculationPump.Value = true;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 
@@ -501,7 +505,6 @@ void loop() {
 			if (messageConfirmd)
 			{
 				state = 30;
-				refTime = millis();    // start timer 
 				messageConfirmd = false;
 				sendMessage += "Messa_"; // Clering message				
 			}
@@ -509,6 +512,12 @@ void loop() {
 		break;
 
 	case 30://Mash step 1 timer and temp regulator
+
+		if (oneTimeCase30)
+		{
+			refTime = millis();    // start timer 
+			oneTimeCase30 = false;
+		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
@@ -518,11 +527,8 @@ void loop() {
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		Hlt.CirculationPump.Value = true;
 
-		if (oneTimeCase30)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase30 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+
 		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
 		{
 			Hlt.Element1.Value = true;
@@ -536,7 +542,6 @@ void loop() {
 
 		if (remainingTime <= 0)
 		{
-			refTime = millis();
 			state = 31;
 		}
 
@@ -544,18 +549,19 @@ void loop() {
 
 	case 31: //Heating Mash to next setpoint (Step 2)
 		
+		if (oneTimeCase31)
+		{
+			refTime = millis();
+			oneTimeCase31 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		remainingTime = -elapsedTimeSeconds;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
-
-		if (oneTimeCase31)
-		{
-			oneTimeCase31 = false;
-		}
-
 		Hlt.CirculationPump.Value = true;
+
 		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
 		{
 			Hlt.Element1.Value = true;
@@ -570,13 +576,18 @@ void loop() {
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
-			refTime = millis();
 			state = 32;
 		}
 		break;
 	
 	case 32://Mash step 2 timer and temp regulator
 		
+		if (oneTimeCase32)
+		{
+			refTime = millis();
+			oneTimeCase32 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -586,11 +597,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		if (oneTimeCase32)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase32 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
@@ -605,23 +612,23 @@ void loop() {
 
 		if (remainingTime <= 0)
 		{
-			refTime = millis();
 			state = 33;
 		}
 		break;
 	
 	case 33://Heating Mash to next setpoint (Step 3)
 		
+		if (oneTimeCase33)
+		{
+			refTime = millis();
+			oneTimeCase33 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		remainingTime = -elapsedTimeSeconds;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
-
-		if (oneTimeCase33)
-		{
-			oneTimeCase33 = false;
-		}
 
 		Hlt.CirculationPump.Value = true;
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
@@ -638,12 +645,17 @@ void loop() {
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
-			refTime = millis();
 			state = 34;
 		}
 		break;
 
 	case 34://Mash step 3 timer and temp regulator
+
+		if (oneTimeCase34)
+		{
+			refTime = millis();
+			oneTimeCase33 = false;
+		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
@@ -654,11 +666,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		if (oneTimeCase34)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase33 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
@@ -673,22 +681,23 @@ void loop() {
 
 		if (remainingTime <= 0)
 		{
-			refTime = millis();
 			state = 35;
 		}
 		break;
 	
 	case 35: //Heating Mash to next setpoint (Step 4)
+
+		if (oneTimeCase35)
+		{
+			refTime = millis();
+			oneTimeCase35 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		remainingTime = -elapsedTimeSeconds;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
-
-		if (oneTimeCase35)
-		{
-			oneTimeCase35 = false;
-		}
 
 		Hlt.CirculationPump.Value = true;
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
@@ -705,13 +714,18 @@ void loop() {
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
-			refTime = millis();
 			state = 36;
 		}
 		break;
 
 	case 36: //Mash step 4 timer and temp regulator
 	
+		if (oneTimeCase36)
+		{
+			refTime = millis();
+			oneTimeCase36 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -721,11 +735,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		if (oneTimeCase36)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase36 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
 		{
@@ -740,12 +750,17 @@ void loop() {
 
 		if (remainingTime <= 0)
 		{
-			refTime = millis();
 			state = 40;
 		}
 		break;
 
 	case 40: //Pre sparge transfer
+		if (oneTimeCase40)
+		{
+			refTime = millis();
+			oneTimeCase40 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
@@ -753,11 +768,7 @@ void loop() {
 		timeSpan = MashTank.Volume * 2;
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		
-		if (oneTimeCase40)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase40 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.CirculationPump.Value = true;
 		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
@@ -770,25 +781,26 @@ void loop() {
 		MashTank.TransferPump.Value = true;
 
 		if (remainingTime < 0)
-		{
-			refTime = millis();
+		{			
 			state = 41;
 		}
 		break;
 
 	case 41: // Sparge
+
+		if (oneTimeCase41)
+		{
+			refTime = millis();		
+			oneTimeCase41 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
 		timeSpan = totalAddedVolume * 10;
 		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		if (oneTimeCase41)
-		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase41 = false;
-		}
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		MashTank.TransferPump.Value = true;
 		if (elapsedTimeSeconds >= prePumpeTimeSparge)
@@ -809,17 +821,24 @@ void loop() {
 
 		if (remainingTime <= 0)
 		{
-			refTime = millis();
 			state = 50;
 		}
 		break;
 
 	case 50://Pre boil getting up to boil temp
+		if (oneTimeCase50)
+		{
+			refTime = millis();
+			oneTimeCase50 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;	
 		remainingTime = - elapsedTimeSeconds;
 		Boil.TemperatureSP = BoilTempThreshold;
 		BoilTank.TemperatureTankSetPoint = Boil.TemperatureSP;
+		
+
 		
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
@@ -829,18 +848,23 @@ void loop() {
 
 		if (BoilTank.TemperatureTank>Boil.TemperatureSP)
 		{
-			refTime = millis();
 			state = 51;
 		}
 		break;
 
-	case 51:  
+	case 51:  	
 
-		
+		if (oneTimeCase51)
+		{
+			refTime = millis();
+			oneTimeCase51 = false;
+		}
+
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		timeSpan = Boil.TimeMinutsSP * 60;
 		remainingTime = timeSpan - elapsedTimeSeconds;
+		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
@@ -848,10 +872,9 @@ void loop() {
 			BoilTank.Element2.Value = true;
 		}
 		
-		if (oneTimeCase51)
+		if (remainingTime <= 600)
 		{
-			sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-			oneTimeCase51 = false;
+			BoilTank.TransferPump.Value = true;
 		}
 
 		if (remainingTime <= 0)
@@ -930,5 +953,6 @@ void loop() {
 		//digitalWrite(AllTanks[tank].InnValve.OutputPin, AllTanks[tank].InnValve.ValueOut);
 	}
 #pragma endregion Setting_Outputs
+	
 	delay(500);
 }
