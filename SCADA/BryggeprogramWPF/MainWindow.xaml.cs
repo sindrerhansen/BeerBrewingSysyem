@@ -622,6 +622,14 @@ namespace BryggeprogramWPF
             MessageBox.Show(tank.TransferPump.Override.ToString());
         }
 
+        private void btnResetFlowSensor_Click(object sender, RoutedEventArgs e)
+        {
+            if (mySerialPort.IsOpen)
+            {
+                mySerialPort.WriteLine("FLOW_RES");
+            }
+        }
+
 
     }
 }

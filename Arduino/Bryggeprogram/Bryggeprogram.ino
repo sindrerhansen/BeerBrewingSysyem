@@ -386,6 +386,15 @@ void loop() {
 			}
 		}
 
+		else if (input_0_String.startsWith("FLOW")) //String FLOW_
+		{
+			input_0_String.remove(0, 5);
+			if (input_0_String.startsWith("RES"))
+			{
+				Serial1.println("X");
+			}
+		}
+
 		input_0_String = "";                                                        //clear the string:
 		input_0_StringComplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
