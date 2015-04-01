@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bryggeprogram", "Bryggeprog
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TemperatureCollector", "..\TemperatureCollector\TemperatureCollector.vcxproj", "{70D03241-75FC-4F5D-9A40-2D4B2EB73799}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlowSensor", "..\..\..\..\Arduino\FlowSensor\FlowSensor.vcxproj", "{790B7CDD-375E-4391-8444-0574C0F68EDB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlowSensor", "..\FlowSensor\FlowSensor.vcxproj", "{790B7CDD-375E-4391-8444-0574C0F68EDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
