@@ -19,8 +19,6 @@ namespace BryggeprogramWPF
                 set { plotModel = value; OnPropertyChanged("PlotModel"); }
             }
 
-            private DateTime lastUpdate = DateTime.Now;
-
             public MainViewModel()
             {
                 PlotModel = new PlotModel();
@@ -38,7 +36,7 @@ namespace BryggeprogramWPF
                                             };
             private readonly List<String> names = new List<string>
         {
-            "HLT","RRR","SSSS","Fff","eeee"
+            "HLT","MashTank","MashTank Heat Return","Boil Tank","Ambiant"
         };
 
             private void SetUpModel()
