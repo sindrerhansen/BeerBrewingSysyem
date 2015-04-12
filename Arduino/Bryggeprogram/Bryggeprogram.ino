@@ -156,8 +156,8 @@ void setup() {
 	Hlt.TransferPump.OutputPin = 5;
 	Hlt.Element1.OutputPin = 20;
 	Hlt.Element2.OutputPin = 21;
-	Hlt.DrainValve.OutputPin = 22;
-	Hlt.LevelOverHeatingElements.InputPin = 26;
+	Hlt.DrainValve.OutputPin = 26;
+	Hlt.LevelOverHeatingElements.InputPin = 22;
 	Hlt.LevelHigh.InputPin = 27;
 	// Setting the HLT inn and out
 	pinMode(Hlt.CirculationPump.OutputPin, OUTPUT);
@@ -460,6 +460,7 @@ void loop() {
 	
 	// Reading sensors
 	BoilTank.LevelOverHeatingElements.State = digitalRead(BoilTank.LevelOverHeatingElements.InputPin);
+	Hlt.LevelOverHeatingElements.State = digitalRead(Hlt.LevelOverHeatingElements.InputPin);
 
 	switch (state)
 	{
@@ -473,11 +474,8 @@ void loop() {
 		Hlt.CirculationPump.Value = true;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 
-		if ((Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint))
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
 		if (startBrewing){
 			state = 20;
 		}
@@ -488,18 +486,13 @@ void loop() {
 		
 		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-		}
+
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		if (MashTank.Volume > MashCirculationStartTreshold)
 		{
 			MashTank.CirculationPump.Value = true;
-			if (MashTank.TemperatureTank<MashTank.TemperatureTankSetPoint)
-			{
-				MashTank.Element1.Value = true;
-			}
+			MashTank.Element1.Value = TankTemperaturRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, true);			
 		}
 		if (MashTank.Volume + flowOfSet < MashInn.AddVolumeSP)
 		{
@@ -538,11 +531,7 @@ void loop() {
 
 		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
-		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -571,11 +560,7 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
 		Hlt.CirculationPump.Value = true;
 
-		if (Hlt.TemperatureTank < Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -608,11 +593,7 @@ void loop() {
 
 		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -640,11 +621,7 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
 
 		Hlt.CirculationPump.Value = true;
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -677,11 +654,7 @@ void loop() {
 
 		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -709,11 +682,7 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
 
 		Hlt.CirculationPump.Value = true;
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -746,11 +715,7 @@ void loop() {
 
 		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
@@ -780,11 +745,7 @@ void loop() {
 		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.CirculationPump.Value = true;
-		if (Hlt.TemperatureTank<Hlt.TemperatureTankSetPoint)
-		{
-			Hlt.Element1.Value = true;
-			Hlt.Element2.Value = true;
-		}
+		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		
 		MashTank.TransferPump.Value = true;
@@ -897,6 +858,8 @@ void loop() {
 		break;
 	}
 
+
+
 #pragma region SendingMessageToSerial 
 	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
 	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
@@ -964,4 +927,23 @@ void loop() {
 #pragma endregion Setting_Outputs
 	
 	delay(500);
+}
+
+bool TankTemperaturRegulator(double setpoint, double actual, bool overElement)
+{
+	if (actual<setpoint)
+	{
+		if (overElement)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
 }
