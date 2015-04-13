@@ -6,6 +6,7 @@ const long prePumpeTimeSparge = 20;
 const int flowOfSet = 0.2;
 const int MashCirculationStartTreshold = 2;
 const float BoilTempThreshold = 97.0;
+const int SerialSendingRate = 500; // Milliseconds
 
 #pragma endregion Constants
 
@@ -92,7 +93,8 @@ long elapsedTimeMinutes = 0;
 long elapsedTimeSeconds = 0;
 long timeSpan = 0;
 long remainingTime = 0;
-long timez = 0;
+unsigned long timez = 0;
+unsigned long cloopTime;
 float lastTotVolume = 0;
 float totalAddedVolume = 0;
 int state = 0;
@@ -148,6 +150,7 @@ void setup() {
 	input_3_String.reserve(200);
 
 	timez = millis();
+	cloopTime = millis();
 
 
 #pragma region Init_HLT
@@ -391,7 +394,7 @@ void loop() {
 			input_0_String.remove(0, 5);
 			if (input_0_String.startsWith("RES"))
 			{
-				Serial1.println("X");
+				Serial1.println("x");
 			}
 		}
 
@@ -402,7 +405,7 @@ void loop() {
 	if (input_1_StringComplete)
 	{
 		input_1_String.trim();
-		String _totalVolume = input_1_String.substring(0, 5);
+		String _totalVolume = input_1_String.substring(0, 4);
 		_totalVolume.trim();
 		float _volume = _totalVolume.toFloat();
 		if (abs(lastTotVolume - _volume) < 0.5)
@@ -457,10 +460,12 @@ void loop() {
 		input_3_String = "";
 		input_3_StringComplete = false;
 	}
-	
-	// Reading sensors
+#pragma region Reading Digital Sensors
+
 	BoilTank.LevelOverHeatingElements.State = digitalRead(BoilTank.LevelOverHeatingElements.InputPin);
 	Hlt.LevelOverHeatingElements.State = digitalRead(Hlt.LevelOverHeatingElements.InputPin);
+
+#pragma endregion Reading Digital Sensors
 
 	switch (state)
 	{
@@ -858,9 +863,11 @@ void loop() {
 		break;
 	}
 
-
-
-#pragma region SendingMessageToSerial 
+#pragma region SendingMessageToSerial
+	if (millis() >= (cloopTime + SerialSendingRate))
+	{
+		cloopTime = millis();			     // Updates cloopTime
+ 
 	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
 	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
 	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
@@ -891,8 +898,10 @@ void loop() {
 
 	Serial.println(sendMessage);
 	sendMessage = "";
-#pragma endregion SendingMessageToSerial
 
+	}
+
+#pragma endregion SendingMessageToSerial
 #pragma region Setting_Outputs 
 	AllTanks[1] = Hlt;
 	AllTanks[2] = MashTank;
@@ -926,7 +935,7 @@ void loop() {
 	}
 #pragma endregion Setting_Outputs
 	
-	delay(500);
+	delay(5);
 }
 
 bool TankTemperaturRegulator(double setpoint, double actual, bool overElement)

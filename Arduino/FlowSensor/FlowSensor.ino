@@ -1,44 +1,56 @@
 
-
-volatile unsigned int  flow_frequency;
 volatile unsigned int  total_flow;
+float totalLiter;
 unsigned int  l_hour;          // Calculated litres/hour                      
 static int flowmeter = 2;  // Flow Meter Pin number
-unsigned long currentTime;
 unsigned long cloopTime;
+String input_String;
+bool input_StringComplete;
 
 void flow()                  // Interruot function
 {
-	flow_frequency++;
 	total_flow++;
 }
+
 
 void setup()
 {
 	pinMode(flowmeter, INPUT);
-	Serial.begin(9600);
-	flow_frequency = 0;
+	Serial.begin(38400);
 	total_flow = 0;
 	attachInterrupt(0, flow, RISING); // Setup Interrupt 
-
 	sei();                            // Enable interrupts  
-	currentTime = millis();
-	cloopTime = currentTime;
+	cloopTime = millis();
 }
 
+void serialEvent(){
+	while (Serial.available()) {
+		char inChar = (char)Serial.read();
+		input_String += inChar;
+		if (inChar == '\n') {
+			input_StringComplete = true;
+		}
+	}
+}
 void loop()
 {
-	currentTime = millis();
-	// Every second, calculate and print litres/hour
-	if (currentTime >= (cloopTime + 1000))
+	if (millis() >= (cloopTime + 500))
 	{
-		cloopTime = currentTime;			     // Updates cloopTime
-											  	// Pulse frequency (Hz) = 7.5Q, Q is flow rate in L/min. (Results in +/- 3% range)
-		l_hour = (flow_frequency * 60 / 7.5);	 // (Pulse frequency x 60 min) / 7.5Q = flow rate in L/hour 
-		flow_frequency = 0;						// Reset Counter
-		Serial.print(l_hour, DEC);            // Print litres/hour
-		Serial.println(" L/hour");
-		Serial.print(total_flow, DEC);
-		Serial.println(" Flow pulser");
+		cloopTime = millis();			     // Updates cloopTime
+        totalLiter = total_flow / 444.444 ;
+        Serial.println(totalLiter);						
+
+	}
+
+	if (input_StringComplete)
+	{
+		input_String.trim();
+		
+		if (input_String=="x")
+		{
+			total_flow = 0;
+		}
+		input_String = "";
+		input_StringComplete = false;
 	}
 }
