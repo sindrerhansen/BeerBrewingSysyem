@@ -119,20 +119,8 @@ static char valueDevider = ':';
 String resivedItems[20];
 String sendMessage = "";
 
-bool oneTimeCase30 = true;
-bool oneTimeCase31 = true;
-bool oneTimeCase32 = true;
-bool oneTimeCase33 = true;
-bool oneTimeCase34 = true;
-bool oneTimeCase35 = true;
-bool oneTimeCase36 = true;
-bool oneTimeCase37 = true;
-bool oneTimeCase38 = true;
-bool oneTimeCase39 = true;
-bool oneTimeCase40 = true;
-bool oneTimeCase41 = true;
-bool oneTimeCase50 = true;
-bool oneTimeCase51 = true;
+int previouslyState = 0;
+
 #pragma endregion Declaring Variables
 
 void setup() {
@@ -470,12 +458,19 @@ void loop() {
 	switch (state)
 	{
 	case 0:
+		if (previouslyState!=state)
+		{
+			sendMessage += "Messa_"; // Clering message	
+		}
 		// ideal state nothing is happening 
-		sendMessage += "Messa_"; // Clering message	
+		previouslyState = state;
 		break;
-
+		
 	case 10: // Prepar HLT tank temperature
-
+		if (previouslyState != state)
+		{
+			
+		}
 		Hlt.CirculationPump.Value = true;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 
@@ -484,9 +479,14 @@ void loop() {
 		if (startBrewing){
 			state = 20;
 		}
+		previouslyState = state;
 		break;
 
 	case 20: // Transfering water from HLT to Mash tank, waiting for grain
+		if (previouslyState != state)
+		{
+
+		}
 		Hlt.CirculationPump.Value = true;
 		
 		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
@@ -516,14 +516,14 @@ void loop() {
 				sendMessage += "Messa_"; // Clering message				
 			}
 		}
+		previouslyState = state;
 		break;
 
 	case 30://Mash step 1 timer and temp regulator
 
-		if (oneTimeCase30)
+		if (previouslyState != state)
 		{
 			refTime = millis();    // start timer 
-			oneTimeCase30 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -547,15 +547,14 @@ void loop() {
 		{
 			state = 31;
 		}
-
+		previouslyState = state;
 		break;
 
 	case 31: //Heating Mash to next setpoint (Step 2)
 		
-		if (oneTimeCase31)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase31 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -577,14 +576,14 @@ void loop() {
 		{
 			state = 32;
 		}
+		previouslyState = state;
 		break;
 	
 	case 32://Mash step 2 timer and temp regulator
 		
-		if (oneTimeCase32)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase32 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -609,14 +608,14 @@ void loop() {
 		{
 			state = 33;
 		}
+		previouslyState = state;
 		break;
 	
 	case 33://Heating Mash to next setpoint (Step 3)
 		
-		if (oneTimeCase33)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase33 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -638,14 +637,14 @@ void loop() {
 		{
 			state = 34;
 		}
+		previouslyState = state;
 		break;
 
 	case 34://Mash step 3 timer and temp regulator
 
-		if (oneTimeCase34)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase33 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -670,14 +669,15 @@ void loop() {
 		{
 			state = 35;
 		}
+		previouslyState = state;
 		break;
 	
 	case 35: //Heating Mash to next setpoint (Step 4)
 
-		if (oneTimeCase35)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase35 = false;
+
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -699,14 +699,14 @@ void loop() {
 		{
 			state = 36;
 		}
+		previouslyState = state;
 		break;
 
 	case 36: //Mash step 4 timer and temp regulator
 	
-		if (oneTimeCase36)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase36 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -731,13 +731,13 @@ void loop() {
 		{
 			state = 40;
 		}
+		previouslyState = state;
 		break;
 
 	case 40: //Pre sparge transfer
-		if (oneTimeCase40)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase40 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -759,14 +759,14 @@ void loop() {
 		{			
 			state = 41;
 		}
+		previouslyState = state;
 		break;
 
 	case 41: // Sparge
 
-		if (oneTimeCase41)
+		if (previouslyState != state)
 		{
 			refTime = millis();		
-			oneTimeCase41 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -798,13 +798,13 @@ void loop() {
 		{
 			state = 50;
 		}
+		previouslyState = state;
 		break;
 
 	case 50://Pre boil getting up to boil temp
-		if (oneTimeCase50)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase50 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -825,14 +825,14 @@ void loop() {
 		{
 			state = 51;
 		}
+		previouslyState = state;
 		break;
 
 	case 51:  	
 
-		if (oneTimeCase51)
+		if (previouslyState != state)
 		{
 			refTime = millis();
-			oneTimeCase51 = false;
 		}
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -857,6 +857,7 @@ void loop() {
 			refTime = millis();
 			state = 0;
 		}
+		previouslyState = state;
 		break;
 	default:
 		state = 0;
