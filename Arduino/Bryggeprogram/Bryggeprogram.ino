@@ -118,6 +118,7 @@ static char valueDevider = ':';
 
 String resivedItems[20];
 String sendMessage = "";
+String systemMessage = "";
 
 int previouslyState = 0;
 
@@ -460,7 +461,6 @@ void loop() {
 	case 0:
 		if (previouslyState!=state)
 		{
-			sendMessage += "Messa_"; // Clering message	
 		}
 		// ideal state nothing is happening 
 		previouslyState = state;
@@ -508,12 +508,11 @@ void loop() {
 		if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
 		{
 			
-			sendMessage += "MessaAdd grain_";
+			systemMessage += "Add grain";
 			if (messageConfirmd)
 			{
 				state = 30;
-				messageConfirmd = false;
-				sendMessage += "Messa_"; // Clering message				
+				messageConfirmd = false;			
 			}
 		}
 		previouslyState = state;
@@ -876,6 +875,7 @@ void loop() {
 	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
 	
 	sendMessage += "STATE" + String(state) + systemDevider;
+	sendMessage += "Messa" + systemMessage + systemDevider;;
 
 	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
 	sendMessage += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
