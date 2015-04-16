@@ -166,10 +166,10 @@ namespace BryggeprogramWPF
                         int.TryParse(message, out time);
                         progressBar.Value = time;
                         TimeSpan t = TimeSpan.FromSeconds(time);
-                        txtTimer.Text = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        t.Hours,
-                                        t.Minutes,
-                                        t.Seconds);
+                        //txtTimer.Text = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                        //                t.Hours,
+                        //                t.Minutes,
+                        //                t.Seconds);
                         mainViewModel.Timer = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
                                         t.Hours,
                                         t.Minutes,

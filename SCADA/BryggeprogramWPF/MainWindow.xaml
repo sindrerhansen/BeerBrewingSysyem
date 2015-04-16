@@ -115,7 +115,7 @@
             </Button>
             <Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="131" Canvas.Top="166" Click="btnConfirm_Click"/>
             <TextBox x:Name="txtProsesInfo" Height="176" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="261" Width="310"/>
-            <TextBox x:Name="txtTimer" Height="23" Canvas.Left="131" TextWrapping="Wrap" Canvas.Top="50" Width="100" MouseDoubleClick="txtTimerDoubleClick"/>
+            <TextBox x:Name="txtTimer" Text="{Binding Timer}" Height="23" Canvas.Left="131" TextWrapping="Wrap" Canvas.Top="50" Width="100" MouseDoubleClick="txtTimerDoubleClick"/>
             <ProgressBar x:Name="progressBar" Height="18" Canvas.Left="10" Canvas.Top="215" Width="310"/>
             <TextBox x:Name="TxtMessageFromSystem" Height="38" Canvas.Left="10" TextWrapping="Wrap" Text="Message from system" IsReadOnly="True" Canvas.Top="123" Width="310" TextChanged="TxtMessageFromSystem_TextChanged" Background="White"/>
             <TextBox x:Name="txtAmbientTemp" Height="23" Canvas.Left="269" TextWrapping="Wrap" Text="12" Canvas.Top="5" Width="51" FontSize="16" FontWeight="Bold"/>
