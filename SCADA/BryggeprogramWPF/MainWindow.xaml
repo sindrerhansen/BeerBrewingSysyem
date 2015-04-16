@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:Controls="clr-namespace:Yuhan.WPF.Controls;assembly=Yuhan.WPF.GaugeBar" xmlns:sparrowToolkit="http://sparrowtoolkit.codeplex.com/wpf" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:GaugeControl="clr-namespace:Tech4WPF.GaugeControl;assembly=Tech4WPF" xmlns:KnobControl="clr-namespace:Tech4WPF.KnobControl;assembly=Tech4WPF" xmlns:ChartControl="clr-namespace:Tech4WPF.ChartControl;assembly=Tech4WPF"
-        Closing="DataWindow_Closing" 
+        Closing="Window_Closing" 
         xmlns:oxy="http://oxyplot.org/wpf"
         x:Class="BryggeprogramWPF.MainWindow"
         xmlns:local="clr-namespace:BryggeprogramWPF"

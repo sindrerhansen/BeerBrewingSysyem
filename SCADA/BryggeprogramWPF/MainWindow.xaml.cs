@@ -30,6 +30,7 @@ namespace BryggeprogramWPF
     {
 
         private MainViewModel mainViewModel;
+        TimerWindow TimerWindow = new TimerWindow();
 
         BrewingData brewingData = new BrewingData();
         
@@ -54,7 +55,7 @@ namespace BryggeprogramWPF
             mainViewModel = new MainViewModel();
             InitializeComponent();
             this.DataContext = mainViewModel;
-            
+                     
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -67,8 +68,6 @@ namespace BryggeprogramWPF
             
             
         }
-
-        
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -97,13 +96,6 @@ namespace BryggeprogramWPF
             }
         }
         
-
-        void DataWindow_Closing(object sender, CancelEventArgs e)
-        {
-
-        }
-
-
         private delegate void UpdateUiTextDelegate(string text);
 
         private void DataReceivedHandler(object sender,SerialDataReceivedEventArgs e)
@@ -636,13 +628,17 @@ namespace BryggeprogramWPF
             }
         }
 
-
         private void txtTimerDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            TimerWindow TimerWindow = new TimerWindow();
+            
             TimerWindow.DataContext = this.DataContext;
             TimerWindow.Show();
 
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            TimerWindow.Close();
         }
 
 
