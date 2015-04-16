@@ -130,8 +130,7 @@ namespace BryggeprogramWPF
             // Assign the value of the recieved_data to the RichTextBox.
             text.Trim();
             string replacement = Regex.Replace(text, "\r", "");
-            textBox.AppendText(replacement);
-            textBox.ScrollToEnd();
+            mainViewModel.ResivedStringFromArduino = replacement;
             
             var textList = Regex.Split(replacement, "_");
             var values = new List<double>();

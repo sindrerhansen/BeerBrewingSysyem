@@ -18,7 +18,17 @@ namespace BryggeprogramWPF
                 get { return plotModel; }
                 set { plotModel = value; OnPropertyChanged("PlotModel"); }
             }
+            
+ 
+            private string resivedStringFromArduino;
+            public string ResivedStringFromArduino
+            {
+                get {return resivedStringFromArduino; }
+                set {resivedStringFromArduino = value; OnPropertyChanged("StringFromArduino"); }
+            }            
+            
             private string timer;
+        
             public string Timer
             {
                 get { return timer; }
