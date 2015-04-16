@@ -101,7 +101,7 @@
         </TabControl>
         <Canvas x:Name="SystemParameters" HorizontalAlignment="Left" Height="447" Margin="914,10,0,0" VerticalAlignment="Top" Width="330" Background="#FFF0F0F0">
             <TextBlock Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="5" Height="19" Width="149" FontSize="14" FontWeight="Bold" TextAlignment="Center"><Run Text="System Parameters"/><LineBreak/><Run/></TextBlock>
-            <TextBox x:Name="SystemState" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="System State" Canvas.Top="50" Width="98" Background="#FFE6E6E6" IsReadOnly="True"/>
+            <TextBox x:Name="SystemState" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="{Binding BrewingState}" Canvas.Top="50" Width="98" Background="#FFE6E6E6" IsReadOnly="True"/>
             <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="System State" Canvas.Top="34"/>
             <Ellipse x:Name="indConnected" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="42" Stroke="Black" VerticalAlignment="Top" Width="42" Canvas.Left="245" Canvas.Top="34"/>
             <Button x:Name="btnPrepareBrewing" Content="Prepare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="10" Canvas.Top="98" Click="btnPrepareBrewing_Click"/>

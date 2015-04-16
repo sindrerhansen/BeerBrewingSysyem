@@ -130,7 +130,8 @@ namespace BryggeprogramWPF
             // Assign the value of the recieved_data to the RichTextBox.
             text.Trim();
             string replacement = Regex.Replace(text, "\r", "");
-            mainViewModel.ResivedStringFromArduino = replacement;
+            textBox.Text = replacement;
+  //         mainViewModel.ResivedStringFromArduino = replacement;
             
             var textList = Regex.Split(replacement, "_");
             var values = new List<double>();
@@ -141,7 +142,8 @@ namespace BryggeprogramWPF
                     if (item.StartsWith("STATE"))
                     {                     
                         int.TryParse(item.Remove(0, 5), out systemState);
-                        SystemState.Text = systemState.ToString();
+                        //SystemState.Text = systemState.ToString();
+                        mainViewModel.BrewingState = systemState;
                     }
                     else if (item.StartsWith("Messa"))
                     {

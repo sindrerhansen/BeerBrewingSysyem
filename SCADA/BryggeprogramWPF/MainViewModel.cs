@@ -27,18 +27,30 @@ namespace BryggeprogramWPF
                 set {resivedStringFromArduino = value; OnPropertyChanged("StringFromArduino"); }
             }            
             
-            private string timer;
-        
+            private string timer;     
             public string Timer
             {
                 get { return timer; }
                 set { timer = value; OnPropertyChanged("Timer"); }
             }
 
+            private double watchTemperature;
+            public double WatchTemperature
+            {
+                get { return watchTemperature; }
+                set { watchTemperature = value; OnPropertyChanged("WatchTemperature"); }
+            }
+
+            private int brewingState;
+            public int BrewingState
+            {
+                get { return brewingState; }
+                set { brewingState = value; OnPropertyChanged("BrewingState"); }
+            }
+
             public MainViewModel()
             {
-                PlotModel = new PlotModel();
-                
+                PlotModel = new PlotModel();               
                 SetUpModel();
                 LoadData();
             }
