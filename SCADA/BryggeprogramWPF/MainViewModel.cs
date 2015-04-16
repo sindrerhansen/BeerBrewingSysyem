@@ -18,10 +18,17 @@ namespace BryggeprogramWPF
                 get { return plotModel; }
                 set { plotModel = value; OnPropertyChanged("PlotModel"); }
             }
+            private string timer;
+            public string Timer
+            {
+                get { return timer; }
+                set { timer = value; OnPropertyChanged("Timer"); }
+            }
 
             public MainViewModel()
             {
                 PlotModel = new PlotModel();
+                
                 SetUpModel();
                 LoadData();
             }

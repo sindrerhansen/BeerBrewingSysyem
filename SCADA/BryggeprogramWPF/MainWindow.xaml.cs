@@ -169,6 +169,11 @@ namespace BryggeprogramWPF
                                         t.Hours,
                                         t.Minutes,
                                         t.Seconds);
+                        mainViewModel.Timer = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                        t.Hours,
+                                        t.Minutes,
+                                        t.Seconds);
+                        
                     }
 
                     else if (item.StartsWith("AmbTe"))
@@ -628,6 +633,15 @@ namespace BryggeprogramWPF
             {
                 mySerialPort.WriteLine("FLOW_RES");
             }
+        }
+
+
+        private void txtTimerDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TimerWindow TimerWindow = new TimerWindow();
+            TimerWindow.DataContext = this.DataContext;
+            TimerWindow.Show();
+
         }
 
 
