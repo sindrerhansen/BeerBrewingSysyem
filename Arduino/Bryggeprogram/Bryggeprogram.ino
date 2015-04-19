@@ -117,8 +117,8 @@ static char systemDevider = '_';
 static char valueDevider = ':';
 
 String resivedItems[20];
-String sendMessage = "";
-String systemMessage = "";
+String AllInfoString = "";
+String MessageToUser = "";
 
 int previouslyState = 0;
 
@@ -264,6 +264,8 @@ void loop() {
 	timeSpan = 0;
 	remainingTime = 0;
 	totalAddedVolume = MashInn.AddVolumeSP + MashStep1.AddVolumeSP + MashStep2.AddVolumeSP + MashStep3.AddVolumeSP + MashStep4.AddVolumeSP + Sparge.AddVolumeSP;
+
+	MessageToUser = "";
 #pragma endregion Resetting outputs
 
 	if (input_0_StringComplete)
@@ -336,20 +338,20 @@ void loop() {
 
 			Sparge.HltTemperatureSP = Sparge.TemperatureSP;
 
-			sendMessage += "ConSe";
-			sendMessage += String(MashInn.TemperatureSP) + valueDevider;
-			sendMessage += String(MashInn.HltTemperatureSP) + valueDevider;
-			sendMessage += String(MashInn.AddVolumeSP) + valueDevider;
-			sendMessage += String(MashStep1.TemperatureSP) + valueDevider;
-			sendMessage += String(MashStep1.TimeMinutsSP) + valueDevider;
-			sendMessage += String(MashStep2.TemperatureSP) + valueDevider;
-			sendMessage += String(MashStep2.TimeMinutsSP) + valueDevider;
-			sendMessage += String(MashStep3.TemperatureSP) + valueDevider;
-			sendMessage += String(MashStep3.TimeMinutsSP) + valueDevider;
-			sendMessage += String(Sparge.TemperatureSP) + valueDevider;
-			sendMessage += String(Sparge.AddVolumeSP) + valueDevider;
-			sendMessage += String(Boil.TimeMinutsSP) + valueDevider;
-			sendMessage += systemDevider;
+			AllInfoString += "ConSe";
+			AllInfoString += String(MashInn.TemperatureSP) + valueDevider;
+			AllInfoString += String(MashInn.HltTemperatureSP) + valueDevider;
+			AllInfoString += String(MashInn.AddVolumeSP) + valueDevider;
+			AllInfoString += String(MashStep1.TemperatureSP) + valueDevider;
+			AllInfoString += String(MashStep1.TimeMinutsSP) + valueDevider;
+			AllInfoString += String(MashStep2.TemperatureSP) + valueDevider;
+			AllInfoString += String(MashStep2.TimeMinutsSP) + valueDevider;
+			AllInfoString += String(MashStep3.TemperatureSP) + valueDevider;
+			AllInfoString += String(MashStep3.TimeMinutsSP) + valueDevider;
+			AllInfoString += String(Sparge.TemperatureSP) + valueDevider;
+			AllInfoString += String(Sparge.AddVolumeSP) + valueDevider;
+			AllInfoString += String(Boil.TimeMinutsSP) + valueDevider;
+			AllInfoString += systemDevider;
 		//	Serial.println(sendMessage);
 		}
 
@@ -459,17 +461,21 @@ void loop() {
 	switch (state)
 	{
 	case 0:
+		
 		if (previouslyState!=state)
 		{
+			previouslyState = state;
 		}
+
 		// ideal state nothing is happening 
-		previouslyState = state;
+		
 		break;
 		
 	case 10: // Prepar HLT tank temperature
+
 		if (previouslyState != state)
 		{
-			
+			previouslyState = state;
 		}
 		Hlt.CirculationPump.Value = true;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
@@ -479,13 +485,14 @@ void loop() {
 		if (startBrewing){
 			state = 20;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 20: // Transfering water from HLT to Mash tank, waiting for grain
+		
 		if (previouslyState != state)
 		{
-
+			previouslyState = state;
 		}
 		Hlt.CirculationPump.Value = true;
 		
@@ -508,20 +515,21 @@ void loop() {
 		if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
 		{
 			
-			systemMessage += "Add grain";
+			MessageToUser += "Add grain";
 			if (messageConfirmd)
 			{
 				state = 30;
 				messageConfirmd = false;			
 			}
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 30://Mash step 1 timer and temp regulator
-
+		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();    // start timer 
 		}
 
@@ -533,7 +541,7 @@ void loop() {
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		Hlt.CirculationPump.Value = true;
 
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		//sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
@@ -541,18 +549,20 @@ void loop() {
 		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
 			MashTank.Element1.Value = true;
 		}
-
+		
+		
 		if (remainingTime <= 0)
 		{
 			state = 31;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 31: //Heating Mash to next setpoint (Step 2)
 		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -575,13 +585,14 @@ void loop() {
 		{
 			state = 32;
 		}
-		previouslyState = state;
+		
 		break;
 	
 	case 32://Mash step 2 timer and temp regulator
 		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -594,7 +605,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
@@ -614,6 +625,7 @@ void loop() {
 		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -636,13 +648,14 @@ void loop() {
 		{
 			state = 34;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 34://Mash step 3 timer and temp regulator
-
+		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -655,7 +668,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
@@ -668,16 +681,18 @@ void loop() {
 		{
 			state = 35;
 		}
-		previouslyState = state;
+		
 		break;
 	
 	case 35: //Heating Mash to next setpoint (Step 4)
-
+		
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 
 		}
+		previouslyState = state;
 
 		elapsedTimeSeconds = (millis() - refTime) / 1000;
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
@@ -698,13 +713,14 @@ void loop() {
 		{
 			state = 36;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 36: //Mash step 4 timer and temp regulator
 	
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -717,7 +733,7 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
@@ -730,12 +746,13 @@ void loop() {
 		{
 			state = 40;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 40: //Pre sparge transfer
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -746,7 +763,7 @@ void loop() {
 		timeSpan = MashTank.Volume * 2;
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.CirculationPump.Value = true;
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
@@ -758,13 +775,14 @@ void loop() {
 		{			
 			state = 41;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 41: // Sparge
 
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();		
 		}
 
@@ -774,7 +792,7 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
 		timeSpan = totalAddedVolume * 10;
 		remainingTime = timeSpan - elapsedTimeSeconds;
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		MashTank.TransferPump.Value = true;
 		if (elapsedTimeSeconds >= prePumpeTimeSparge)
@@ -797,12 +815,13 @@ void loop() {
 		{
 			state = 50;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 50://Pre boil getting up to boil temp
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -824,13 +843,14 @@ void loop() {
 		{
 			state = 51;
 		}
-		previouslyState = state;
+		
 		break;
 
 	case 51:  	
 
 		if (previouslyState != state)
 		{
+			previouslyState = state;
 			refTime = millis();
 		}
 
@@ -838,7 +858,6 @@ void loop() {
 		elapsedTimeMinutes = elapsedTimeSeconds / 60;
 		timeSpan = Boil.TimeMinutsSP * 60;
 		remainingTime = timeSpan - elapsedTimeSeconds;
-		sendMessage += "TimSp" + String(timeSpan) + systemDevider;
 
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
@@ -856,7 +875,7 @@ void loop() {
 			refTime = millis();
 			state = 0;
 		}
-		previouslyState = state;
+		
 		break;
 	default:
 		state = 0;
@@ -868,37 +887,37 @@ void loop() {
 	{
 		cloopTime = millis();			     // Updates cloopTime
  
-	sendMessage += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
-	sendMessage += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
-	sendMessage += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
-	sendMessage += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
-	sendMessage += "AmbTe" + String(ambientTemperature) + systemDevider;
+	AllInfoString += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
+	AllInfoString += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
+	AllInfoString += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
+	AllInfoString += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
+	AllInfoString += "AmbTe" + String(ambientTemperature) + systemDevider;
 	
-	sendMessage += "STATE" + String(state) + systemDevider;
-	sendMessage += "Messa" + systemMessage + systemDevider;;
+	AllInfoString += "STATE" + String(state) + systemDevider;
+	AllInfoString += "Messa" + MessageToUser + systemDevider;;
 
-	sendMessage += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
-	sendMessage += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
-	sendMessage += "HltCp" + String(Hlt.CirculationPump.Value) + systemDevider;
-	sendMessage += "HltTp" + String(Hlt.TransferPump.Value) + systemDevider;
+	AllInfoString += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
+	AllInfoString += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
+	AllInfoString += "HltCp" + String(Hlt.CirculationPump.Value) + systemDevider;
+	AllInfoString += "HltTp" + String(Hlt.TransferPump.Value) + systemDevider;
 
-	sendMessage += "MatSp" + String(MashTank.TemperatureTankSetPoint) + systemDevider;
-	sendMessage += "MatE1" + String(MashTank.Element1.Value) + systemDevider;
-	sendMessage += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
-	sendMessage += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
-	sendMessage += "MatVo" + String(MashTank.Volume) + systemDevider;
+	AllInfoString += "MatSp" + String(MashTank.TemperatureTankSetPoint) + systemDevider;
+	AllInfoString += "MatE1" + String(MashTank.Element1.Value) + systemDevider;
+	AllInfoString += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
+	AllInfoString += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
+	AllInfoString += "MatVo" + String(MashTank.Volume) + systemDevider;
 
-	sendMessage += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
-	sendMessage += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
-	sendMessage += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
-	sendMessage += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
-	sendMessage += "BotVo" + String(BoilTank.Volume) + systemDevider;
+	AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
+	AllInfoString += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
+	AllInfoString += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
+	AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
+	AllInfoString += "BotVo" + String(BoilTank.Volume) + systemDevider;
 
-	sendMessage += "Timer" + String(elapsedTimeSeconds) + systemDevider;
-	sendMessage += "RemTi" + String(remainingTime) + systemDevider;
+	AllInfoString += "Timer" + String(elapsedTimeSeconds) + systemDevider;
+	AllInfoString += "RemTi" + String(remainingTime) + systemDevider;
 
-	Serial.println(sendMessage);
-	sendMessage = "";
+	Serial.println(AllInfoString);
+	AllInfoString = "";
 
 	}
 
@@ -941,19 +960,26 @@ void loop() {
 
 bool TankTemperaturRegulator(double setpoint, double actual, bool overElement)
 {
+	bool ret;
 	if (actual<setpoint)
 	{
 		if (overElement)
 		{
-			return true;
+			ret= true;
 		}
 		else
 		{
-			return false;
+			ret= false;
 		}
 	}
 	else
 	{
-		return false;
+		ret= false;
 	}
+
+	if (!overElement)
+	{
+		MessageToUser = "Add water to hot liquor tank!!";
+	}
+	return ret;
 }

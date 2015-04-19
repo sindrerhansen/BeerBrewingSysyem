@@ -6,6 +6,8 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
+using System.Speech.Synthesis;
+
 
 namespace BryggeprogramWPF
 {
@@ -19,19 +21,33 @@ namespace BryggeprogramWPF
                 set { plotModel = value; OnPropertyChanged("PlotModel"); }
             }
             
- 
             private string resivedStringFromArduino;
             public string ResivedStringFromArduino
             {
                 get {return resivedStringFromArduino; }
                 set {resivedStringFromArduino = value; OnPropertyChanged("StringFromArduino"); }
-            }            
+            }
+
+            private DateTime currentDateTime;
+            public DateTime CurrentDateTime
+            {
+                get { return currentDateTime; }
+                set { currentDateTime = value; OnPropertyChanged("CurrentDateTime"); TimeDisplayUpdate(); }
+            }
+            private double hotLiquidTankTemperature;
+            public double HotLiquidTankTemperature { get { return hotLiquidTankTemperature; } set { hotLiquidTankTemperature = value; OnPropertyChanged("HotLiquidTankTemperature"); TemperatureOfIntrestUpdate(); } }
             
+            private double meshTankTemperature;
+            public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; OnPropertyChanged("MeshTankTemperature"); TemperatureOfIntrestUpdate(); } }
+
+            private double boilTankTemperature;
+            public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; OnPropertyChanged("BoilTankTemperature"); TemperatureOfIntrestUpdate(); } }
+
             private string timer;     
             public string Timer
             {
                 get { return timer; }
-                set { timer = value; OnPropertyChanged("Timer"); }
+                set { timer = value; OnPropertyChanged("Timer"); TimeDisplayUpdate(); }
             }
 
             private double watchTemperature;
@@ -48,11 +64,66 @@ namespace BryggeprogramWPF
                 set { brewingState = value; OnPropertyChanged("BrewingState"); }
             }
 
+            private string timeDisplay;
+            public string TimeDisplay { get { return timeDisplay; } set { timeDisplay = value; OnPropertyChanged("TimeDisplay"); } }
+            private void TimeDisplayUpdate()
+            {
+                if (brewingState<=20)
+                {
+                    TimeDisplay = CurrentDateTime.ToString("HH.mm.ss");
+                }
+                else
+                {
+                    TimeDisplay = Timer;
+                }
+            }
+
+            private double temperatureOfIntrest;
+            public double TemperatureOfIntrest { get { return temperatureOfIntrest; } set { temperatureOfIntrest = value; OnPropertyChanged("TemperatureOfIntrest"); } }
+
+            private string messageFromSystem;
+            public string MessageFromSystem
+            { 
+                get {
+                    return messageFromSystem; }
+                set {
+                    if (messageFromSystem!=value)
+                    {
+                        messageFromSystem = value; OnPropertyChanged("MessageFromSystem");
+                        if (value.Length > 0)
+                        {
+                            SpeechSynthesizer speak = new SpeechSynthesizer();
+                            speak.Rate = -5;
+                            speak.Volume = 100;
+                            speak.SpeakAsync(value);
+                        }
+                    }
+
+                }
+            }
+
+            private void TemperatureOfIntrestUpdate()
+            {
+                if (BrewingState<=10)
+                {
+                    TemperatureOfIntrest = HotLiquidTankTemperature;
+                }
+                else if (BrewingState>=20 && BrewingState<50)
+                {
+                    TemperatureOfIntrest = MeshTankTemperature;
+                }
+                else if (BrewingState>=50)
+                {
+                    TemperatureOfIntrest = BoilTankTemperature;
+                }
+            }
+
             public MainViewModel()
             {
                 PlotModel = new PlotModel();               
                 SetUpModel();
                 LoadData();
+                
             }
 
             private readonly List<OxyColor> colors = new List<OxyColor>
@@ -65,7 +136,7 @@ namespace BryggeprogramWPF
                                             };
             private readonly List<String> names = new List<string>
         {
-            "HLT","MashTank","MashTank Heat Return","Boil Tank","Ambiant"
+            "HLT","MashTank","Boil Tank","Ambient","Mesh Volume"
         };
 
             private void SetUpModel()
