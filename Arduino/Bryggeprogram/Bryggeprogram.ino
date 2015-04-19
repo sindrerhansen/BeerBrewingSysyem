@@ -605,8 +605,6 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
-
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
@@ -667,8 +665,6 @@ void loop() {
 		remainingTime = timeSpan - elapsedTimeSeconds;
 
 		Hlt.CirculationPump.Value = true;
-
-		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
@@ -733,8 +729,6 @@ void loop() {
 
 		Hlt.CirculationPump.Value = true;
 
-		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
-
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
@@ -762,8 +756,6 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
 		timeSpan = MashTank.Volume * 2;
 		remainingTime = timeSpan - elapsedTimeSeconds;
-		
-		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 
 		Hlt.CirculationPump.Value = true;
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
@@ -792,19 +784,14 @@ void loop() {
 		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
 		timeSpan = totalAddedVolume * 10;
 		remainingTime = timeSpan - elapsedTimeSeconds;
-		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
-
-		MashTank.TransferPump.Value = true;
-		if (elapsedTimeSeconds >= prePumpeTimeSparge)
-		{
-			
-			if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
-			{
-				Hlt.TransferPump.Value = true;
-			}
-			
-		}
 		
+
+		MashTank.TransferPump.Value = true;			
+		if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+		{
+			Hlt.TransferPump.Value = true;
+		}
+				
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
 			BoilTank.Element1.Value = true;
@@ -873,9 +860,20 @@ void loop() {
 		if (remainingTime <= 0)
 		{
 			refTime = millis();
-			state = 0;
+			state = 52;
 		}
 		
+		break;
+	case 52:
+		
+		if (previouslyState != state)
+		{
+			previouslyState = state;
+			refTime = millis();
+		}
+		
+		BoilTank.TransferPump.Value = true;
+
 		break;
 	default:
 		state = 0;
@@ -913,6 +911,7 @@ void loop() {
 	AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
 	AllInfoString += "BotVo" + String(BoilTank.Volume) + systemDevider;
 
+	AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 	AllInfoString += "Timer" + String(elapsedTimeSeconds) + systemDevider;
 	AllInfoString += "RemTi" + String(remainingTime) + systemDevider;
 
