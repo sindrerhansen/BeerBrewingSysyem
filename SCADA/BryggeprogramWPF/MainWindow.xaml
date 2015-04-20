@@ -18,6 +18,7 @@
                     <Label Content="Baud Rate" HorizontalAlignment="Left" Margin="110,10,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="110,57,0,0" VerticalAlignment="Top" Width="85" Click="btnDisconnect_Click" RenderTransformOrigin="0.717,2.302"/>
                     <Button x:Name="btnResetFlowSensor" Content="Reset Flowsensor" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="185" Click="btnResetFlowSensor_Click"/>
+                    <ToggleButton Name="tglSimulateArduino" Content="Simulate" HorizontalAlignment="Left" Margin="230,57,0,0" VerticalAlignment="Top" Width="75" IsThreeState="False" Click="tglSimulateArduino_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Commans" Margin="4,0,-8,-4">

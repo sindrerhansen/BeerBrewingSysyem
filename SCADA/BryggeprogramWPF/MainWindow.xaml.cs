@@ -642,5 +642,18 @@ namespace BryggeprogramWPF
         }
 
 
+        private void tglSimulateArduino_Click(object sender, RoutedEventArgs e)
+        {
+            if (tglSimulateArduino.IsChecked == true)
+            {
+                btnConnect.IsEnabled = false;
+            }
+            else
+            {
+                btnConnect.IsEnabled = true;
+            }
+        }
+
+
     }
 }
