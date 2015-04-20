@@ -46,6 +46,8 @@ namespace BryggeprogramWPF
         int systemState = 0;
         double ambiantTemperature;
 
+        int x = 0;
+
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
@@ -71,6 +73,7 @@ namespace BryggeprogramWPF
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            x++;
             mainViewModel.CurrentDateTime = DateTime.Now;
             if (mySerialPort.IsOpen)
             {
@@ -83,7 +86,24 @@ namespace BryggeprogramWPF
                 indConnected.Fill = myGrayBrush;
                 btnStartBrewing.IsEnabled = false;
                 btnPrepareBrewing.IsEnabled = false;
+                if (tglSimulateArduino.IsChecked==true)
+                {
+                    var indata = GennerateSimulatedArduinoValues();
+                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+                }
             }
+        }
+
+        private string GennerateSimulatedArduinoValues()
+        {
+            string ret="";
+            ret += "STATE" + "10" + "_";
+            ret += "AmbTe" + (10+10*Math.Sin(x)).ToString().Replace(',','.') + "_";
+            ret += "HltTe" + "30" + "_";
+            ret += "MatTe" + "35" + "_";
+            ret += "BotTe" + "39" + "_";
+            ret += "MatVo" + "0" + "_";
+            return ret; 
         }
         
         private delegate void UpdateUiTextDelegate(string text);

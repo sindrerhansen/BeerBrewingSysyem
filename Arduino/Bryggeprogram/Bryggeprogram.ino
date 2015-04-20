@@ -880,47 +880,6 @@ void loop() {
 		break;
 	}
 
-#pragma region SendingMessageToSerial
-	if (millis() >= (cloopTime + SerialSendingRate))
-	{
-		cloopTime = millis();			     // Updates cloopTime
- 
-	AllInfoString += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
-	AllInfoString += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
-	AllInfoString += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
-	AllInfoString += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
-	AllInfoString += "AmbTe" + String(ambientTemperature) + systemDevider;
-	
-	AllInfoString += "STATE" + String(state) + systemDevider;
-	AllInfoString += "Messa" + MessageToUser + systemDevider;;
-
-	AllInfoString += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider ;
-	AllInfoString += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
-	AllInfoString += "HltCp" + String(Hlt.CirculationPump.Value) + systemDevider;
-	AllInfoString += "HltTp" + String(Hlt.TransferPump.Value) + systemDevider;
-
-	AllInfoString += "MatSp" + String(MashTank.TemperatureTankSetPoint) + systemDevider;
-	AllInfoString += "MatE1" + String(MashTank.Element1.Value) + systemDevider;
-	AllInfoString += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
-	AllInfoString += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
-	AllInfoString += "MatVo" + String(MashTank.Volume) + systemDevider;
-
-	AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
-	AllInfoString += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
-	AllInfoString += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
-	AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
-	AllInfoString += "BotVo" + String(BoilTank.Volume) + systemDevider;
-
-	AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
-	AllInfoString += "Timer" + String(elapsedTimeSeconds) + systemDevider;
-	AllInfoString += "RemTi" + String(remainingTime) + systemDevider;
-
-	Serial.println(AllInfoString);
-	AllInfoString = "";
-
-	}
-
-#pragma endregion SendingMessageToSerial
 #pragma region Setting_Outputs 
 	AllTanks[1] = Hlt;
 	AllTanks[2] = MashTank;
@@ -953,7 +912,48 @@ void loop() {
 		//digitalWrite(AllTanks[tank].InnValve.OutputPin, AllTanks[tank].InnValve.ValueOut);
 	}
 #pragma endregion Setting_Outputs
-	
+
+#pragma region SendingMessageToSerial
+	if (millis() >= (cloopTime + SerialSendingRate))
+	{
+		cloopTime = millis();			     // Updates cloopTime
+
+		AllInfoString += "HltTe" + String(Hlt.TemperatureTank) + systemDevider;
+		AllInfoString += "MatTe" + String(MashTank.TemperatureTank) + systemDevider;
+		AllInfoString += "MarTe" + String(MashTank.TemperatureHeatingRetur) + systemDevider;
+		AllInfoString += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
+		AllInfoString += "AmbTe" + String(ambientTemperature) + systemDevider;
+
+		AllInfoString += "STATE" + String(state) + systemDevider;
+		AllInfoString += "Messa" + MessageToUser + systemDevider;;
+
+		AllInfoString += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider;
+		AllInfoString += "HltE1" + String(Hlt.Element1.Value) + systemDevider;
+		AllInfoString += "HltCp" + String(Hlt.CirculationPump.Value) + systemDevider;
+		AllInfoString += "HltTp" + String(Hlt.TransferPump.Value) + systemDevider;
+
+		AllInfoString += "MatSp" + String(MashTank.TemperatureTankSetPoint) + systemDevider;
+		AllInfoString += "MatE1" + String(MashTank.Element1.Value) + systemDevider;
+		AllInfoString += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
+		AllInfoString += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
+		AllInfoString += "MatVo" + String(MashTank.Volume) + systemDevider;
+
+		AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
+		AllInfoString += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
+		AllInfoString += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
+		AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
+		AllInfoString += "BotVo" + String(BoilTank.Volume) + systemDevider;
+
+		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
+		AllInfoString += "Timer" + String(elapsedTimeSeconds) + systemDevider;
+		AllInfoString += "RemTi" + String(remainingTime) + systemDevider;
+
+		Serial.println(AllInfoString);
+		AllInfoString = "";
+
+	}
+
+#pragma endregion SendingMessageToSerial
 	delay(5);
 }
 
