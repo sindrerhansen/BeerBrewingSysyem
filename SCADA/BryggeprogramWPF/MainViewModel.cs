@@ -138,15 +138,15 @@ namespace BryggeprogramWPF
                     selectedTemperatureSetpoint = BoilTankTemperatureSetpoint;
                 }
 
-                if (selectedTemperature <= (selectedTemperatureSetpoint + 0.25) || selectedTemperature >= (selectedTemperatureSetpoint - 0.25))
+                if (selectedTemperature <= (selectedTemperatureSetpoint + 0.25) && selectedTemperature >= (selectedTemperatureSetpoint - 0.25))
                 {
                     TemperatureOfIntrestBacground = "Green";
                 }
-
-                if (selectedTemperature <= (selectedTemperatureSetpoint + 0.5) || selectedTemperature >= (selectedTemperatureSetpoint - 0.5))
+                else if (selectedTemperature <= (selectedTemperatureSetpoint + 0.5) && selectedTemperature >= (selectedTemperatureSetpoint - 0.5))
                 {
                     TemperatureOfIntrestBacground = "Yellow";
                 }
+
                 else
                 {
                     TemperatureOfIntrestBacground = "Red";
