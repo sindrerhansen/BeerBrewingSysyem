@@ -158,6 +158,7 @@ namespace BryggeprogramWPF
                         var message = item.Remove(0, 5);
                         int.TryParse(message, out maxtTme);
                         progressBar.Maximum = maxtTme;
+                        
                     }
 
                     else if (item.StartsWith("RemTi"))
@@ -190,7 +191,7 @@ namespace BryggeprogramWPF
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         hotLiqureTank.TemperatureSetpoint = value;
                         HLT.TextSetTemp.Text = value.ToString();
-                        
+                        mainViewModel.HotLiquidTankTemperatureSetpoint = value;
                     }
                     else if (item.StartsWith("HltTe"))
                     {
@@ -273,6 +274,7 @@ namespace BryggeprogramWPF
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         mashTank.TemperatureSetpoint = value;
                         MashTank.TextSetTemp.Text = value.ToString();
+                        mainViewModel.MeshTankTemperatureSetpoint = value;
 
                     }
                     else if (item.StartsWith("MatE1"))
@@ -339,6 +341,7 @@ namespace BryggeprogramWPF
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         boilTank.TemperatureSetpoint = value;
                         BoilTank.TextSetTemp.Text = value.ToString();
+                        mainViewModel.BoilTankTemperatureSetpoint = value;
 
                     }
                     else if (item.StartsWith("BotE1"))
