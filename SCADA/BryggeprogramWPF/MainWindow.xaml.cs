@@ -71,17 +71,7 @@ namespace BryggeprogramWPF
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-
-            //Random r = new Random();
-
-            //var _now = DateTime.Now;
-            //chart.HLT.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
-            //chart.MashTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
-            //chart.BoilTank.Add(new DataPoint(DateTimeAxis.ToDouble(_now), r.NextDouble()));
-            
-            //Plot.InvalidatePlot();
-
-
+            mainViewModel.CurrentDateTime = DateTime.Now;
             if (mySerialPort.IsOpen)
             {
                 indConnected.Fill = myGreenBrush;
@@ -123,7 +113,6 @@ namespace BryggeprogramWPF
             text.Trim();
             string replacement = Regex.Replace(text, "\r", "");
             textBox.Text = replacement;
-  //         mainViewModel.ResivedStringFromArduino = replacement;
             
             var textList = Regex.Split(replacement, "_");
             var values = new List<double>();
@@ -134,13 +123,13 @@ namespace BryggeprogramWPF
                     if (item.StartsWith("STATE"))
                     {                     
                         int.TryParse(item.Remove(0, 5), out systemState);
-                        //SystemState.Text = systemState.ToString();
                         mainViewModel.BrewingState = systemState;
                     }
                     else if (item.StartsWith("Messa"))
                     {
                         var message=item.Remove(0,5);
                         TxtMessageFromSystem.Text= message;
+                        mainViewModel.MessageFromSystem = message;
                     }
 
                     else if (item.StartsWith("TimSp"))
@@ -158,10 +147,6 @@ namespace BryggeprogramWPF
                         int.TryParse(message, out time);
                         progressBar.Value = time;
                         TimeSpan t = TimeSpan.FromSeconds(time);
-                        //txtTimer.Text = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                        //                t.Hours,
-                        //                t.Minutes,
-                        //                t.Seconds);
                         mainViewModel.Timer = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
                                         t.Hours,
                                         t.Minutes,
@@ -195,6 +180,7 @@ namespace BryggeprogramWPF
                         hotLiqureTank.TemperatureActual.SensorValue = value;
                         HLT.GauageActTemp.Value = value;
                         HLT.TextActuelTemp.Text =value.ToString();
+                        mainViewModel.HotLiquidTankTemperature = value;
                     }
                     else if (item.StartsWith("HltE1"))
                     {
@@ -251,6 +237,7 @@ namespace BryggeprogramWPF
                         mashTank.TemperatureActual.SensorValue = value;
                         MashTank.GauageActTemp.Value = value;
                         MashTank.TextActuelTemp.Text = value.ToString();
+                        mainViewModel.MeshTankTemperature = value;
                     }
 
                     else if (item.StartsWith("MarTe"))
@@ -324,6 +311,7 @@ namespace BryggeprogramWPF
                         boilTank.TemperatureActual.SensorValue = value;
                         BoilTank.GauageActTemp.Value = value;
                         BoilTank.TextActuelTemp.Text = value.ToString();
+                        mainViewModel.BoilTankTemperature = value;
                     }
                     else if (item.StartsWith("BotSp"))
                     {
@@ -382,7 +370,6 @@ namespace BryggeprogramWPF
 
                     else if (item.StartsWith("ConSe"))
                     {
-                        //var values = new List<string>();
                         var ConSe = Regex.Split(item, ":");
                     }
 
@@ -405,7 +392,6 @@ namespace BryggeprogramWPF
                     MessageBox.Show(message);
 
                 }
-
                 
             }
 

@@ -13,7 +13,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature TemperatureSensors(&oneWire);
 
 bool input_stringcomplete;
-String sendMessage;
+String AllInfoString;
 void setup()
 {
 	Serial.begin(9600);
@@ -33,19 +33,19 @@ void loop()
 {
 	// Getting Temperatures
 	TemperatureSensors.requestTemperatures();
-	sendMessage = "";
+	AllInfoString = "";
 	int numberOfSensors = TemperatureSensors.getDeviceCount();
 	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(0);
-	sendMessage += String(HltTemperatureTank) + valueDevider;
+	AllInfoString += String(HltTemperatureTank) + valueDevider;
 	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(2);
-	sendMessage += String(MashTankTemperatureTank) + valueDevider;
+	AllInfoString += String(MashTankTemperatureTank) + valueDevider;
 	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
-	sendMessage += String(MashTankTemperatureHeatingRetur) + valueDevider;
+	AllInfoString += String(MashTankTemperatureHeatingRetur) + valueDevider;
 	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(4);
-	sendMessage += String(BoilTankTemperatureTank) + valueDevider;
+	AllInfoString += String(BoilTankTemperatureTank) + valueDevider;
 	float ambientTemperature = TemperatureSensors.getTempCByIndex(3);
-	sendMessage += String(ambientTemperature) + valueDevider;
+	AllInfoString += String(ambientTemperature) + valueDevider;
 
-	Serial.println(sendMessage);
+	Serial.println(AllInfoString);
 	//Serial.println(numberOfSensors);
 }
