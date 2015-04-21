@@ -78,14 +78,27 @@ namespace BryggeprogramWPF
             public string TimeDisplay { get { return timeDisplay; } set { timeDisplay = value; OnPropertyChanged("TimeDisplay"); } }
             private void TimeDisplayUpdate()
             {
-                if (brewingState<=20)
+                if (MessageFromSystem==null)
                 {
-                    TimeDisplay = CurrentDateTime.ToString("HH.mm.ss");
+                    MessageFromSystem = "";
+                }
+
+                if (MessageFromSystem.Length > 0)
+                {
+                    TimeDisplay = MessageFromSystem;
                 }
                 else
                 {
-                    TimeDisplay = Timer;
+                    if (brewingState <= 20)
+                    {
+                        TimeDisplay = CurrentDateTime.ToString("HH.mm.ss");
+                    }
+                    else
+                    {
+                        TimeDisplay = Timer;
+                    }
                 }
+
             }
 
             private double temperatureOfIntrest;
@@ -102,7 +115,7 @@ namespace BryggeprogramWPF
                 set {
                     if (messageFromSystem!=value)
                     {
-                        messageFromSystem = value; OnPropertyChanged("MessageFromSystem");
+                        messageFromSystem = value; OnPropertyChanged("MessageFromSystem"); TimeDisplayUpdate();
                         if (value.Length > 0)
                         {
                             SpeechSynthesizer speak = new SpeechSynthesizer();
@@ -151,8 +164,13 @@ namespace BryggeprogramWPF
                 {
                     TemperatureOfIntrestBacground = "Red";
                 }
+                if (BrewingState<10)
+                {
+                    TemperatureOfIntrestBacground = "Transparent";
+                }
 
             }
+
 
             public MainViewModel()
             {

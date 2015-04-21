@@ -30,7 +30,7 @@ namespace BryggeprogramWPF
     {
 
         private MainViewModel mainViewModel;
-        TimerWindow TimerWindow = new TimerWindow();
+       
 
         BrewingData brewingData = new BrewingData();
         
@@ -639,7 +639,7 @@ namespace BryggeprogramWPF
 
         private void txtTimerDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+            TimerWindow TimerWindow = new TimerWindow();
             TimerWindow.DataContext = this.DataContext;
             TimerWindow.Show();
 
@@ -647,14 +647,14 @@ namespace BryggeprogramWPF
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            TimerWindow.Close();
+         
         }
-
 
         private void tglSimulateArduino_Click(object sender, RoutedEventArgs e)
         {
             if (tglSimulateArduino.IsChecked == true)
             {
+
                 btnConnect.IsEnabled = false;
             }
             else
