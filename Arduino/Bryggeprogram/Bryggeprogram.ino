@@ -423,11 +423,31 @@ void loop() {
 				conter++;
 			}
 		}
-		Hlt.TemperatureTank = _resiveArray[0].toFloat();
-		MashTank.TemperatureTank = _resiveArray[1].toFloat();
-		MashTank.TemperatureHeatingRetur = _resiveArray[2].toFloat();
-		BoilTank.TemperatureTank = _resiveArray[3].toFloat();
-		ambientTemperature = _resiveArray[4].toFloat();
+		if (_resiveArray[0].toFloat()>=0)
+		{
+			Hlt.TemperatureTank = _resiveArray[0].toFloat();
+		}
+
+		if (_resiveArray[1].toFloat() >= 0)
+		{
+			MashTank.TemperatureTank = _resiveArray[1].toFloat();
+		}
+
+		if (_resiveArray[2].toFloat() >= 0)
+		{
+			MashTank.TemperatureHeatingRetur = _resiveArray[2].toFloat();
+		}
+
+		if (_resiveArray[3].toFloat() >= 0)
+		{
+			BoilTank.TemperatureTank = _resiveArray[3].toFloat();
+		}
+
+		if (_resiveArray[4].toFloat() >= 0)
+		{
+			ambientTemperature = _resiveArray[4].toFloat();
+		}
+
 		input_2_String = "";
 		input_2_StringComplete = false;
 	}
