@@ -849,12 +849,21 @@ void loop() {
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
 			BoilTank.Element1.Value = true;
-			BoilTank.Element2.Value = true;
+			if (BoilTank.TemperatureTank<BoilTank.TemperatureTankSetPoint+0.5)
+			{
+				BoilTank.Element2.Value = true;
+			}
+			
 		}
 		
 		if (remainingTime <= 600)
 		{
 			BoilTank.TransferPump.Value = true;
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element2.Value = true;
+			}
+			
 		}
 
 		if (remainingTime <= 0)

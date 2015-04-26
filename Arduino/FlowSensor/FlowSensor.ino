@@ -37,7 +37,7 @@ void loop()
 	if (millis() >= (cloopTime + 500))
 	{
 		cloopTime = millis();			     // Updates cloopTime
-        totalLiter = total_flow / 444.444 ;
+        totalLiter = total_flow / 444.4444444 ;
         Serial.println(totalLiter);						
 
 	}
