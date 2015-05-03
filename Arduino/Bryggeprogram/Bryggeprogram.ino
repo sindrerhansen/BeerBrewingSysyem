@@ -1,7 +1,6 @@
 // This code is for a Arduino Mega. By Sindre
 
 #pragma region Constants
-const int ONE_WIRE_BUS = 2;
 const long prePumpeTimeSparge = 20;
 const int flowOfSet = 0.2;
 const int MashCirculationStartTreshold = 2;

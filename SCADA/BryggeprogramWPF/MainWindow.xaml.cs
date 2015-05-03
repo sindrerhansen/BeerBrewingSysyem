@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -549,9 +550,11 @@ namespace BryggeprogramWPF
             }
         }
 
-        private void btnStoreSettings_Click(object sender, RoutedEventArgs e)
+        private void btnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
             BrewingData brewingData = new BrewingData();
+            DataTable datatable = new DataTable();
+
 
             brewingData.MashInHltTemperature = double.Parse(TxtMashInHltTemp.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
@@ -567,7 +570,7 @@ namespace BryggeprogramWPF
 
             brewingData.MashStep2Time = int.Parse(TxtMashStep2Time.Text.Replace(',','.'), CultureInfo.InvariantCulture);
 
-            brewingData.MashStep3Temperature = double.Parse(TxtMashStep2Time.Text.Replace(',','.'), CultureInfo.InvariantCulture);
+            brewingData.MashStep3Temperature = double.Parse(TxtMashStep3Temperature.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
 
             brewingData.MashStep3Time = int.Parse(TxtMashStep3Time.Text.Replace(',','.'),CultureInfo.InvariantCulture);
 

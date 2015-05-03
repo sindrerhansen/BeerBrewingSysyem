@@ -72,7 +72,7 @@
                             <Label Content="Liter" Canvas.Left="235"/>
                         </Canvas>
                         <Button x:Name="btnDownloadSettings" Content="Download" Canvas.Left="223" Canvas.Top="354" Width="81" Click="btnDownloadSettings_Click" Height="30"/>
-                        <Button x:Name="btnStoreSettings1" Content="Store settings" Canvas.Left="95" Canvas.Top="354" Width="80" Click="btnStoreSettings_Click" Height="30"/>
+                        <Button x:Name="btnStoreSettings1" Content="Store settings" Canvas.Left="95" Canvas.Top="354" Width="80" Click="btnSaveSettings_Click" Height="30"/>
                         <Button x:Name="btnGetSettings" Content="Get settings" Canvas.Left="10" Canvas.Top="354" Width="80" Click="btnGetSettings_Click" Height="30"/>
                         <Canvas Height="23" Canvas.Left="10" Canvas.Top="57" Width="252">
                             <TextBox x:Name="TxtMashInHltTemp" TextWrapping="Wrap" Text="0" TextAlignment="Right" Canvas.Left="191" Canvas.Top="2" Width="39"/>
