@@ -1,4 +1,18 @@
 // This code is for a Arduino Mega. By Sindre
+#include <PID_v1.h>
+
+//Define Variables we'll be connecting to
+double Setpoint, Input, Output;
+
+//Specify the links and initial tuning parameters
+PID myPID(&Input, &Output, &Setpoint, 900, 1, 0, DIRECT);
+
+int WindowSize = 5000;
+unsigned long windowStartTime;
+bool ElementOnOff = false;
+String element = "";
+unsigned long now = millis();
+
 
 #pragma region Constants
 const long prePumpeTimeSparge = 20;
@@ -121,10 +135,27 @@ String MessageToUser = "";
 
 int previouslyState = 0;
 
+unsigned long Ts;
+unsigned long Tc;
+
 #pragma endregion Declaring Variables
 
 void setup() {
 	
+	windowStartTime = millis();
+	Ts = millis();
+	Tc = millis();
+
+	//initialize the variables we're linked to
+	Setpoint = 100;
+
+	//tell the PID to range between 0 and the full window size
+	myPID.SetOutputLimits(0, WindowSize);
+
+	//turn the PID on
+	myPID.SetMode(AUTOMATIC);
+
+
 	Serial.begin(9600);
 	input_0_String.reserve(200);
 
@@ -498,13 +529,42 @@ void loop() {
 		}
 		Hlt.CirculationPump.Value = true;
 		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+#pragma region PID Test
+		//Setpoint = Hlt.TemperatureTankSetPoint;
+		//Input = Hlt.TemperatureTank;
+		//myPID.Compute();
 
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+		///************************************************
+		//* turn the output pin on/off based on pid output
+		//************************************************/
 
+		//if (now - windowStartTime>WindowSize)
+		//{ //time to shift the Relay Window
+		//	windowStartTime += WindowSize;
+		//}
+		//if (Output > now - windowStartTime)
+		//{
+		//	ElementOnOff = true;
+		//	Hlt.Element1.Value = true;
+		////	digitalWrite(Hlt.Element1.OutputPin, HIGH);
+		//	element = "On";
+		//}
+		//else
+		//{
+		//	ElementOnOff = false;
+		//	Hlt.Element1.Value = false;
+		//	//digitalWrite(Hlt.Element1.OutputPin, LOW);
+		//	element = "Off";
+		//}
+#pragma endregion PID Test
+
+	//	Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+		Hlt.Element1.Value = PWM_Reelay(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, 1,Hlt.TemperatureTankSetPoint ,Hlt.LevelOverHeatingElements.State);
 		if (startBrewing){
 			state = 20;
 		}
 		
+		MessageToUser = (String)Hlt.Element1.Value+"Element: ";
 		break;
 
 	case 20: // Transfering water from HLT to Mash tank, waiting for grain
@@ -523,7 +583,8 @@ void loop() {
 		if (MashTank.Volume > MashCirculationStartTreshold)
 		{
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = TankTemperaturRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, true);			
+			//MashTank.Element1.Value = TankTemperaturRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, true);			
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.5, MashTank.TemperatureHeatingRetur, true);
 		}
 		if (MashTank.Volume + flowOfSet < MashInn.AddVolumeSP)
 		{
@@ -564,11 +625,12 @@ void loop() {
 
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
-		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-		}
 		
+		MashTank.CirculationPump.Value = true;
+		//if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
+		//	MashTank.Element1.Value = true;
+		//}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank,0.5, MashTank.TemperatureHeatingRetur ,true);
 		
 		if (remainingTime <= 0)
 		{
@@ -868,7 +930,7 @@ void loop() {
 		if (BoilTank.LevelOverHeatingElements.State)
 		{
 			BoilTank.Element1.Value = true;
-			if (BoilTank.TemperatureTank<BoilTank.TemperatureTankSetPoint+0.5)
+			if (BoilTank.TemperatureTank<BoilTank.TemperatureTankSetPoint-0.2)
 			{
 				BoilTank.Element2.Value = true;
 			}
@@ -982,13 +1044,15 @@ void loop() {
 	}
 
 #pragma endregion SendingMessageToSerial
-	delay(5);
+	delay(10);
 }
 
-bool TankTemperaturRegulator(double setpoint, double actual, bool overElement)
+
+
+bool TankTemperaturRegulator(double setpoint, double actual,bool overElement)
 {
 	bool ret;
-	if (actual<setpoint)
+	if (actual<=setpoint)
 	{
 		if (overElement)
 		{
@@ -1009,4 +1073,57 @@ bool TankTemperaturRegulator(double setpoint, double actual, bool overElement)
 		MessageToUser = "Add water to hot liquor tank!!";
 	}
 	return ret;
+}
+
+bool PWM_Reelay(double setpoint, double actual, double ratio, double returnTemp, bool overElement)
+{
+	if (returnTemp<setpoint)
+	{
+		return true;
+	}
+
+	if (returnTemp>setpoint+5)
+	{
+		return false;
+	}
+
+	Tc = millis();
+	double PWD_Window = 5000;
+	bool output;
+	if (actual<setpoint)
+	{
+
+	
+	if (ratio>0 && overElement)
+	{
+		if (ratio<1)
+		{
+			if (Ts + PWD_Window*ratio > Tc)
+			{
+				output = true;
+			}
+			else
+			{
+				output = false;
+			}
+			if (Ts+PWD_Window<Tc)
+			{
+				Ts = Tc;
+			}
+		}
+		else
+		{
+			output = true;
+		}
+	}
+	else
+	{
+		output = false;
+	}
+	}
+	else
+	{
+		output = false;
+	}
+	return output;
 }
