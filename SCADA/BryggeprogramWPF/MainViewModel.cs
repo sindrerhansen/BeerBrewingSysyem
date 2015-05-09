@@ -12,6 +12,7 @@ using System.Windows.Input;
 using Yuhan.WPF.Commands;
 using System.IO;
 using System.Windows.Media;
+using Microsoft.Win32;
 
 
 namespace BryggeprogramWPF
@@ -275,17 +276,22 @@ namespace BryggeprogramWPF
             private void FuncToCall(object context)
             {
                 //this is called when the button is clicked
-                using (var stream = File.Create("C:\\Users\\Sindre\\Documents\\Plot"+DateTime.Now.ToString()+".png"))
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == true)
                 {
-                    var pngExporter = new OxyPlot.Wpf.PngExporter();
-                    pngExporter.Height = 500;
-                    pngExporter.Width = 1500;
-                    pngExporter.Background = OxyColors.White;
-                    pngExporter.Resolution = 96;
-                    pngExporter.Export(plotModel, stream);
-                    
-           
+                    using (var stream = File.Create(saveFileDialog.FileName))
+                    {
+                        var pngExporter = new OxyPlot.Wpf.PngExporter();
+                        pngExporter.Height = 500;
+                        pngExporter.Width = 1500;
+                        pngExporter.Background = OxyColors.White;
+                        pngExporter.Resolution = 96;
+                        pngExporter.Export(plotModel, stream);
+
+
+                    }
                 }
+
             }
 
             private bool FuncToEvaluate(object context)
