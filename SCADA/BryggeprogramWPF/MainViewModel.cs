@@ -7,6 +7,11 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
+using System.Windows;
+using System.Windows.Input;
+using Yuhan.WPF.Commands;
+using System.IO;
+using System.Windows.Media;
 
 
 namespace BryggeprogramWPF
@@ -261,7 +266,34 @@ namespace BryggeprogramWPF
                 PropertyChangedEventHandler handler = PropertyChanged;
                 if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
             }
-        
+
+            public ICommand BrewDone_Click
+            {
+                get { return new DelegateCommand<object>(FuncToCall, FuncToEvaluate); }
+            }
+
+            private void FuncToCall(object context)
+            {
+                //this is called when the button is clicked
+                using (var stream = File.Create("C:\\Users\\Sindre\\Documents\\Plot"+DateTime.Now.ToString()+".png"))
+                {
+                    var pngExporter = new OxyPlot.Wpf.PngExporter();
+                    pngExporter.Height = 500;
+                    pngExporter.Width = 1500;
+                    pngExporter.Background = OxyColors.White;
+                    pngExporter.Resolution = 96;
+                    pngExporter.Export(plotModel, stream);
+                    
+           
+                }
+            }
+
+            private bool FuncToEvaluate(object context)
+            {
+                //this is called to evaluate whether FuncToCall can be called
+                //for example you can return true or false based on some validation logic
+                return true;
+            }
 
         
         }

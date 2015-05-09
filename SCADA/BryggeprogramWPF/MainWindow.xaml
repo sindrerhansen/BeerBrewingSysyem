@@ -126,6 +126,8 @@
                     <Style TargetType="{x:Type Button}"/>
                 </Button.Style>
             </Button>
+            <Button x:Name="BrewDone" Command="{Binding BrewDone_Click}" Content="Brew done" Canvas.Left="245" Canvas.Top="190" Width="75"/>
+            <TextBox Name="BrewName" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="TextBox" Canvas.Top="192" Width="120"/>
         </Canvas>
         <local:Tank x:Name="MashTank" Margin="544,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
         <local:Tank x:Name="BoilTank" Margin="729,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
