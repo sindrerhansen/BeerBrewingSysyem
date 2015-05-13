@@ -563,8 +563,7 @@ void loop() {
 		if (startBrewing){
 			state = 20;
 		}
-		
-		MessageToUser = (String)Hlt.Element1.Value+"Element: ";
+
 		break;
 
 	case 20: // Transfering water from HLT to Mash tank, waiting for grain
@@ -621,16 +620,11 @@ void loop() {
 		remainingTime = timeSpan - elapsedTimeSeconds;
 		Hlt.CirculationPump.Value = true;
 
-		//sendMessage += "TimSp" + String(timeSpan) + systemDevider;
-
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		
 		MashTank.CirculationPump.Value = true;
-		//if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-		//	MashTank.Element1.Value = true;
-		//}
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank,0.5, MashTank.TemperatureHeatingRetur ,true);
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank,0.4, MashTank.TemperatureHeatingRetur ,true);
 		
 		if (remainingTime <= 0)
 		{
@@ -657,10 +651,7 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-			MashTank.Element2.Value = true;
-		}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
@@ -689,9 +680,8 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-		}
+
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (remainingTime <= 0)
 		{
@@ -718,10 +708,7 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-			MashTank.Element2.Value = true;
-		}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
@@ -750,9 +737,7 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-		}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (remainingTime <= 0)
 		{
@@ -781,10 +766,7 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-			MashTank.Element2.Value = true;
-		}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 		{
@@ -813,9 +795,7 @@ void loop() {
 		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 		MashTank.CirculationPump.Value = true;
-		if (MashTank.TemperatureTank < MashTank.TemperatureTankSetPoint){
-			MashTank.Element1.Value = true;
-		}
+		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
 		if (remainingTime <= 0)
 		{
@@ -1077,7 +1057,7 @@ bool TankTemperaturRegulator(double setpoint, double actual,bool overElement)
 
 bool PWM_Reelay(double setpoint, double actual, double ratio, double returnTemp, bool overElement)
 {
-	if (returnTemp<setpoint)
+	if (actual<(setpoint-3))
 	{
 		return true;
 	}
