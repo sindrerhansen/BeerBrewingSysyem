@@ -110,9 +110,10 @@ unsigned long timez = 0;
 unsigned long cloopTime;
 float lastTotVolume = 0;
 float totalAddedVolume = 0;
-int state = 0;
+int BrewingState = 0;
 bool startBrewing = false;
 bool messageConfirmd = false;
+bool CleaningSequense = false;
 
 String input_0_String = "";
 boolean input_0_StringComplete = false;
@@ -133,7 +134,7 @@ String resivedItems[20];
 String AllInfoString = "";
 String MessageToUser = "";
 
-int previouslyState = 0;
+int previouslyBrewingState = 0;
 
 unsigned long Ts;
 unsigned long Tc;
@@ -310,19 +311,19 @@ void loop() {
 			int CMD = input_0_String.toInt();
 			if (CMD==0)
 			{
-				state = 0;
+				BrewingState = 0;
 				startBrewing = false;
 			}
 			
-		else if ((CMD == 10) && (state < 10))
+		else if ((CMD == 10) && (BrewingState < 10))
 			{
 				Serial.println("CMD = 10");
-				state = 10;
+				BrewingState = 10;
 			}
-		else if ((CMD == 20) && (state<20))
+		else if ((CMD == 20) && (BrewingState<20))
 			{
 				startBrewing = true;
-				state = 20;
+				BrewingState = 20;
 			}
 		}
 
@@ -335,7 +336,7 @@ void loop() {
 		{
 			input_0_String.remove(0, 3);
 			int STA = input_0_String.toInt();
-			state = STA;
+			BrewingState = STA;
 		}
 
 		else if (input_0_String.startsWith("SET"))
@@ -507,448 +508,454 @@ void loop() {
 	Hlt.LevelOverHeatingElements.State = digitalRead(Hlt.LevelOverHeatingElements.InputPin);
 
 #pragma endregion Reading Digital Sensors
-
-	switch (state)
-	{
-	case 0:
-		
-		if (previouslyState!=state)
+#pragma region Brygge sekvens
+	if (!CleaningSequense)
+	{ 
+		switch (BrewingState)
 		{
-			previouslyState = state;
-		}
+		case 0:
 
-		// ideal state nothing is happening 
-		
-		break;
-		
-	case 10: // Prepar HLT tank temperature
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+			}
 
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-		}
-		Hlt.CirculationPump.Value = true;
-		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+			// ideal state nothing is happening 
+
+			break;
+
+		case 10: // Prepar HLT tank temperature
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+			}
+			Hlt.CirculationPump.Value = true;
+			Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
 #pragma region PID Test
-		//Setpoint = Hlt.TemperatureTankSetPoint;
-		//Input = Hlt.TemperatureTank;
-		//myPID.Compute();
+			//Setpoint = Hlt.TemperatureTankSetPoint;
+			//Input = Hlt.TemperatureTank;
+			//myPID.Compute();
 
-		///************************************************
-		//* turn the output pin on/off based on pid output
-		//************************************************/
+			///************************************************
+			//* turn the output pin on/off based on pid output
+			//************************************************/
 
-		//if (now - windowStartTime>WindowSize)
-		//{ //time to shift the Relay Window
-		//	windowStartTime += WindowSize;
-		//}
-		//if (Output > now - windowStartTime)
-		//{
-		//	ElementOnOff = true;
-		//	Hlt.Element1.Value = true;
-		////	digitalWrite(Hlt.Element1.OutputPin, HIGH);
-		//	element = "On";
-		//}
-		//else
-		//{
-		//	ElementOnOff = false;
-		//	Hlt.Element1.Value = false;
-		//	//digitalWrite(Hlt.Element1.OutputPin, LOW);
-		//	element = "Off";
-		//}
+			//if (now - windowStartTime>WindowSize)
+			//{ //time to shift the Relay Window
+			//	windowStartTime += WindowSize;
+			//}
+			//if (Output > now - windowStartTime)
+			//{
+			//	ElementOnOff = true;
+			//	Hlt.Element1.Value = true;
+			////	digitalWrite(Hlt.Element1.OutputPin, HIGH);
+			//	element = "On";
+			//}
+			//else
+			//{
+			//	ElementOnOff = false;
+			//	Hlt.Element1.Value = false;
+			//	//digitalWrite(Hlt.Element1.OutputPin, LOW);
+			//	element = "Off";
+			//}
 #pragma endregion PID Test
 
-	//	Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-		Hlt.Element1.Value = PWM_Reelay(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, 1,Hlt.TemperatureTankSetPoint ,Hlt.LevelOverHeatingElements.State);
-		if (startBrewing){
-			state = 20;
-		}
+			//	Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+			Hlt.Element1.Value = PWM_Reelay(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, 1, Hlt.TemperatureTankSetPoint, Hlt.LevelOverHeatingElements.State);
+			if (startBrewing){
+				BrewingState = 20;
+			}
 
-		break;
+			break;
 
-	case 20: // Transfering water from HLT to Mash tank, waiting for grain
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-		}
-		Hlt.CirculationPump.Value = true;
-		
-		MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
-		Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+		case 20: // Transfering water from HLT to Mash tank, waiting for grain
 
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+			}
+			Hlt.CirculationPump.Value = true;
 
-		if (MashTank.Volume > MashCirculationStartTreshold)
-		{
+			MashTank.TemperatureTankSetPoint = MashInn.TemperatureSP;
+			Hlt.TemperatureTankSetPoint = MashInn.HltTemperatureSP;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			if (MashTank.Volume > MashCirculationStartTreshold)
+			{
+				MashTank.CirculationPump.Value = true;
+				//MashTank.Element1.Value = TankTemperaturRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, true);			
+				MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.5, MashTank.TemperatureHeatingRetur, true);
+			}
+			if (MashTank.Volume + flowOfSet < MashInn.AddVolumeSP)
+			{
+				Hlt.TransferPump.Value = true;
+			}
+
+
+			if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
+			{
+
+				MessageToUser += "Add grain";
+				if (messageConfirmd)
+				{
+					BrewingState = 30;
+					messageConfirmd = false;
+				}
+			}
+
+			break;
+
+		case 30://Mash step 1 timer and temp regulator
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();    // start timer 
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep1.TemperatureSP;
+			timeSpan = MashStep1.TimeMinutsSP * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+			Hlt.CirculationPump.Value = true;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+
 			MashTank.CirculationPump.Value = true;
-			//MashTank.Element1.Value = TankTemperaturRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, true);			
-			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.5, MashTank.TemperatureHeatingRetur, true);
-		}
-		if (MashTank.Volume + flowOfSet < MashInn.AddVolumeSP)
-		{
-			Hlt.TransferPump.Value = true;
-		}
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
 
-
-		if ((MashTank.Volume + flowOfSet >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
-		{
-			
-			MessageToUser += "Add grain";
-			if (messageConfirmd)
+			if (remainingTime <= 0)
 			{
-				state = 30;
-				messageConfirmd = false;			
+				BrewingState = 31;
 			}
-		}
-		
-		break;
 
-	case 30://Mash step 1 timer and temp regulator
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();    // start timer 
-		}
+			break;
 
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep1.TemperatureSP;
-		timeSpan = MashStep1.TimeMinutsSP * 60;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-		Hlt.CirculationPump.Value = true;
+		case 31: //Heating Mash to next setpoint (Step 2)
 
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank,0.4, MashTank.TemperatureHeatingRetur ,true);
-		
-		if (remainingTime <= 0)
-		{
-			state = 31;
-		}
-		
-		break;
-
-	case 31: //Heating Mash to next setpoint (Step 2)
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		remainingTime = -elapsedTimeSeconds;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
-		Hlt.CirculationPump.Value = true;
-
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
-		{
-			state = 32;
-		}
-		
-		break;
-	
-	case 32://Mash step 2 timer and temp regulator
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
-		timeSpan = MashStep2.TimeMinutsSP * 60;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		Hlt.CirculationPump.Value = true;
-
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (remainingTime <= 0)
-		{
-			state = 33;
-		}
-		previouslyState = state;
-		break;
-	
-	case 33://Heating Mash to next setpoint (Step 3)
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		remainingTime = -elapsedTimeSeconds;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
-
-		Hlt.CirculationPump.Value = true;
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
-		{
-			state = 34;
-		}
-		
-		break;
-
-	case 34://Mash step 3 timer and temp regulator
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
-		timeSpan = MashStep3.TimeMinutsSP * 60;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		Hlt.CirculationPump.Value = true;
-
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (remainingTime <= 0)
-		{
-			state = 35;
-		}
-		
-		break;
-	
-	case 35: //Heating Mash to next setpoint (Step 4)
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-
-		}
-		previouslyState = state;
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		remainingTime = -elapsedTimeSeconds;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
-
-		Hlt.CirculationPump.Value = true;
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
-		{
-			state = 36;
-		}
-		
-		break;
-
-	case 36: //Mash step 4 timer and temp regulator
-	
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
-		timeSpan = MashStep4.TimeMinutsSP * 60;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		Hlt.CirculationPump.Value = true;
-
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		MashTank.CirculationPump.Value = true;
-		MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
-
-		if (remainingTime <= 0)
-		{
-			state = 40;
-		}
-		
-		break;
-
-	case 40: //Pre sparge transfer
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
-		timeSpan = MashTank.Volume * 2;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		Hlt.CirculationPump.Value = true;
-		Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
-
-		
-		MashTank.TransferPump.Value = true;
-
-		if (remainingTime < 0)
-		{			
-			state = 41;
-		}
-		
-		break;
-
-	case 41: // Sparge
-
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();		
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
-		MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
-		timeSpan = totalAddedVolume * 10;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-		
-
-		MashTank.TransferPump.Value = true;			
-		if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
-		{
-			Hlt.TransferPump.Value = true;
-		}
-				
-		if (BoilTank.LevelOverHeatingElements.State)
-		{
-			BoilTank.Element1.Value = true;
-			BoilTank.Element2.Value = true;
-		}
-
-		if (remainingTime <= 0)
-		{
-			state = 50;
-		}
-		
-		break;
-
-	case 50://Pre boil getting up to boil temp
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;	
-		remainingTime = - elapsedTimeSeconds;
-		Boil.TemperatureSP = BoilTempThreshold;
-		BoilTank.TemperatureTankSetPoint = Boil.TemperatureSP;
-		
-
-		
-		if (BoilTank.LevelOverHeatingElements.State)
-		{
-			BoilTank.Element1.Value = true;
-			BoilTank.Element2.Value = true;
-		}
-
-		if (BoilTank.TemperatureTank>Boil.TemperatureSP)
-		{
-			state = 51;
-		}
-		
-		break;
-
-	case 51:  	
-
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-
-		elapsedTimeSeconds = (millis() - refTime) / 1000;
-		elapsedTimeMinutes = elapsedTimeSeconds / 60;
-		timeSpan = Boil.TimeMinutsSP * 60;
-		remainingTime = timeSpan - elapsedTimeSeconds;
-
-		if (BoilTank.LevelOverHeatingElements.State)
-		{
-			BoilTank.Element1.Value = true;
-			if (BoilTank.TemperatureTank<BoilTank.TemperatureTankSetPoint-0.2)
+			if (previouslyBrewingState != BrewingState)
 			{
-				BoilTank.Element2.Value = true;
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
 			}
-			
-		}
-		
-		if (remainingTime <= 600)
-		{
-			BoilTank.TransferPump.Value = true;
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			remainingTime = -elapsedTimeSeconds;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
+			Hlt.CirculationPump.Value = true;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
+			{
+				BrewingState = 32;
+			}
+
+			break;
+
+		case 32://Mash step 2 timer and temp regulator
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep2.TemperatureSP;
+			timeSpan = MashStep2.TimeMinutsSP * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			Hlt.CirculationPump.Value = true;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (remainingTime <= 0)
+			{
+				BrewingState = 33;
+			}
+			previouslyBrewingState = BrewingState;
+			break;
+
+		case 33://Heating Mash to next setpoint (Step 3)
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			remainingTime = -elapsedTimeSeconds;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
+
+			Hlt.CirculationPump.Value = true;
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
+			{
+				BrewingState = 34;
+			}
+
+			break;
+
+		case 34://Mash step 3 timer and temp regulator
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep3.TemperatureSP;
+			timeSpan = MashStep3.TimeMinutsSP * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			Hlt.CirculationPump.Value = true;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (remainingTime <= 0)
+			{
+				BrewingState = 35;
+			}
+
+			break;
+
+		case 35: //Heating Mash to next setpoint (Step 4)
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+
+			}
+			previouslyBrewingState = BrewingState;
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			remainingTime = -elapsedTimeSeconds;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
+
+			Hlt.CirculationPump.Value = true;
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
+			{
+				BrewingState = 36;
+			}
+
+			break;
+
+		case 36: //Mash step 4 timer and temp regulator
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = MashStep4.TemperatureSP;
+			timeSpan = MashStep4.TimeMinutsSP * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			Hlt.CirculationPump.Value = true;
+
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = PWM_Reelay(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, 0.4, MashTank.TemperatureHeatingRetur, true);
+
+			if (remainingTime <= 0)
+			{
+				BrewingState = 40;
+			}
+
+			break;
+
+		case 40: //Pre sparge transfer
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
+			timeSpan = MashTank.Volume * 2;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			Hlt.CirculationPump.Value = true;
+			Hlt.Element1.Value = TankTemperaturRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
+
+
+			MashTank.TransferPump.Value = true;
+
+			if (remainingTime < 0)
+			{
+				BrewingState = 41;
+			}
+
+			break;
+
+		case 41: // Sparge
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			Hlt.TemperatureTankSetPoint = Sparge.HltTemperatureSP;
+			MashTank.TemperatureTankSetPoint = Sparge.TemperatureSP;
+			timeSpan = totalAddedVolume * 10;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+
+			MashTank.TransferPump.Value = true;
+			if (MashTank.Volume<(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+			{
+				Hlt.TransferPump.Value = true;
+			}
+
 			if (BoilTank.LevelOverHeatingElements.State)
 			{
+				BoilTank.Element1.Value = true;
 				BoilTank.Element2.Value = true;
 			}
-			
-		}
 
-		if (remainingTime <= 0)
-		{
-			refTime = millis();
-			state = 52;
-		}
-		
-		break;
-	case 52:
-		
-		if (previouslyState != state)
-		{
-			previouslyState = state;
-			refTime = millis();
-		}
-		
-		BoilTank.TransferPump.Value = true;
+			if (remainingTime <= 0)
+			{
+				BrewingState = 50;
+			}
 
-		break;
-	default:
-		state = 0;
-		break;
+			break;
+
+		case 50://Pre boil getting up to boil temp
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			remainingTime = -elapsedTimeSeconds;
+			Boil.TemperatureSP = BoilTempThreshold;
+			BoilTank.TemperatureTankSetPoint = Boil.TemperatureSP;
+
+
+
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element1.Value = true;
+				BoilTank.Element2.Value = true;
+			}
+
+			if (BoilTank.TemperatureTank>Boil.TemperatureSP)
+			{
+				BrewingState = 51;
+			}
+
+			break;
+
+		case 51:
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			timeSpan = Boil.TimeMinutsSP * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element1.Value = true;
+				if (BoilTank.TemperatureTank<BoilTank.TemperatureTankSetPoint - 0.2)
+				{
+					BoilTank.Element2.Value = true;
+				}
+
+			}
+
+			if (remainingTime <= 600)
+			{
+				BoilTank.TransferPump.Value = true;
+				if (BoilTank.LevelOverHeatingElements.State)
+				{
+					BoilTank.Element2.Value = true;
+				}
+
+			}
+
+			if (remainingTime <= 0)
+			{
+				refTime = millis();
+				BrewingState = 52;
+			}
+
+			break;
+		case 52:
+
+			if (previouslyBrewingState != BrewingState)
+			{
+				previouslyBrewingState = BrewingState;
+				refTime = millis();
+			}
+
+			BoilTank.TransferPump.Value = true;
+
+			break;
+		default:
+			BrewingState = 0;
+			break;
+		}
 	}
+	
+#pragma endregion Brygge sekvens
+
 
 #pragma region Setting_Outputs 
 	AllTanks[1] = Hlt;
@@ -994,7 +1001,7 @@ void loop() {
 		AllInfoString += "BotTe" + String(BoilTank.TemperatureTank) + systemDevider;
 		AllInfoString += "AmbTe" + String(ambientTemperature) + systemDevider;
 
-		AllInfoString += "STATE" + String(state) + systemDevider;
+		AllInfoString += "STATE" + String(BrewingState) + systemDevider;
 		AllInfoString += "Messa" + MessageToUser + systemDevider;;
 
 		AllInfoString += "HltSp" + String(Hlt.TemperatureTankSetPoint) + systemDevider;
