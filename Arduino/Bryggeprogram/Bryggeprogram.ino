@@ -1139,6 +1139,10 @@ void loop() {
 				CleaningState = 0;
 			}
 			break;
+
+		default:
+			CleaningState = 0;
+			break;
 		}
 	}
 #pragma endregion Cleaning sekvens	

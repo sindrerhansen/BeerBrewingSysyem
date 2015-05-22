@@ -104,12 +104,12 @@
             <TextBlock Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="5" Height="19" Width="149" FontSize="14" FontWeight="Bold" TextAlignment="Center"><Run Text="System Parameters"/><LineBreak/><Run/></TextBlock>
             <TextBox x:Name="SystemState" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="{Binding BrewingState}" Canvas.Top="40" Width="98" Background="#FFE6E6E6" IsReadOnly="True"/>
             <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="System State" Canvas.Top="24"/>
-            <Ellipse x:Name="indConnected" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="42" Stroke="Black" VerticalAlignment="Top" Width="42" Canvas.Left="245" Canvas.Top="34"/>
-            <Button x:Name="btnPrepareBrewing" Command="{Binding PrepareBrewing}" Content="Prepare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="90" Canvas.Top="98" Click="btnPrepareBrewing_Click" ToolTip="Prepare the HLT to temperature"/>
-            <Button x:Name="btnStartBrewing" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="170" Canvas.Top="98" Click="btnStartBrewing_Click"/>
+            <Ellipse x:Name="indConnected" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="24" Stroke="Black" VerticalAlignment="Top" Width="24" Canvas.Left="296" Canvas.Top="39"/>
+            <Button x:Name="btnPrepareBrewing" Command="{Binding PrepareBrewing}" Content="Prepare Brewing" HorizontalAlignment="Left" VerticalAlignment="Top" Width="98" Canvas.Left="10" Canvas.Top="98" Click="btnPrepareBrewing_Click" ToolTip="Prepare the HLT to temperature"/>
+            <Button x:Name="btnStartBrewing" Content="Start Brewing" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Canvas.Left="135" Canvas.Top="98" Click="btnStartBrewing_Click"/>
             <Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="135" Canvas.Top="163" Click="btnConfirm_Click"/>
             <TextBox x:Name="txtProsesInfo" Height="176" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="261" Width="310"/>
-            <TextBox x:Name="txtTimer" Text="{Binding TimeDisplay}" Height="23" Canvas.Left="131" TextWrapping="Wrap" Canvas.Top="40" Width="100" MouseDoubleClick="txtTimerDoubleClick"/>
+            <TextBox x:Name="txtTimer" Text="{Binding TimeDisplay}" Height="23" Canvas.Left="135" TextWrapping="Wrap" Canvas.Top="40" Width="138" MouseDoubleClick="txtTimerDoubleClick"/>
             <ProgressBar x:Name="progressBar" Height="18" Canvas.Left="10" Canvas.Top="215" Width="310"/>
             <TextBox x:Name="TxtMessageFromSystem" Height="38" Canvas.Left="10" TextWrapping="Wrap" Text="Message from system" IsReadOnly="True" Canvas.Top="123" Width="310" TextChanged="TxtMessageFromSystem_TextChanged" Background="White"/>
             <TextBox x:Name="txtAmbientTemp" Height="23" Canvas.Left="269" TextWrapping="Wrap" Text="12" Canvas.Top="5" Width="51" FontSize="16" FontWeight="Bold"/>
@@ -120,8 +120,8 @@
                 </Button.Style>
             </Button>
             <Button x:Name="BrewDone" Command="{Binding BrewDone_Click}" Content="SnapTrend" Canvas.Left="245" Canvas.Top="190" Width="75"/>
-            <Button Name="btnCleanSystem" Content="Clean" Canvas.Left="170" Canvas.Top="73" Width="75" Click="btnCleanSystem_Click" />
-            <Button x:Name="btnPrepCleanSystem" Content="Prep Clean" Canvas.Left="90" Canvas.Top="73" Width="75" Click="btnPrepCleanSystem_Click" />
+            <Button Name="btnCleanSystem" Content="Start Cleaning" Canvas.Left="135" Canvas.Top="73" Width="96" Click="btnCleanSystem_Click" />
+            <Button x:Name="btnPrepCleanSystem" Content="Prepare Cleaning" Canvas.Left="10" Canvas.Top="73" Width="98" Click="btnPrepCleanSystem_Click" />
         </Canvas>
         <local:Tank x:Name="MashTank" Margin="544,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
         <local:Tank x:Name="BoilTank" Margin="729,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SendOverrideCommandHeatingElement="SendOverrideCommandHeatingElement" SendOverrideCommandCirculationPump="SendOverrideCommandCirculationPump" SendOverrideCommandTransferElement="SendOverrideCommandTransferPump"/>
