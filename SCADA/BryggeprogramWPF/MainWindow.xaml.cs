@@ -666,6 +666,38 @@ namespace BryggeprogramWPF
             }
         }
 
+        private void btnCleanSystem_Click(object sender, RoutedEventArgs e)
+        {
+            if (mySerialPort.IsOpen && mainViewModel.BrewingState == 0)
+            {
+                var mBoxRes = MessageBox.Show("Sure you want to start cleaning sequence?", "Important Question", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (mBoxRes==MessageBoxResult.Yes)
+                {
+                    mySerialPort.WriteLine("CLEAN");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Can not start cleaning sequense when not connected or system state is not 0");
+            }
+            
+        }
+
+        private void btnPrepCleanSystem_Click(object sender, RoutedEventArgs e)
+        {
+            if (mySerialPort.IsOpen && mainViewModel.BrewingState == 0)
+            {
+                mySerialPort.WriteLine("PREPCLEAN");
+            }
+            else
+            {
+                MessageBox.Show("Can not start preparing cleaning sequense when not connected or system state is not 0");
+            }
+        }
+
+
+
+
 
 
 

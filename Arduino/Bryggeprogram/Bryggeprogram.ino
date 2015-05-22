@@ -111,9 +111,13 @@ unsigned long cloopTime;
 float lastTotVolume = 0;
 float totalAddedVolume = 0;
 int BrewingState = 0;
+int previouslyBrewingState = 0;
 bool startBrewing = false;
+bool StartCleaning = false;
 bool messageConfirmd = false;
-bool CleaningSequense = false;
+bool Cleaning = false;
+int CleaningState = 0;
+int previouslyCleaningState = 0;
 
 String input_0_String = "";
 boolean input_0_StringComplete = false;
@@ -133,8 +137,6 @@ static char valueDevider = ':';
 String resivedItems[20];
 String AllInfoString = "";
 String MessageToUser = "";
-
-int previouslyBrewingState = 0;
 
 unsigned long Ts;
 unsigned long Tc;
@@ -312,6 +314,7 @@ void loop() {
 			if (CMD==0)
 			{
 				BrewingState = 0;
+				CleaningState = 0;
 				startBrewing = false;
 			}
 			
@@ -420,6 +423,21 @@ void loop() {
 			}
 		}
 
+		else if (input_0_String.startsWith("PREPCLEAN"))
+		{
+			if (BrewingState == 0)
+			{
+				CleaningState = 10;
+			}
+		}
+		else if (input_0_String.startsWith("CLEAN"))
+		{
+			if (BrewingState==0)
+			{
+				CleaningState = 20;
+			}
+		}
+
 		input_0_String = "";                                                        //clear the string:
 		input_0_StringComplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
@@ -508,8 +526,24 @@ void loop() {
 	Hlt.LevelOverHeatingElements.State = digitalRead(Hlt.LevelOverHeatingElements.InputPin);
 
 #pragma endregion Reading Digital Sensors
+
+	if (BrewingState==0 && CleaningState!=0)
+	{
+		Cleaning = true;
+	}
+
+	else if (BrewingState != 0 && CleaningState == 0)
+	{
+		Cleaning = false;
+	}
+
+	else if (BrewingState == 0 && CleaningState == 0)
+	{
+		Cleaning = false;
+	}
+
 #pragma region Brygge sekvens
-	if (!CleaningSequense)
+	if (!Cleaning)
 	{ 
 		switch (BrewingState)
 		{
@@ -953,8 +987,162 @@ void loop() {
 			break;
 		}
 	}
-	
 #pragma endregion Brygge sekvens
+
+#pragma region Cleaning sekvens
+	else
+	{
+		MessageToUser = (String)CleaningState;
+		switch (CleaningState)
+		{
+		case 0:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+			}
+
+			// ideal state nothing is happening 
+
+			break;
+		
+		case 10:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+			}
+
+			Hlt.CirculationPump.Value = true;
+			Hlt.TemperatureTankSetPoint = 40.0;
+			Hlt.Element1.Value = PWM_Reelay(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, 1, Hlt.TemperatureTankSetPoint, Hlt.LevelOverHeatingElements.State);
+
+			break;
+		
+
+		case 20:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+			}
+
+			Hlt.CirculationPump.Value = true;
+			if (MashTank.Volume<10)
+			{
+				Hlt.TransferPump.Value = true;
+			}
+			else
+			{
+				MessageToUser = "Add cleaning chemicals to mash tank";
+				if (messageConfirmd)
+				{
+					CleaningState = 30;
+
+				}
+			}
+			if (MashTank.Volume>5)
+			{
+				MashTank.CirculationPump.Value = true;
+			}
+
+			break;
+
+		case 30:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+				refTime = millis();    // start timer 
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			
+			MashTank.CirculationPump.Value = true;
+			if (elapsedTimeMinutes>10)
+			{
+				CleaningState = 40;
+			}
+
+			break;
+
+		case 40:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+				refTime = millis();    // start timer 
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			timeSpan = 50 * 10;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+			MashTank.TransferPump.Value = true;
+
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element1.Value = true;
+				BoilTank.Element2.Value = true;
+			}
+			if (elapsedTimeMinutes>60)
+			{
+				BoilTank.CirculationPump.Value = true;
+			}
+
+			if (MashTank.Volume<50)
+			{
+				Hlt.TransferPump.Value = true;
+			}
+			else
+			{
+				if (remainingTime <= 0)
+				{
+					CleaningState = 50;
+				}
+			}
+
+			break;
+		
+		case 50:
+		
+			if (previouslyCleaningState != CleaningState)
+			{ 
+				previouslyCleaningState = CleaningState;
+			}
+
+			if (BoilTank.TemperatureTank>97)
+			{
+				CleaningState = 51;
+			}
+			
+			break;
+		
+		case 51:
+		
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+				refTime = millis();    // start timer 
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			timeSpan = 15 * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+			
+			BoilTank.CirculationPump.Value = true;
+
+			if (timeSpan<=0)
+			{
+				CleaningState = 0;
+			}
+			break;
+		}
+	}
+#pragma endregion Cleaning sekvens	
+
 
 
 #pragma region Setting_Outputs 
