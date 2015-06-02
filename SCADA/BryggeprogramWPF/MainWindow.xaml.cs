@@ -45,6 +45,7 @@ namespace BryggeprogramWPF
 
         BrewingSettings brewingSettings = new BrewingSettings();
         int systemState = 0;
+        int systemCleaningState = 0;
         double ambiantTemperature;
 
         int x = 0;
@@ -145,6 +146,12 @@ namespace BryggeprogramWPF
                     {                     
                         int.TryParse(item.Remove(0, 5), out systemState);
                         mainViewModel.BrewingState = systemState;
+                    }
+
+                    else if (item.StartsWith("CleSt"))
+                    {
+                        int.TryParse(item.Remove(0, 5), out systemCleaningState);
+                        mainViewModel.CleaningState = systemCleaningState;
                     }
                     else if (item.StartsWith("Messa"))
                     {
@@ -325,6 +332,14 @@ namespace BryggeprogramWPF
                         mashTank.Volume.SensorValue = value;
                         MashTank.TxtTankVolume.Text = value.ToString();
                     }
+                    //else if (item.StartsWith("RimsO"))
+                    //{
+                    //    double value;
+                    //    value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                    //    values.Add(value);
+                    //    mashTank.Volume.SensorValue = value;
+                    //    MashTank.TxtTankVolume.Text = value.ToString();
+                    //}
 
                     else if (item.StartsWith("BotTe"))
                     {
@@ -694,12 +709,5 @@ namespace BryggeprogramWPF
                 MessageBox.Show("Can not start preparing cleaning sequense when not connected or system state is not 0");
             }
         }
-
-
-
-
-
-
-
     }
 }

@@ -12,15 +12,12 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega328p__
 #define __AVR_ATmega328P__
-#define ARDUINO 158
-#define ARDUINO_MAIN
-#define __AVR__
-#define __avr__
 #define F_CPU 16000000L
+#define ARDUINO 158
+#define ARDUINO_AVR_UNO
+#define ARDUINO_ARCH_AVR
 #define __cplusplus
 #define GCC_VERSION 40801
-#define ARDUINO_ARCH_AVR
-#define ARDUINO_AVR_UNO
 #define __inline__
 #define __asm__(x)
 #define __extension__
@@ -67,6 +64,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <pins_arduino.h> 
 #undef F
 #define F(string_literal) ((const PROGMEM char *)(string_literal))
+#undef PSTR
+#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
 #undef cli
 #define cli()
 #define pgm_read_byte(address_short)

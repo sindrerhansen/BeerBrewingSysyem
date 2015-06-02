@@ -79,6 +79,12 @@ namespace BryggeprogramWPF
                 get { return brewingState; }
                 set { brewingState = value; OnPropertyChanged("BrewingState"); }
             }
+            private int cleaningState;
+            public int CleaningState
+            {
+                get { return cleaningState; }
+                set { cleaningState = value; OnPropertyChanged("CleaningState"); }
+            }
 
             private string timeDisplay;
             public string TimeDisplay { get { return timeDisplay; } set { timeDisplay = value; OnPropertyChanged("TimeDisplay"); } }
