@@ -709,5 +709,15 @@ namespace BryggeprogramWPF
                 MessageBox.Show("Can not start preparing cleaning sequense when not connected or system state is not 0");
             }
         }
+
+        private void btnResetBoilFlowSensor_Click(object sender, RoutedEventArgs e)
+        {
+            {
+                if (mySerialPort.IsOpen)
+                {
+                    mySerialPort.WriteLine("FLOW_REB");
+                }
+            }
+        }
     }
 }
