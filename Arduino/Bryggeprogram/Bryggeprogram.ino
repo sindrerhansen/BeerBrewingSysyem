@@ -105,7 +105,7 @@ long elapsedTimeMinutes = 0;
 long elapsedTimeSeconds = 0;
 long lastTime = 0;
 long timeSpan = 0;
-long mashDrainOffTime = 10;
+long mashDrainOffTime = 400;
 long remainingTime = 0;
 unsigned long timez = 0;
 unsigned long cloopTime;
@@ -609,7 +609,7 @@ void loop() {
 			if (MashTank.Volume > MashCirculationStartTreshold)
 			{
 				MashTank.CirculationPump.Value = true;	
-				MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.7, RimsOuteSideTemp);
+				MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 			}
 			if (MashTank.Volume < MashInn.AddVolumeSP)
 			{
@@ -649,7 +649,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.4, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (remainingTime <= 0)
 			{
@@ -676,7 +676,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.7, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -706,7 +706,7 @@ void loop() {
 
 			MashTank.CirculationPump.Value = true;
 
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.4, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (remainingTime <= 0)
 			{
@@ -733,7 +733,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.9, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -762,7 +762,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.4, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (remainingTime <= 0)
 			{
@@ -791,7 +791,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.7, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -820,7 +820,7 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.4, RimsOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 
 			if (remainingTime <= 0)
 			{
@@ -917,6 +917,12 @@ void loop() {
 				MashTank.TransferPump.Value = true;
 			}
 
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element1.Value = true;
+				BoilTank.Element2.Value = true;
+			}
+
 			if (elapsedTimeSeconds >= (mashDrainOffTime + 3))
 			{
 				if ((elapsedTimeSeconds - lastTime) >= 3)
@@ -949,6 +955,12 @@ void loop() {
 			if (elapsedTimeSeconds > mashDrainOffTime)
 			{
 				MashTank.TransferPump.Value = true;
+			}
+
+			if (BoilTank.LevelOverHeatingElements.State)
+			{
+				BoilTank.Element1.Value = true;
+				BoilTank.Element2.Value = true;
 			}
 
 			if (elapsedTimeSeconds >= (mashDrainOffTime + 3))
