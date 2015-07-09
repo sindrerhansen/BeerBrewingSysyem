@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TemperatureCollector", "..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlowSensor", "..\FlowSensor\FlowSensor.vcxproj", "{790B7CDD-375E-4391-8444-0574C0F68EDB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ObjectTest", "..\..\..\..\Arduino\ObjectTest\ObjectTest.vcxproj", "{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FermenterController", "..\FermenterController\FermenterController.vcxproj", "{D0F59641-596A-4EF8-B12E-D0E83A44D176}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,16 +51,16 @@ Global
 		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Win32.ActiveCfg = Release|Win32
 		{790B7CDD-375E-4391-8444-0574C0F68EDB}.Release|Win32.Build.0 = Release|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Debug|Win32.Build.0 = Debug|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Release|Any CPU.ActiveCfg = Release|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Release|Win32.ActiveCfg = Release|Win32
-		{EB33FCBE-E1F3-4B4E-A123-8F34290083DC}.Release|Win32.Build.0 = Release|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Debug|Win32.Build.0 = Debug|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Release|Win32.ActiveCfg = Release|Win32
+		{D0F59641-596A-4EF8-B12E-D0E83A44D176}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
