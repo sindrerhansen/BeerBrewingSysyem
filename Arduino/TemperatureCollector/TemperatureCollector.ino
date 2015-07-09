@@ -12,7 +12,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature TemperatureSensors(&oneWire);
 
-bool input_stringcomplete;
+bool Serial1_Input_stringcomplete;
 String AllInfoString;
 void setup()
 {
@@ -25,7 +25,7 @@ void serialEvent() {
 	String inString = Serial.readString();
 
 	if (inString.endsWith("\n")) {
-		input_stringcomplete = true;
+		Serial1_Input_stringcomplete = true;
 	}
 }
 
