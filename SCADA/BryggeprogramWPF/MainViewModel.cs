@@ -41,23 +41,28 @@ namespace BryggeprogramWPF
                 set { currentDateTime = value; OnPropertyChanged("CurrentDateTime"); TimeDisplayUpdate(); }
             }
             private double hotLiquidTankTemperature;
-            public double HotLiquidTankTemperature { get { return hotLiquidTankTemperature; } set { hotLiquidTankTemperature = value; OnPropertyChanged("HotLiquidTankTemperature"); TemperatureOfIntrestUpdate(); } }
+            public double HotLiquidTankTemperature { get { return hotLiquidTankTemperature; } set { hotLiquidTankTemperature = value; OnPropertyChanged("HotLiquidTankTemperature"); ValueOfIntrestUpdate(); } }
             
             private double meshTankTemperature;
-            public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; OnPropertyChanged("MeshTankTemperature"); TemperatureOfIntrestUpdate(); } }
+            public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; OnPropertyChanged("MeshTankTemperature"); ValueOfIntrestUpdate(); } }
+
+            private double meshTankVolume;
+            public double MeshTankVolume { get { return meshTankVolume; } set { meshTankVolume = value; OnPropertyChanged("MeshTankVolume"); ValueOfIntrestUpdate(); } }
 
             private double boilTankTemperature;
-            public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; OnPropertyChanged("BoilTankTemperature"); TemperatureOfIntrestUpdate(); } }
+            public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; OnPropertyChanged("BoilTankTemperature"); ValueOfIntrestUpdate(); } }
 
             private double hotLiquidTankTemperatureSetpoint;
-            public double HotLiquidTankTemperatureSetpoint { get { return hotLiquidTankTemperatureSetpoint; } set { hotLiquidTankTemperatureSetpoint = value; OnPropertyChanged("HotLiquidTankTemperatureSetpoint"); TemperatureOfIntrestUpdate(); } }
+            public double HotLiquidTankTemperatureSetpoint { get { return hotLiquidTankTemperatureSetpoint; } set { hotLiquidTankTemperatureSetpoint = value; OnPropertyChanged("HotLiquidTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
             private double meshTankTemperatureSetpoint;
-            public double MeshTankTemperatureSetpoint { get { return meshTankTemperatureSetpoint; } set { meshTankTemperatureSetpoint = value; OnPropertyChanged("MeshTankTemperatureSetpoint"); TemperatureOfIntrestUpdate(); } }
+            public double MeshTankTemperatureSetpoint { get { return meshTankTemperatureSetpoint; } set { meshTankTemperatureSetpoint = value; OnPropertyChanged("MeshTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
             private double boilTankTemperatureSetpoint;
-            public double BoilTankTemperatureSetpoint { get { return boilTankTemperatureSetpoint; } set { boilTankTemperatureSetpoint = value; OnPropertyChanged("BoilTankTemperatureSetpoint"); TemperatureOfIntrestUpdate(); } }
+            public double BoilTankTemperatureSetpoint { get { return boilTankTemperatureSetpoint; } set { boilTankTemperatureSetpoint = value; OnPropertyChanged("BoilTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
+            private double boilTankVolume;
+            public double BoilTankVolume { get { return boilTankVolume; } set { boilTankVolume = value; OnPropertyChanged("BoilTankVolume"); ValueOfIntrestUpdate(); } }
 
             private string timer;     
             public string Timer
@@ -99,6 +104,7 @@ namespace BryggeprogramWPF
                 {
                     TimeDisplay = MessageFromSystem;
                 }
+
                 else
                 {
                     if (brewingState <= 20)
@@ -114,7 +120,7 @@ namespace BryggeprogramWPF
             }
 
             private double temperatureOfIntrest;
-            public double TemperatureOfIntrest { get { return temperatureOfIntrest; } set { temperatureOfIntrest = value; OnPropertyChanged("TemperatureOfIntrest"); } }
+            public double ValueOfIntrest { get { return temperatureOfIntrest; } set { temperatureOfIntrest = value; OnPropertyChanged("ValueOfIntrest"); } }
 
             private string temperatureOfIntrestBacground;
             public string TemperatureOfIntrestBacground { get { return temperatureOfIntrestBacground; } set { temperatureOfIntrestBacground = value; OnPropertyChanged("TemperatureOfIntrestBacground"); } }
@@ -140,30 +146,39 @@ namespace BryggeprogramWPF
                 }
             }
 
-            private void TemperatureOfIntrestUpdate()
+            private void ValueOfIntrestUpdate()
             {
                 double selectedTemperature=0;
                 double selectedTemperatureSetpoint=0;
                 if (BrewingState<=10)
                 {
-                    TemperatureOfIntrest = HotLiquidTankTemperature;
-                    selectedTemperature = TemperatureOfIntrest;
+                    ValueOfIntrest = HotLiquidTankTemperature;
+                    selectedTemperature = ValueOfIntrest;
                     selectedTemperatureSetpoint = HotLiquidTankTemperatureSetpoint;
                 }
-                else if (BrewingState>=20 && BrewingState<50)
+                else if (BrewingState>=20 && BrewingState<40)
                 {
-                    TemperatureOfIntrest = MeshTankTemperature;
-                    selectedTemperature = TemperatureOfIntrest;
+                    ValueOfIntrest = MeshTankTemperature;
+                    selectedTemperature = ValueOfIntrest;
                     selectedTemperatureSetpoint = MeshTankTemperatureSetpoint;
+                }
+                else if (brewingState>=40 && brewingState<50)
+                {
+                    ValueOfIntrest = BoilTankVolume;
+                    selectedTemperature = 0;
+                    selectedTemperatureSetpoint = 0;
                 }
                 else if (BrewingState>=50)
                 {
-                    TemperatureOfIntrest = BoilTankTemperature;
-                    selectedTemperature = TemperatureOfIntrest;
+                    ValueOfIntrest = BoilTankTemperature;
+                    selectedTemperature = ValueOfIntrest;
                     selectedTemperatureSetpoint = BoilTankTemperatureSetpoint;
                 }
-
-                if (selectedTemperature <= (selectedTemperatureSetpoint + 0.25) && selectedTemperature >= (selectedTemperatureSetpoint - 0.25))
+                if (selectedTemperature==0 && selectedTemperatureSetpoint==0)
+                {
+                    TemperatureOfIntrestBacground = "White";
+                }
+                else if (selectedTemperature <= (selectedTemperatureSetpoint + 0.25) && selectedTemperature >= (selectedTemperatureSetpoint - 0.25))
                 {
                     TemperatureOfIntrestBacground = "Green";
                 }

@@ -62,7 +62,8 @@ struct TankInfo
 		int InputPin;
 		bool State;
 	};
-	float Volume;
+	float AddedVolume;
+	float CurentVolume;
 	float TemperatureTank;
 	float TemperatureTankSetPoint;
 	float TemperatureHeatingRetur;
@@ -456,7 +457,7 @@ void loop() {
 			}
 		}
 
-		input_0_String = "";                                                        //clear the string:
+		input_0_String = "";                                                       //clear the string:
 		input_0_StringComplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
 
@@ -468,7 +469,8 @@ void loop() {
 		float _volume = _totalVolume.toFloat();
 		if (abs(lastTotVolumeHLT - _volume) < 0.5)
 		{
-			MashTank.Volume = _volume;
+			MashTank.AddedVolume = _volume;
+			MashTank.CurentVolume = MashTank.AddedVolume - BoilTank.AddedVolume;
 		}
 		lastTotVolumeHLT = _volume;
 		input_1_String = "";
@@ -532,7 +534,8 @@ void loop() {
 		float _volume = _totalVolume.toFloat();
 		if (abs(lastTotVolumeBoil-_volume) < 0.5)
 		{
-			BoilTank.Volume = _volume;
+			BoilTank.AddedVolume = _volume;
+			BoilTank.CurentVolume = BoilTank.AddedVolume;
 		}
 		lastTotVolumeBoil = _volume;
 		input_3_String = "";
@@ -560,7 +563,7 @@ void loop() {
 	{
 		Cleaning = false;
 	}
-	test2 = (String)BoilTank.Volume;
+	test2 = (String)BoilTank.CurentVolume;
 #pragma region Brygge sekvens
 	if (!Cleaning)
 	{ 
@@ -606,18 +609,18 @@ void loop() {
 
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
-			if (MashTank.Volume > MashCirculationStartTreshold)
+			if (MashTank.CurentVolume > MashCirculationStartTreshold)
 			{
 				MashTank.CirculationPump.Value = true;	
 				MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsOuteSideTemp);
 			}
-			if (MashTank.Volume < MashInn.AddVolumeSP)
+			if (MashTank.CurentVolume < MashInn.AddVolumeSP)
 			{
 				Hlt.TransferPump.Value = true;
 			}
 
 
-			if ((MashTank.Volume >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
+			if ((MashTank.CurentVolume >= MashInn.AddVolumeSP) && (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint))
 			{
 
 				MessageToUser += "Add grain";
@@ -847,7 +850,7 @@ void loop() {
 
 			MashTank.TransferPump.Value = true;
 
-			if (BoilTank.Volume > (MashInn.AddVolumeSP * 0.6))
+			if (BoilTank.CurentVolume > (MashInn.AddVolumeSP * 0.6))
 			{
 				BrewingState = 41;
 			}
@@ -861,7 +864,7 @@ void loop() {
 				previouslyBrewingState = BrewingState;
 				refTime = millis();
 				lastTime = 0;
-				lastBoilVolume = BoilTank.Volume;
+				lastBoilVolume = BoilTank.CurentVolume;
 			}
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -871,7 +874,7 @@ void loop() {
 			remainingTime = - elapsedTimeSeconds;
 
 			MashTank.TransferPump.Value = true;
-			if (MashTank.Volume <(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+			if (MashTank.CurentVolume <(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
 			{
 				Hlt.TransferPump.Value = true;
 			}
@@ -889,8 +892,8 @@ void loop() {
 			if ((elapsedTimeSeconds-lastTime) >= 3)
 			{
 				lastTime = elapsedTimeSeconds;
-				transferRate = (BoilTank.Volume - lastBoilVolume) / 3;
-				lastBoilVolume = BoilTank.Volume;
+				transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
+				lastBoilVolume = BoilTank.CurentVolume;
 				if ((transferRate < 0.05) && SpargeIsDone)
 				{
 					BrewingState = 42;
@@ -905,7 +908,7 @@ void loop() {
 				previouslyBrewingState = BrewingState;
 				refTime = millis();
 				lastTime = 0;
-				lastBoilVolume = BoilTank.Volume;
+				lastBoilVolume = BoilTank.CurentVolume;
 			}
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -928,8 +931,8 @@ void loop() {
 				if ((elapsedTimeSeconds - lastTime) >= 3)
 				{
 					lastTime = elapsedTimeSeconds;
-					transferRate = (BoilTank.Volume - lastBoilVolume) / 3;
-					lastBoilVolume = BoilTank.Volume;
+					transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
+					lastBoilVolume = BoilTank.CurentVolume;
 					if (transferRate < 0.05)
 					{
 						BrewingState = 43;
@@ -945,7 +948,7 @@ void loop() {
 				previouslyBrewingState = BrewingState;
 				refTime = millis();
 				lastTime = 0;
-				lastBoilVolume = BoilTank.Volume;
+				lastBoilVolume = BoilTank.CurentVolume;
 			}
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -968,8 +971,8 @@ void loop() {
 				if ((elapsedTimeSeconds - lastTime) >= 3)
 				{
 					lastTime = elapsedTimeSeconds;
-					transferRate = (BoilTank.Volume - lastBoilVolume) / 3;
-					lastBoilVolume = BoilTank.Volume;
+					transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
+					lastBoilVolume = BoilTank.CurentVolume;
 					if (transferRate < 0.05)
 					{
 						BrewingState = 50;
@@ -1102,7 +1105,7 @@ void loop() {
 			}
 			
 			Hlt.CirculationPump.Value = true;
-			if (MashTank.Volume<20)
+			if (MashTank.CurentVolume<20)
 			{
 				Hlt.TransferPump.Value = true;
 			}
@@ -1115,7 +1118,7 @@ void loop() {
 
 				}
 			}
-			if (MashTank.Volume>5)
+			if (MashTank.CurentVolume>5)
 			{
 				MashTank.CirculationPump.Value = true;
 
@@ -1132,12 +1135,10 @@ void loop() {
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
 			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			timeSpan = 10 * 11;
-			remainingTime = timeSpan - elapsedTimeSeconds;
 
 			MashTank.CirculationPump.Value = true;
 			MashTank.TransferPump.Value = true;
-			if (remainingTime<=0)
+			if (BoilTank.CurentVolume>=12)
 			{
 				CleaningState = 31;
 			}
@@ -1180,12 +1181,11 @@ void loop() {
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
 			elapsedTimeMinutes = elapsedTimeSeconds / 60;
-			timeSpan = 50 * 11;
-			remainingTime = timeSpan - elapsedTimeSeconds;
 			
-			MashTank.TransferPump.Value = true;
+			
 			MashTank.CirculationPump.Value = true;
 			BoilTank.TransferPump.Value = true;
+			Hlt.TransferPump.Value = true;
 
 			if (BoilTank.LevelOverHeatingElements.State)
 			{
@@ -1193,16 +1193,14 @@ void loop() {
 				BoilTank.Element2.Value = true;
 			}			
 
-			if (MashTank.Volume<60)
+			if (BoilTank.CurentVolume<55)
 			{
-				Hlt.TransferPump.Value = true;
+				MashTank.TransferPump.Value = true;				
 			}
-			else
+
+			else if (MashTank.CurentVolume>=10)
 			{
-				if (remainingTime <= 0)
-				{
-					CleaningState = 50;
-				}
+				CleaningState = 50;
 			}
 
 			break;
@@ -1218,11 +1216,6 @@ void loop() {
 			{
 				BoilTank.Element1.Value = true;
 				BoilTank.Element2.Value = true;
-			}
-	
-			if (MashTank.Volume<70)
-			{
-				Hlt.TransferPump.Value = true;
 			}
 			
 			MashTank.CirculationPump.Value = true;
@@ -1324,14 +1317,14 @@ void loop() {
 		AllInfoString += "MatE1" + String(MashTank.Element1.Value) + systemDevider;
 		AllInfoString += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
 		AllInfoString += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
-		AllInfoString += "MatVo" + String(MashTank.Volume) + systemDevider;
+		AllInfoString += "MatVo" + String(MashTank.CurentVolume) + systemDevider;
 		AllInfoString += "RimsO" + String(RimsOuteSideTemp) + systemDevider;
 
 		AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
 		AllInfoString += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
 		AllInfoString += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
 		AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
-		AllInfoString += "BotVo" + String(BoilTank.Volume) + systemDevider;
+		AllInfoString += "BotVo" + String(BoilTank.CurentVolume) + systemDevider;
 
 		AllInfoString += "TimSp" + String(timeSpan) + systemDevider;
 		AllInfoString += "Timer" + String(elapsedTimeSeconds) + systemDevider;

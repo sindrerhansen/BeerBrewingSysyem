@@ -331,6 +331,7 @@ namespace BryggeprogramWPF
                         values.Add(value);
                         mashTank.Volume.SensorValue = value;
                         MashTank.TxtTankVolume.Text = value.ToString();
+                        mainViewModel.MeshTankVolume = value;
                     }
                     //else if (item.StartsWith("RimsO"))
                     //{
