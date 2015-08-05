@@ -91,7 +91,7 @@ namespace BryggeprogramWPF
                 if (tglSimulateArduino.IsChecked==true)
                 {
                     var indata = GennerateSimulatedArduinoValues();
-                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace BryggeprogramWPF
                 try
                 {
                     string indata = sp.ReadLine();
-                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(WriteData), indata);
+                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
                 catch (Exception)
                 {
@@ -129,7 +129,7 @@ namespace BryggeprogramWPF
             }         
         }
 
-        private void WriteData(string text)
+        private void DecodeDataString(string text)
         {
             // Assign the value of the recieved_data to the RichTextBox.
             text.Trim();

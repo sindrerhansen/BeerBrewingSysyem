@@ -49,6 +49,9 @@ namespace BryggeprogramWPF
             private double meshTankVolume;
             public double MeshTankVolume { get { return meshTankVolume; } set { meshTankVolume = value; OnPropertyChanged("MeshTankVolume"); ValueOfIntrestUpdate(); } }
 
+            private double meshTankAddedVolume;
+            public double MeshTankAddedVolume { get { return meshTankAddedVolume; } set { meshTankAddedVolume = value; OnPropertyChanged("MeshTankAddedVolume"); } }
+
             private double boilTankTemperature;
             public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; OnPropertyChanged("BoilTankTemperature"); ValueOfIntrestUpdate(); } }
 

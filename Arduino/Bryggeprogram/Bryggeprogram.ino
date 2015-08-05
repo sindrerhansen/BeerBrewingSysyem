@@ -837,6 +837,7 @@ void loop() {
 			{
 				previouslyBrewingState = BrewingState;
 				refTime = millis();
+				lastTime = 0;
 			}
 
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
@@ -850,9 +851,20 @@ void loop() {
 
 			MashTank.TransferPump.Value = true;
 
-			if (BoilTank.CurentVolume > (MashInn.AddVolumeSP * 0.6))
+			if (BoilTank.CurentVolume > (MashInn.AddVolumeSP * 0.5))
 			{
 				BrewingState = 41;
+			}
+
+			if ((elapsedTimeSeconds - lastTime) >= 3)
+			{
+				lastTime = elapsedTimeSeconds;
+				transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
+				lastBoilVolume = BoilTank.AddedVolume;
+				if (transferRate < 0.05)
+				{
+					BrewingState = 41;
+				}
 			}
 
 			break;
@@ -874,7 +886,7 @@ void loop() {
 			remainingTime = - elapsedTimeSeconds;
 
 			MashTank.TransferPump.Value = true;
-			if (MashTank.CurentVolume <(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
+			if (MashTank.AddedVolume <(MashInn.AddVolumeSP + Sparge.AddVolumeSP))
 			{
 				Hlt.TransferPump.Value = true;
 			}
@@ -931,8 +943,8 @@ void loop() {
 				if ((elapsedTimeSeconds - lastTime) >= 3)
 				{
 					lastTime = elapsedTimeSeconds;
-					transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
-					lastBoilVolume = BoilTank.CurentVolume;
+					transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
+					lastBoilVolume = BoilTank.AddedVolume;
 					if (transferRate < 0.05)
 					{
 						BrewingState = 43;
@@ -971,8 +983,8 @@ void loop() {
 				if ((elapsedTimeSeconds - lastTime) >= 3)
 				{
 					lastTime = elapsedTimeSeconds;
-					transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
-					lastBoilVolume = BoilTank.CurentVolume;
+					transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
+					lastBoilVolume = BoilTank.AddedVolume;
 					if (transferRate < 0.05)
 					{
 						BrewingState = 50;
@@ -1115,6 +1127,7 @@ void loop() {
 				if (messageConfirmd)
 				{
 					CleaningState = 30;
+					messageConfirmd = false;
 
 				}
 			}
@@ -1318,6 +1331,7 @@ void loop() {
 		AllInfoString += "MatCp" + String(MashTank.CirculationPump.Value) + systemDevider;
 		AllInfoString += "MatTp" + String(MashTank.TransferPump.Value) + systemDevider;
 		AllInfoString += "MatVo" + String(MashTank.CurentVolume) + systemDevider;
+		AllInfoString += "MatAV" + String(MashTank.AddedVolume) + systemDevider;
 		AllInfoString += "RimsO" + String(RimsOuteSideTemp) + systemDevider;
 
 		AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
