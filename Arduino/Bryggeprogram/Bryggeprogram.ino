@@ -1108,7 +1108,6 @@ void loop() {
 
 			break;
 		
-
 		case 20:
 		
 			if (previouslyCleaningState != CleaningState)
@@ -1117,7 +1116,7 @@ void loop() {
 			}
 			
 			Hlt.CirculationPump.Value = true;
-			if (MashTank.CurentVolume<20)
+			if (MashTank.CurentVolume < 20)
 			{
 				Hlt.TransferPump.Value = true;
 			}
@@ -1128,15 +1127,12 @@ void loop() {
 				{
 					CleaningState = 30;
 					messageConfirmd = false;
-
 				}
 			}
 			if (MashTank.CurentVolume>5)
 			{
 				MashTank.CirculationPump.Value = true;
-
 			}
-
 			break;
 
 		case 30:
@@ -1151,7 +1147,7 @@ void loop() {
 
 			MashTank.CirculationPump.Value = true;
 			MashTank.TransferPump.Value = true;
-			if (BoilTank.CurentVolume>=12)
+			if (BoilTank.CurentVolume >= 12)
 			{
 				CleaningState = 31;
 			}
@@ -1170,14 +1166,13 @@ void loop() {
 			elapsedTimeMinutes = elapsedTimeSeconds / 60;
 			timeSpan = 10 * 60;
 			remainingTime = timeSpan - elapsedTimeSeconds;
-			if (MashTank.TemperatureTank<MashTank.TemperatureTankSetPoint)
-			{
-				MashTank.Element1.Value = true;
-			}
+			
 			MashTank.CirculationPump.Value = true;
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsOuteSideTemp);
+
 			BoilTank.TransferPump.Value = true;
 
-			if (remainingTime<=0)
+			if (remainingTime <= 0)
 			{
 				CleaningState = 40;
 			}
@@ -1195,7 +1190,6 @@ void loop() {
 			elapsedTimeSeconds = (millis() - refTime) / 1000;
 			elapsedTimeMinutes = elapsedTimeSeconds / 60;
 			
-			
 			MashTank.CirculationPump.Value = true;
 			BoilTank.TransferPump.Value = true;
 			Hlt.TransferPump.Value = true;
@@ -1206,12 +1200,12 @@ void loop() {
 				BoilTank.Element2.Value = true;
 			}			
 
-			if (BoilTank.CurentVolume<55)
+			if (BoilTank.CurentVolume < 55)
 			{
 				MashTank.TransferPump.Value = true;				
 			}
 
-			else if (MashTank.CurentVolume>=10)
+			else if (MashTank.CurentVolume >= 10)
 			{
 				CleaningState = 50;
 			}
@@ -1233,7 +1227,7 @@ void loop() {
 			
 			MashTank.CirculationPump.Value = true;
 
-			if (BoilTank.TemperatureTank>97)
+			if (BoilTank.TemperatureTank > 97)
 			{
 				CleaningState = 51;
 			}
@@ -1263,10 +1257,31 @@ void loop() {
 
 			if (remainingTime <= 0)
 			{
-				CleaningState = 0;
+				CleaningState = 52;
 			}
 			break;
 
+		case 52:
+
+			if (previouslyCleaningState != CleaningState)
+			{
+				previouslyCleaningState = CleaningState;
+				refTime = millis();    // start timer 
+			}
+
+			elapsedTimeSeconds = (millis() - refTime) / 1000;
+			elapsedTimeMinutes = elapsedTimeSeconds / 60;
+			timeSpan = 15 * 60;
+			remainingTime = timeSpan - elapsedTimeSeconds;
+
+			BoilTank.TransferPump.Value = true;
+
+			if (remainingTime <= 0)
+			{
+				CleaningState = 0;
+			}
+
+			break;
 		default:
 			CleaningState = 0;
 			break;
