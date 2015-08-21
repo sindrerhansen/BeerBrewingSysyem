@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryggeprogramWPF", "BryggeprogramWPF.csproj", "{F82C68AB-AF41-4998-BFF9-09B09B374BCD}"
 EndProject
@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{440D8F
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryggeprogramWPF V2", "..\BryggeprogramWPF V2\BryggeprogramWPF V2.csproj", "{9BDE900D-3E3C-435E-8C12-352987A20292}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,20 +56,6 @@ Global
 		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{8209D4ED-1090-40ED-BE46-1F450D184C1C}.Release|x64.ActiveCfg = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|ARM.ActiveCfg = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|Win32.ActiveCfg = Release|Any CPU
-		{9BDE900D-3E3C-435E-8C12-352987A20292}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

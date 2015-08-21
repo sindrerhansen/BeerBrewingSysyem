@@ -78,12 +78,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Regulators.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Serial.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Tank.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="Visual Micro\.Bryggeprogram.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Regulators.c" />
+    <ClCompile Include="Serial.cpp" />
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

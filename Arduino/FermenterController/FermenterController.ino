@@ -21,7 +21,7 @@ void setup()
 	Serial.begin(9600);
 	Serial1.begin(9600);
 	setSyncProvider(requestSync);  //set function to call when sync required
-	Ferm1.init();
+	
 }
 
 void serialEvent() {
@@ -58,9 +58,9 @@ void serial3Event(){
 void loop()
 {
 	// Getting Temperatures
-	TemperatureSensors.requestTemperatures();
-	AllInfoString = "";
-	Temperature = TemperatureSensors.getTempCByIndex(0);
+	//TemperatureSensors.requestTemperatures();
+	//AllInfoString = "";
+	//Temperature = TemperatureSensors.getTempCByIndex(0);
 
 }
 

@@ -18,6 +18,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+# Visual Micro
+[Vv]isual [Mm]icro/
+
 # Roslyn cache directories
 *.ide/
 

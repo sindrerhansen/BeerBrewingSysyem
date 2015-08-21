@@ -79,6 +79,10 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <Bryggeprogram.ino>
+#include <Regulators.c>
+#include <Regulators.h>
+#include <Serial.cpp>
+#include <Serial.h>
 #include <Tank.cpp>
 #include <Tank.h>
 #endif

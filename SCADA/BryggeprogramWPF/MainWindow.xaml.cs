@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO.Ports;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using OxyPlot;
-using OxyPlot.Axes;
-
+using GalaSoft.MvvmLight;
+using BryggeprogramWPF.Messages;
+using BryggeprogramWPF.Model;
+using BryggeprogramWPF.ViewModel;
 
 namespace BryggeprogramWPF
 {
@@ -43,7 +36,6 @@ namespace BryggeprogramWPF
         TankVM BoilTankVm = new TankVM();
         TankVM HltVm = new TankVM();
 
-        BrewingSettings brewingSettings = new BrewingSettings();
         int systemState = 0;
         int systemCleaningState = 0;
         double ambiantTemperature;
@@ -135,7 +127,7 @@ namespace BryggeprogramWPF
             text.Trim();
             string replacement = Regex.Replace(text, "\r", "");
             textBox.Text = replacement;
-            
+            ProsessData _prosessData = new ProsessData();
             var textList = Regex.Split(replacement, "_");
             var values = new List<double>();
             try
@@ -147,7 +139,6 @@ namespace BryggeprogramWPF
                         int.TryParse(item.Remove(0, 5), out systemState);
                         mainViewModel.BrewingState = systemState;
                     }
-
                     else if (item.StartsWith("CleSt"))
                     {
                         int.TryParse(item.Remove(0, 5), out systemCleaningState);
@@ -159,7 +150,6 @@ namespace BryggeprogramWPF
                         TxtMessageFromSystem.Text= message;
                         mainViewModel.MessageFromSystem = message;
                     }
-
                     else if (item.StartsWith("TimSp"))
                     {
                         int maxtTme;
@@ -168,7 +158,6 @@ namespace BryggeprogramWPF
                         progressBar.Maximum = maxtTme;
                         
                     }
-
                     else if (item.StartsWith("RemTi"))
                     {
                         int time;
@@ -182,7 +171,6 @@ namespace BryggeprogramWPF
                                         t.Seconds);
                         
                     }
-
                     else if (item.StartsWith("AmbTe"))
                     {
                         double value;
@@ -191,8 +179,7 @@ namespace BryggeprogramWPF
                         ambiantTemperature = value;
                         txtAmbientTemp.Text = value.ToString();
                  
-                    }
-                                 
+                    }                               
                     else if (item.StartsWith("HltSp"))
                     {
                         double value;
@@ -200,6 +187,7 @@ namespace BryggeprogramWPF
                         hotLiqureTank.TemperatureSetpoint = value;
                         HLT.TextSetTemp.Text = value.ToString();
                         mainViewModel.HotLiquidTankTemperatureSetpoint = value;
+                        _prosessData.HLT.TemperatureSetpoint = value;
                     }
                     else if (item.StartsWith("HltTe"))
                     {
@@ -210,6 +198,7 @@ namespace BryggeprogramWPF
                         HLT.GauageActTemp.Value = value;
                         HLT.TextActuelTemp.Text =value.ToString();
                         mainViewModel.HotLiquidTankTemperature = value;
+                        _prosessData.HLT.Temperature = value;
                     }
                     else if (item.StartsWith("HltE1"))
                     {
@@ -217,11 +206,15 @@ namespace BryggeprogramWPF
                         {
                             hotLiqureTank.HeatingElement.On = true;
                             HLT.indicatorHeatingElementOn.Fill = myRedBrush;
+                            mainViewModel.HotLiquidTankElement = true;
+                            _prosessData.HLT.HeatingElementOn = true;
                         }
                         else
                         {
                             hotLiqureTank.HeatingElement.On = false;
                             HLT.indicatorHeatingElementOn.Fill = myGrayBrush;
+                            mainViewModel.HotLiquidTankElement = false;
+                            _prosessData.HLT.HeatingElementOn = false;
                         }
                     }
                     else if (item.StartsWith("HltCp"))
@@ -230,11 +223,13 @@ namespace BryggeprogramWPF
                         {
                             hotLiqureTank.CirculationPump.On = true;
                             HLT.indicatorCirculationPumpOn.Fill = myRedBrush;
+                            _prosessData.HLT.CirculationPump.Running = true;
                         }
                         else
                         {
                             hotLiqureTank.CirculationPump.On = false;
                             HLT.indicatorCirculationPumpOn.Fill = myGrayBrush;
+                            _prosessData.HLT.CirculationPump.Running = false;
                         }
                     }
                     else if (item.StartsWith("HltTp"))
@@ -243,11 +238,13 @@ namespace BryggeprogramWPF
                         {
                             hotLiqureTank.TransferPump.On = true;
                             HLT.indicatorTransferPumpOn.Fill = myRedBrush;
+                            _prosessData.HLT.TransferPump.Running = true;
                         }
                         else
                         {
                             hotLiqureTank.TransferPump.On = false;
                             HLT.indicatorTransferPumpOn.Fill = myGrayBrush;
+                            _prosessData.HLT.TransferPump.Running = false;
                         }
                     }
                     else if (item.StartsWith("HltVo"))
@@ -256,8 +253,8 @@ namespace BryggeprogramWPF
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         hotLiqureTank.Volume.SensorValue = value;
                         HLT.TxtTankVolume.Text = value.ToString();
+                        _prosessData.HLT.CurrentVolume = value;
                     }
-
                     else if (item.StartsWith("MatTe"))
                     {
                         double value;
@@ -267,14 +264,23 @@ namespace BryggeprogramWPF
                         MashTank.GauageActTemp.Value = value;
                         MashTank.TextActuelTemp.Text = value.ToString();
                         mainViewModel.MeshTankTemperature = value;
+                        _prosessData.MashTank.Temperature = value;
                     }
-
+                    else if (item.StartsWith("RimsO"))
+                    {
+                        double value;
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        mainViewModel.MeshTankRimsOutesideTemperature = value;
+                        _prosessData.MashTank.RIMS.OutesideTemperature = value;
+                    }
                     else if (item.StartsWith("MarTe"))
                     {
                         double value;
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         mashTank.HeatingElementReturTemperature.SensorValue = value;
+                        mainViewModel.MeshTankRimsReturTemperature = value;
                         MashTank.txtTemperatureAfterHeate.Text = value.ToString();
+                        _prosessData.MashTank.Temperature = value;
                     }
                     else if (item.StartsWith("MatSp"))
                     {
@@ -283,6 +289,7 @@ namespace BryggeprogramWPF
                         mashTank.TemperatureSetpoint = value;
                         MashTank.TextSetTemp.Text = value.ToString();
                         mainViewModel.MeshTankTemperatureSetpoint = value;
+                        _prosessData.MashTank.TemperatureSetpoint = value;
 
                     }
                     else if (item.StartsWith("MatE1"))
@@ -291,11 +298,13 @@ namespace BryggeprogramWPF
                         {
                             mashTank.HeatingElement.On = true;
                             MashTank.indicatorHeatingElementOn.Fill = myRedBrush;
+                            _prosessData.MashTank.RIMS.ElementOn = true;
                         }
                         else
                         {
                             mashTank.HeatingElement.On = false;
                             MashTank.indicatorHeatingElementOn.Fill = myGrayBrush;
+                            _prosessData.MashTank.RIMS.ElementOn = false;
                         }
                     }
                     else if (item.StartsWith("MatCp"))
@@ -304,11 +313,13 @@ namespace BryggeprogramWPF
                         {
                             mashTank.CirculationPump.On = true;
                             MashTank.indicatorCirculationPumpOn.Fill = myRedBrush;
+                            _prosessData.MashTank.CirculationPump.Running = true;
                         }
                         else
                         {
                             mashTank.CirculationPump.On = false;
                             MashTank.indicatorCirculationPumpOn.Fill = myGrayBrush;
+                            _prosessData.MashTank.CirculationPump.Running = false;
                         }
                     }
                     else if (item.StartsWith("MatTp"))
@@ -317,12 +328,21 @@ namespace BryggeprogramWPF
                         {
                             mashTank.TransferPump.On = true;
                             MashTank.indicatorTransferPumpOn.Fill = myRedBrush;
+                            _prosessData.MashTank.TransferPump.Running=true;        
                         }
                         else
                         {
                             mashTank.TransferPump.On = false;
                             MashTank.indicatorTransferPumpOn.Fill = myGrayBrush;
+                            _prosessData.MashTank.TransferPump.Running = false;
                         }
+                    }
+                    else if (item.StartsWith("MatAV"))
+                    {
+                        double value;
+                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        _prosessData.MashTank.AddedVolume = value;
+                        
                     }
                     else if (item.StartsWith("MatVo"))
                     {
@@ -332,15 +352,8 @@ namespace BryggeprogramWPF
                         mashTank.Volume.SensorValue = value;
                         MashTank.TxtTankVolume.Text = value.ToString();
                         mainViewModel.MeshTankVolume = value;
+                        _prosessData.MashTank.CurrentVolume = value;
                     }
-                    //else if (item.StartsWith("RimsO"))
-                    //{
-                    //    double value;
-                    //    value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
-                    //    values.Add(value);
-                    //    mashTank.Volume.SensorValue = value;
-                    //    MashTank.TxtTankVolume.Text = value.ToString();
-                    //}
 
                     else if (item.StartsWith("BotTe"))
                     {
@@ -405,6 +418,7 @@ namespace BryggeprogramWPF
                         double value;
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         boilTank.Volume.SensorValue = value;
+                        mainViewModel.BoilTankVolume = value;
                         BoilTank.TxtTankVolume.Text = value.ToString();
                     }
 
@@ -415,7 +429,10 @@ namespace BryggeprogramWPF
 
 
                 }
-               
+
+                var mes = new MessengerInstanceWrappr(_prosessData);
+                mes.Cleanup();
+
                 try
                 {
 
@@ -438,6 +455,7 @@ namespace BryggeprogramWPF
             catch (Exception ex) {
                 textBoxError.Text = ex.ToString();
             }
+            
         }
 
         private void send_Click(object sender, RoutedEventArgs e)
@@ -658,9 +676,10 @@ namespace BryggeprogramWPF
 
         private void txtTimerDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            TimerWindow TimerWindow = new TimerWindow();
-            TimerWindow.DataContext = this.DataContext;
-            TimerWindow.Show();
+            ProsessWindow prosessWindow = new ProsessWindow();
+            ProsessViewModel prosessViewModel = new ProsessViewModel();
+            prosessWindow.DataContext = prosessViewModel;
+            prosessWindow.Show();
 
         }
 
@@ -719,6 +738,15 @@ namespace BryggeprogramWPF
                     mySerialPort.WriteLine("FLOW_REB");
                 }
             }
+        }
+
+        public class MessengerInstanceWrappr : ViewModelBase
+        {
+            public MessengerInstanceWrappr(ProsessData data)
+            {
+                MessengerInstance.Send(new ProsessDataMessage(data));
+            }
+
         }
     }
 }
