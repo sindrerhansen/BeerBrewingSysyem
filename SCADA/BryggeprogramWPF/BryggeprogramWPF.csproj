@@ -132,6 +132,9 @@
     </ApplicationDefinition>
     <Compile Include="BrewingData.cs" />
     <Compile Include="Converters\BoolToGrayGreenConverter.cs" />
+    <Compile Include="Converters\BoolToGrayRedConverter.cs" />
+    <Compile Include="Converters\TemperatureToColor.cs" />
+    <Compile Include="Converters\TimeToStringConverter.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Messages\ProsessDataMessage.cs" />
     <Compile Include="Messages\TimeMessage.cs" />

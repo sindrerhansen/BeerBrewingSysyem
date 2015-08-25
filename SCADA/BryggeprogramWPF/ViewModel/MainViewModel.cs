@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using OxyPlot;
@@ -7,11 +6,9 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
-using System.Windows;
 using System.Windows.Input;
 using Yuhan.WPF.Commands;
 using System.IO;
-using System.Windows.Media;
 using Microsoft.Win32;
 
 
@@ -217,7 +214,6 @@ namespace BryggeprogramWPF
             {
                 TemperatureOfIntrestBacground = "Yellow";
             }
-
             else
             {
                 TemperatureOfIntrestBacground = "Red";
@@ -239,30 +235,31 @@ namespace BryggeprogramWPF
         }
 
         private readonly List<OxyColor> colors = new List<OxyColor>
-                                            {
+                                            {   OxyColors.Blue,
                                                 OxyColors.Green,
-                                                OxyColors.IndianRed,
-                                                OxyColors.Coral,
-                                                OxyColors.Chartreuse,
-                                                OxyColors.Azure
+                                                OxyColors.Red,
+                                                OxyColors.Yellow,
+                                                OxyColors.Black
                                             };
+
         private readonly List<String> names = new List<string>
         {
-            "HLT","MashTank","Boil Tank","Ambient","Mesh Volume"
+            "HLT","MashTank","Boil Tank","RIMS Outeside","Mesh Volume"
         };
 
         private void SetUpModel()
         {
-            PlotModel.LegendTitle = "Legend";
+            plotModel.Background = OxyColors.LightGray;
+            PlotModel.LegendTitle = "Temperatures";
             PlotModel.LegendOrientation = LegendOrientation.Horizontal;
             PlotModel.LegendPlacement = LegendPlacement.Outside;
             PlotModel.LegendPosition = LegendPosition.RightTop;
-            PlotModel.LegendBackground = OxyColor.FromAColor(200, OxyColors.White);
+            PlotModel.LegendBackground = OxyColor.FromAColor(200, OxyColors.LightGray);
             PlotModel.LegendBorder = OxyColors.Black;
 
             var dateAxis = new DateTimeAxis(AxisPosition.Bottom, "Date", "HH:mm") { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, IntervalLength = 80 };
             PlotModel.Axes.Add(dateAxis);
-            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "Value" };
+            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "C/m3" };
             PlotModel.Axes.Add(valueAxis);
 
         }
@@ -279,6 +276,7 @@ namespace BryggeprogramWPF
                 {
                     StrokeThickness = 2,
                     MarkerSize = 3,
+                    Color=colors[data.Key],
                     MarkerStroke = colors[data.Key],
                     //MarkerType = markerTypes[data.Key],
                     CanTrackerInterpolatePoints = false,
@@ -310,7 +308,6 @@ namespace BryggeprogramWPF
             }
 
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

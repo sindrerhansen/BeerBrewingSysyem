@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BryggeprogramWPF
 {
     public class Sensor
@@ -18,7 +12,7 @@ namespace BryggeprogramWPF
             SensorIdentifier = "";
         }
     }
-    public class TankData : INotifyPropertyChanged
+    public class TankData
     {
         public Sensor TemperatureActual { get; set; }
         public double TemperatureSetpoint {get; set;}
@@ -41,7 +35,7 @@ namespace BryggeprogramWPF
             TransferPump = new Pump();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+     
     }
     public class BaseElement
     {

@@ -132,8 +132,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="544,19,0,0" TextWrapping="Wrap" Text="Mesh Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="729,19,0,0" TextWrapping="Wrap" Text="Boil Tank" VerticalAlignment="Top" Width="168" FontSize="14" TextAlignment="Center"/>
         <Grid HorizontalAlignment="Left" Height="360" Margin="10,481,0,0" VerticalAlignment="Top" Width="1234">
-            <oxy:Plot x:Name="Plot" Model="{Binding PlotModel}" Margin="0,0,10,0">
-            </oxy:Plot>
+            <oxy:PlotView x:Name="Plot" Model="{Binding PlotModel}" Margin="0,0,10,0">
+            </oxy:PlotView>
         </Grid>
 
 

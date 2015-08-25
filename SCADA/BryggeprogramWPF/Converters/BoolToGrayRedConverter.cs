@@ -3,14 +3,14 @@ using System.Windows.Data;
 
 namespace BryggeprogramWPF.Converters
 {
-    class BoolToGrayGreenConverter : IValueConverter
+    class BoolToGrayRedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string ret;
             if ((bool)value)
             {
-                ret = "Green";
+                ret = "Red";
             }
             else
             {
