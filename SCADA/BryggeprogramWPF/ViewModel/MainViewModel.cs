@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Yuhan.WPF.Commands;
 using System.IO;
 using Microsoft.Win32;
+using BryggeprogramWPF.ViewModel;
 
 
 namespace BryggeprogramWPF
@@ -225,12 +226,35 @@ namespace BryggeprogramWPF
 
         }
 
+        public ICommand OpenProsessViewCommand
+        {
+            get;
+            private set;
+        }
+
+        private bool CanExecuteOpenProsessViewCommand()
+        {
+            return true;
+        }
+        private void CreatePoenProsessViewCommand()
+        {
+            OpenProsessViewCommand = new RelayCommand(OpenProsessViewCommandExecute, CanExecuteOpenProsessViewCommand);
+        }
+
+        private void OpenProsessViewCommandExecute()
+        {
+            ProsessWindow prosessWindow = new ProsessWindow();
+            ProsessViewModel prosessViewModel = new ProsessViewModel();
+            prosessWindow.DataContext = prosessViewModel;
+            prosessWindow.Show();
+        }
 
         public MainViewModel()
         {
             PlotModel = new PlotModel();
             SetUpModel();
             LoadData();
+            CreatePoenProsessViewCommand();
 
         }
 
@@ -244,7 +268,7 @@ namespace BryggeprogramWPF
 
         private readonly List<String> names = new List<string>
         {
-            "HLT","MashTank","Boil Tank","RIMS Outeside","Mesh Volume"
+            "HLT","MashTank","RIMS Outeside","Boil Tank","Mesh Volume"
         };
 
         private void SetUpModel()
@@ -259,7 +283,7 @@ namespace BryggeprogramWPF
 
             var dateAxis = new DateTimeAxis(AxisPosition.Bottom, "Date", "HH:mm") { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, IntervalLength = 80 };
             PlotModel.Axes.Add(dateAxis);
-            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "C/m3" };
+            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "C/dm3" };
             PlotModel.Axes.Add(valueAxis);
 
         }
@@ -281,7 +305,7 @@ namespace BryggeprogramWPF
                     //MarkerType = markerTypes[data.Key],
                     CanTrackerInterpolatePoints = false,
                     Title = names[data.Key],
-                    Smooth = false,
+                    Smooth = true,
                 };
 
                 // data.ToList().ForEach(d=>lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime),d.Value)));

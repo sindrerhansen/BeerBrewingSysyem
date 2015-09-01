@@ -10,6 +10,7 @@ namespace BryggeprogramWPF.Model
         public TimeSpan Timer { get; set; }
         public int CleaningState { get; set; }
         public int BrewingState { get; set; }
+        public string RAW_Data { get; set; }
         
 
         public ProsessData()
@@ -20,7 +21,6 @@ namespace BryggeprogramWPF.Model
             Timer = new TimeSpan();
             BrewingState = 0;
             CleaningState = 0;
-            
 
         }
     }

@@ -57,6 +57,10 @@
       <HintPath>packages\MvvmLightLibs.5.1.1.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.SignalR.Client.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +140,10 @@
     <Compile Include="Converters\TemperatureToColor.cs" />
     <Compile Include="Converters\TimeToStringConverter.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="Simulate.cs" />
+    <Compile Include="HubClientStart.cs" />
+    <Compile Include="MainWindowHelper.cs" />
+    <Compile Include="Messages\MulticastMessage.cs" />
     <Compile Include="Messages\ProsessDataMessage.cs" />
     <Compile Include="Messages\TimeMessage.cs" />
     <Compile Include="Model\BoilTank.cs" />

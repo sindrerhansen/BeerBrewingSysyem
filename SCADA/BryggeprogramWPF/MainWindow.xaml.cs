@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using System.IO.Ports;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -14,6 +13,8 @@ using GalaSoft.MvvmLight;
 using BryggeprogramWPF.Messages;
 using BryggeprogramWPF.Model;
 using BryggeprogramWPF.ViewModel;
+using Microsoft.AspNet.SignalR.Client;
+using System.Windows.Threading;
 
 namespace BryggeprogramWPF
 {
@@ -45,7 +46,9 @@ namespace BryggeprogramWPF
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
-        
+        HubClientStart hubClient;
+        Simulate simulator;
+
         public MainWindow()
         {
             mainViewModel = new MainViewModel();
@@ -59,9 +62,12 @@ namespace BryggeprogramWPF
 
             DropDownBaudRate.Items.Add("9600");
             DropDownBaudRate.SelectedItem = "9600";
+            cbHubIp.Items.Add("192.168.3.103");
+            cbHubIp.Items.Add("93.89.117.144");
+            cbHubIp.SelectedItem = "192.168.3.103";
             DropDownComPorts.ItemsSource=SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
-            
+            simulator = new Simulate();
             
         }
 
@@ -82,23 +88,14 @@ namespace BryggeprogramWPF
                 btnPrepareBrewing.IsEnabled = false;
                 if (tglSimulateArduino.IsChecked==true)
                 {
-                    var indata = GennerateSimulatedArduinoValues();
-                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
+                    var indata = simulator.GennerateSimulatedArduinoValues();
+                    // Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
+                    hubClient.Hub.Invoke("MulticastBrewingData", indata);
                 }
             }
         }
 
-        private string GennerateSimulatedArduinoValues()
-        {
-            string ret="";
-            ret += "STATE" + "10" + "_";
-            ret += "RimsO" + "20" + "_";
-            ret += "HltTe" + (5 + 10 * Math.Sin(x)).ToString().Replace(',', '.') + "_";
-            ret += "MatTe" + (10 + 10 * Math.Sin(x)).ToString().Replace(',', '.') + "_";
-            ret += "BotTe" + "39" + "_";
-            ret += "MatVo" + "0" + "_";
-            return ret; 
-        }
+
         
         private delegate void UpdateUiTextDelegate(string text);
 
@@ -110,6 +107,7 @@ namespace BryggeprogramWPF
                 try
                 {
                     string indata = sp.ReadLine();
+                    hubClient.Hub.Invoke("MulticastBrewingData", indata);
                     Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
                 catch (Exception)
@@ -121,13 +119,15 @@ namespace BryggeprogramWPF
             }         
         }
 
-        private void DecodeDataString(string text)
+        public void DecodeDataString(string text)
         {
             // Assign the value of the recieved_data to the RichTextBox.
             text.Trim();
-            string replacement = Regex.Replace(text, "\r", "");
-            textBox.Text = replacement;
             ProsessData _prosessData = new ProsessData();
+            
+            string replacement = Regex.Replace(text, "\r", "");
+            _prosessData.RAW_Data = replacement;
+            
             var textList = Regex.Split(replacement, "_");
             var plotValues = new List<double>();
             try
@@ -539,6 +539,7 @@ namespace BryggeprogramWPF
 
         private void btnDisconnect_Click(object sender, RoutedEventArgs e)
         {
+            
             if (mySerialPort.IsOpen)
             {
                 try
@@ -769,6 +770,16 @@ namespace BryggeprogramWPF
             {
                 MessengerInstance.Send(new ProsessDataMessage(data));
             }
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
+            
+            hubClient = new HubClientStart();
+
+            hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));
 
         }
     }

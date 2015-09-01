@@ -11,13 +11,11 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define _VMDEBUG 1
 #define F_CPU 16000000L
 #define ARDUINO 165
 #define ARDUINO_AVR_MEGA2560
 #define ARDUINO_ARCH_AVR
 #define __cplusplus
-#define GCC_VERSION 40801
 #define __inline__
 #define __asm__(x)
 #define __extension__
@@ -26,9 +24,9 @@
 #define __inline__
 //#define __asm__ 
 #define __volatile__
-#define GCC_VERSION 40301
+#define GCC_VERSION 40801
 #define volatile(va_arg) 
-
+#define _CONST
 typedef void *__builtin_va_list;
 #define __builtin_va_start
 #define __builtin_va_end
@@ -37,6 +35,12 @@ typedef void *__builtin_va_list;
 #define NOINLINE __attribute__((noinline))
 #define prog_void
 #define PGM_VOID_P int
+#ifndef __builtin_constant_p
+#define __builtin_constant_p __attribute__((__const__))
+#endif
+#ifndef __builtin_strlen
+#define __builtin_strlen  __attribute__((__const__))
+#endif
 #define NEW_H
 /*
 #ifndef __ATTR_CONST__

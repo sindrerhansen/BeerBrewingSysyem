@@ -20,6 +20,9 @@
                     <Button x:Name="btnResetFlowSensor" Content="Reset Mesh Tank Flowsensor" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="185" Click="btnResetFlowSensor_Click"/>
                     <ToggleButton Name="tglSimulateArduino" Content="Simulate" HorizontalAlignment="Left" Margin="230,57,0,0" VerticalAlignment="Top" Width="75" IsThreeState="False" Click="tglSimulateArduino_Click"/>
                     <Button x:Name="btnResetBoilFlowSensor" Content="Reset Boil Tank Flowsensor" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="185" Click="btnResetBoilFlowSensor_Click"/>
+                    <Button Content="Connect to HUB" HorizontalAlignment="Left" Margin="197,175,0,0" VerticalAlignment="Top" Width="108" Click="Button_Click"/>
+                    <ComboBox Name="cbHubIp" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Width="120"/>
+                    <Button Command="{Binding OpenProsessViewCommand}" Content="Open Prosess view" HorizontalAlignment="Left" Margin="0,243,0,0" VerticalAlignment="Top" Width="139"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Commans" Margin="4,0,-8,-4">

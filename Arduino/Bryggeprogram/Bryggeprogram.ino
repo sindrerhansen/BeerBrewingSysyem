@@ -1,10 +1,12 @@
 // This code is for a Arduino Mega. By Sindre
-#include "Regulators.h"
+//#include "Regulators.h"
 #include "Serial.h"
 #include <PID_v1.h>
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
+unsigned long Ts;
+unsigned long Tc;
 
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, 900, 1, 0, DIRECT);
@@ -17,6 +19,7 @@ unsigned long now = millis();
 
 
 #pragma region Constants
+
 const long prePumpeTimeSparge = 20;
 const int MashCirculationStartTreshold = 2;
 const float BoilTempThreshold = 97.0;
@@ -1352,6 +1355,7 @@ void loop() {
 
 		AllInfoString += "BotSp" + String(BoilTank.TemperatureTankSetPoint) + systemDevider;
 		AllInfoString += "BotE1" + String(BoilTank.Element1.Value) + systemDevider;
+		AllInfoString += "BotE2" + String(BoilTank.Element2.Value) + systemDevider;
 		AllInfoString += "BotCp" + String(BoilTank.CirculationPump.Value) + systemDevider;
 		AllInfoString += "BotTp" + String(BoilTank.TransferPump.Value) + systemDevider;
 		AllInfoString += "BotVo" + String(BoilTank.CurentVolume) + systemDevider;
@@ -1366,7 +1370,113 @@ void loop() {
 
 	}
 
+
+
 #pragma endregion SendingMessageToSerial
 	delay(10);
 }
 
+bool TankTemperaturOnOffRegulator(double setpoint, double actual, bool overElement)
+{
+	bool output;
+	if (overElement)
+	{
+		if (actual <= setpoint)
+		{
+			output = true;
+		}
+		else
+		{
+			output = false;
+		}
+	}
+
+	else
+	{
+		output = false;
+		//MessageToUser = "Add water to hot liquor tank!!";
+	}
+
+	return output;
+}
+
+bool PWM_Reelay(double setpoint, double actual, double ratio)
+{
+	bool output = false;
+	Tc = millis();
+	double PWD_Window = 5000;
+
+	if (actual < setpoint)
+	{
+		if (ratio > 0)
+		{
+			if (ratio < 1)
+			{
+				if (Ts + PWD_Window*ratio > Tc)
+				{
+					output = true;
+				}
+				else
+				{
+					output = false;
+				}
+				if (Ts + PWD_Window < Tc)
+				{
+					Ts = Tc;
+				}
+			}
+			else
+			{
+				output = true;
+			}
+		}
+		else
+		{
+			output = false;
+		}
+	}
+
+	else
+	{
+		output = false;
+	}
+	if (actual < (setpoint - 3.0))
+	{
+		output = true;
+	}
+
+	return output;
+}
+
+bool Tank_PWM_ReelayRegulator(double setpoint, double actual, double ratio, bool overElement)
+{
+	bool output;
+
+	if (overElement)
+	{
+		output = PWM_Reelay(setpoint, actual, ratio);
+	}
+	else
+	{
+
+		output = false;
+	}
+
+	return output;
+}
+
+bool RIMS_PWM_ReelayRegulator(double setpoint, double tempInn, double tempOut, double ratio, double RIMS_outesideTemp)
+{
+	bool output = false;
+
+	if (tempOut < (tempInn + 9.0) && tempOut < (setpoint + 5.0) && RIMS_outesideTemp < tempInn && RIMS_outesideTemp < setpoint)
+	{
+		output = PWM_Reelay(setpoint, tempInn, ratio);
+	}
+	else
+	{
+		output = false;
+	}
+
+	return output;
+}
