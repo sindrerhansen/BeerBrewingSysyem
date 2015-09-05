@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
 using System;
+using System.Windows;
 
 
 namespace BryggeprogramWPF
@@ -24,9 +25,18 @@ namespace BryggeprogramWPF
         
         public HubClientStart()
         {
-            connection= new HubConnection(url);
-            _hub = connection.CreateHubProxy("BrewingHub");
-            connection.Start().Wait();
+            try
+            {
+                connection = new HubConnection(url);
+                _hub = connection.CreateHubProxy("BrewingHub");
+                connection.Start().Wait();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Hub error: {0}", e.Message.ToString());
+                
+            }
+
       
         }
         

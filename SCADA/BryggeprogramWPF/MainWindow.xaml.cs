@@ -89,8 +89,8 @@ namespace BryggeprogramWPF
                 if (tglSimulateArduino.IsChecked==true)
                 {
                     var indata = simulator.GennerateSimulatedArduinoValues();
-                    // Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
-                    hubClient.Hub.Invoke("MulticastBrewingData", indata);
+                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
+                    //hubClient.Hub.Invoke("MulticastBrewingData", indata);
                 }
             }
         }
@@ -778,8 +778,12 @@ namespace BryggeprogramWPF
            
             
             hubClient = new HubClientStart();
-
-            hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));
+            hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
+            if (!mySerialPort.IsOpen)
+            {
+                hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));  
+            }
+           
 
         }
     }
