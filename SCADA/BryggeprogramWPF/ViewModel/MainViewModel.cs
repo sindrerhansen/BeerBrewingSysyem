@@ -11,36 +11,63 @@ using Yuhan.WPF.Commands;
 using System.IO;
 using Microsoft.Win32;
 using BryggeprogramWPF.ViewModel;
+using GalaSoft.MvvmLight;
 
 
 namespace BryggeprogramWPF
 {
 
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         private PlotModel plotModel;
         public PlotModel PlotModel
         {
             get { return plotModel; }
-            set { plotModel = value; OnPropertyChanged("PlotModel"); }
+            set { plotModel = value; RaisePropertyChanged(()=>PlotModel); }
         }
 
         private string resivedStringFromArduino;
         public string ResivedStringFromArduino
         {
             get { return resivedStringFromArduino; }
-            set { resivedStringFromArduino = value; OnPropertyChanged("StringFromArduino"); }
+            set { resivedStringFromArduino = value; RaisePropertyChanged(()=>ResivedStringFromArduino); }
+        }
+
+        private double totaleUsedEnergy;
+        public double TotaleUsedEnergy
+        {
+            get { return totaleUsedEnergy; }
+            set
+            {
+                if (value!=totaleUsedEnergy)
+                {
+                    totaleUsedEnergy = value;
+                    
+                    RaisePropertyChanged("TotaleUsedEnergy");
+                }
+            }
         }
 
         private DateTime currentDateTime;
         public DateTime CurrentDateTime
         {
             get { return currentDateTime; }
-            set { currentDateTime = value; OnPropertyChanged("CurrentDateTime"); TimeDisplayUpdate(); }
+            set { currentDateTime = value; RaisePropertyChanged("CurrentDateTime"); TimeDisplayUpdate(); }
+        }
+
+        private int heartBeat;
+        public int HeartBeat {
+            get { return heartBeat; }
+            set
+            { 
+                heartBeat = value;
+                RaisePropertyChanged(()=>HeartBeat); 
+            } 
+        
         }
 
         private double hotLiquidTankTemperature;
-        public double HotLiquidTankTemperature { get { return hotLiquidTankTemperature; } set { hotLiquidTankTemperature = value; OnPropertyChanged("HotLiquidTankTemperature"); ValueOfIntrestUpdate(); } }
+        public double HotLiquidTankTemperature { get { return hotLiquidTankTemperature; } set { hotLiquidTankTemperature = value; RaisePropertyChanged("HotLiquidTankTemperature"); ValueOfIntrestUpdate(); } }
 
         public string hotLiquidTankElement = "Black";
         public bool HotLiquidTankElement
@@ -49,11 +76,11 @@ namespace BryggeprogramWPF
             {
                 if (value)
                 {
-                    hotLiquidTankElement = "Red"; OnPropertyChanged("HotLiquidTankElement");
+                    hotLiquidTankElement = "Red"; RaisePropertyChanged("HotLiquidTankElement");
                 }
                 else
                 {
-                    hotLiquidTankElement = "Black"; OnPropertyChanged("HotLiquidTankElement");
+                    hotLiquidTankElement = "Black"; RaisePropertyChanged("HotLiquidTankElement");
                 }
 
             }
@@ -61,64 +88,64 @@ namespace BryggeprogramWPF
         }
 
         private double meshTankTemperature;
-        public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; OnPropertyChanged("MeshTankTemperature"); ValueOfIntrestUpdate(); } }
+        public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; RaisePropertyChanged("MeshTankTemperature"); ValueOfIntrestUpdate(); } }
 
         private double meshTankRimsOutesideTemperature;
-        public double MeshTankRimsOutesideTemperature { get { return meshTankRimsOutesideTemperature; } set { meshTankRimsOutesideTemperature = value; OnPropertyChanged("MeshTankRimsOutesideTemperature"); } }
+        public double MeshTankRimsOutesideTemperature { get { return meshTankRimsOutesideTemperature; } set { meshTankRimsOutesideTemperature = value; RaisePropertyChanged("MeshTankRimsOutesideTemperature"); } }
 
         private double meshTankRimsReturTemperature;
-        public double MeshTankRimsReturTemperature { get { return meshTankRimsReturTemperature; } set { meshTankRimsReturTemperature = value; OnPropertyChanged("MeshTankRimsReturTemperature"); } }
+        public double MeshTankRimsReturTemperature { get { return meshTankRimsReturTemperature; } set { meshTankRimsReturTemperature = value; RaisePropertyChanged("MeshTankRimsReturTemperature"); } }
 
         private double meshTankVolume;
-        public double MeshTankVolume { get { return meshTankVolume; } set { meshTankVolume = value; OnPropertyChanged("MeshTankVolume"); ValueOfIntrestUpdate(); } }
+        public double MeshTankVolume { get { return meshTankVolume; } set { meshTankVolume = value; RaisePropertyChanged("MeshTankVolume"); ValueOfIntrestUpdate(); } }
 
         private double meshTankAddedVolume;
-        public double MeshTankAddedVolume { get { return meshTankAddedVolume; } set { meshTankAddedVolume = value; OnPropertyChanged("MeshTankAddedVolume"); } }
+        public double MeshTankAddedVolume { get { return meshTankAddedVolume; } set { meshTankAddedVolume = value; RaisePropertyChanged("MeshTankAddedVolume"); } }
 
         private double boilTankTemperature;
-        public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; OnPropertyChanged("BoilTankTemperature"); ValueOfIntrestUpdate(); } }
+        public double BoilTankTemperature { get { return boilTankTemperature; } set { boilTankTemperature = value; RaisePropertyChanged("BoilTankTemperature"); ValueOfIntrestUpdate(); } }
 
         private double hotLiquidTankTemperatureSetpoint;
-        public double HotLiquidTankTemperatureSetpoint { get { return hotLiquidTankTemperatureSetpoint; } set { hotLiquidTankTemperatureSetpoint = value; OnPropertyChanged("HotLiquidTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
+        public double HotLiquidTankTemperatureSetpoint { get { return hotLiquidTankTemperatureSetpoint; } set { hotLiquidTankTemperatureSetpoint = value; RaisePropertyChanged("HotLiquidTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
         private double meshTankTemperatureSetpoint;
-        public double MeshTankTemperatureSetpoint { get { return meshTankTemperatureSetpoint; } set { meshTankTemperatureSetpoint = value; OnPropertyChanged("MeshTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
+        public double MeshTankTemperatureSetpoint { get { return meshTankTemperatureSetpoint; } set { meshTankTemperatureSetpoint = value; RaisePropertyChanged("MeshTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
         private double boilTankTemperatureSetpoint;
-        public double BoilTankTemperatureSetpoint { get { return boilTankTemperatureSetpoint; } set { boilTankTemperatureSetpoint = value; OnPropertyChanged("BoilTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
+        public double BoilTankTemperatureSetpoint { get { return boilTankTemperatureSetpoint; } set { boilTankTemperatureSetpoint = value; RaisePropertyChanged("BoilTankTemperatureSetpoint"); ValueOfIntrestUpdate(); } }
 
         private double boilTankVolume;
-        public double BoilTankVolume { get { return boilTankVolume; } set { boilTankVolume = value; OnPropertyChanged("BoilTankVolume"); ValueOfIntrestUpdate(); } }
+        public double BoilTankVolume { get { return boilTankVolume; } set { boilTankVolume = value; RaisePropertyChanged("BoilTankVolume"); ValueOfIntrestUpdate(); } }
 
         private string timer;
         public string Timer
         {
             get { return timer; }
-            set { timer = value; OnPropertyChanged("Timer"); TimeDisplayUpdate(); }
+            set { timer = value; RaisePropertyChanged("Timer"); TimeDisplayUpdate(); }
         }
 
         private double watchTemperature;
         public double WatchTemperature
         {
             get { return watchTemperature; }
-            set { watchTemperature = value; OnPropertyChanged("WatchTemperature"); }
+            set { watchTemperature = value; RaisePropertyChanged("WatchTemperature"); }
         }
 
         private int brewingState;
         public int BrewingState
         {
             get { return brewingState; }
-            set { brewingState = value; OnPropertyChanged("BrewingState"); }
+            set { brewingState = value; RaisePropertyChanged("BrewingState"); }
         }
         private int cleaningState;
         public int CleaningState
         {
             get { return cleaningState; }
-            set { cleaningState = value; OnPropertyChanged("CleaningState"); }
+            set { cleaningState = value; RaisePropertyChanged("CleaningState"); }
         }
 
         private string timeDisplay;
-        public string TimeDisplay { get { return timeDisplay; } set { timeDisplay = value; OnPropertyChanged("TimeDisplay"); } }
+        public string TimeDisplay { get { return timeDisplay; } set { timeDisplay = value; RaisePropertyChanged("TimeDisplay"); } }
         private void TimeDisplayUpdate()
         {
             if (MessageFromSystem == null)
@@ -146,10 +173,10 @@ namespace BryggeprogramWPF
         }
 
         private double temperatureOfIntrest;
-        public double ValueOfIntrest { get { return temperatureOfIntrest; } set { temperatureOfIntrest = value; OnPropertyChanged("ValueOfIntrest"); } }
+        public double ValueOfIntrest { get { return temperatureOfIntrest; } set { temperatureOfIntrest = value; RaisePropertyChanged("ValueOfIntrest"); } }
 
         private string temperatureOfIntrestBacground;
-        public string TemperatureOfIntrestBacground { get { return temperatureOfIntrestBacground; } set { temperatureOfIntrestBacground = value; OnPropertyChanged("TemperatureOfIntrestBacground"); } }
+        public string TemperatureOfIntrestBacground { get { return temperatureOfIntrestBacground; } set { temperatureOfIntrestBacground = value; RaisePropertyChanged("TemperatureOfIntrestBacground"); } }
 
         private string messageFromSystem;
         public string MessageFromSystem
@@ -162,7 +189,7 @@ namespace BryggeprogramWPF
             {
                 if (messageFromSystem != value)
                 {
-                    messageFromSystem = value; OnPropertyChanged("MessageFromSystem"); TimeDisplayUpdate();
+                    messageFromSystem = value; RaisePropertyChanged("MessageFromSystem"); TimeDisplayUpdate();
                     if (value.Length > 0)
                     {
                         SpeechSynthesizer speak = new SpeechSynthesizer();
@@ -335,11 +362,11 @@ namespace BryggeprogramWPF
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChangedEventHandler handler = PropertyChanged;
+        //    if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
         public ICommand BrewDone_Click
         {

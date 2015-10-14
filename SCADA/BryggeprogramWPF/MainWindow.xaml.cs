@@ -42,6 +42,7 @@ namespace BryggeprogramWPF
         double ambiantTemperature;
 
         int x = 0;
+        int HartBeatArduino = 0;
 
         SolidColorBrush myRedBrush = new SolidColorBrush(Colors.Red);
         SolidColorBrush myGrayBrush = new SolidColorBrush(Colors.LightGray);
@@ -90,7 +91,6 @@ namespace BryggeprogramWPF
                 {
                     var indata = simulator.GennerateSimulatedArduinoValues();
                     Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
-                    //hubClient.Hub.Invoke("MulticastBrewingData", indata);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace BryggeprogramWPF
                 try
                 {
                     string indata = sp.ReadLine();
-                    hubClient.Hub.Invoke("MulticastBrewingData", indata);
+               //     hubClient.Hub.Invoke("MulticastBrewingData", indata);
                     Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
                 catch (Exception)
@@ -123,6 +123,7 @@ namespace BryggeprogramWPF
         {
             // Assign the value of the recieved_data to the RichTextBox.
             text.Trim();
+            mainViewModel.ResivedStringFromArduino = text;
             ProsessData _prosessData = new ProsessData();
             
             string replacement = Regex.Replace(text, "\r", "");
@@ -134,7 +135,32 @@ namespace BryggeprogramWPF
             {
                 foreach (var item in textList)
                 {
-                    if (item.StartsWith("STATE"))
+                    if (item.StartsWith("HartB"))
+                    {
+                        int beat;
+                        int.TryParse(item.Remove(0, 5), out beat);
+                        //if (beat != HartBeatArduino)
+                        //{
+                            HartBeatArduino=beat;
+                            mainViewModel.HeartBeat = HartBeatArduino;
+                        //}
+                        //else
+                        //{
+                        //    string mesage = string.Format("Hartbeat from arduino {0}, vs {1}", beat.ToString(), HartBeatArduino.ToString());
+                        //    MessageBox.Show(mesage,"HartBeatArduino");
+                        //    try
+                        //    {
+                        //        mySerialPort.Close();
+                        //    }
+                        //    catch (Exception)
+                        //    {
+
+                        //        mySerialPort.Dispose();
+                        //    }
+
+                        //}
+                    }
+                    else if (item.StartsWith("STATE"))
                     {                     
                         int.TryParse(item.Remove(0, 5), out systemState);
                         mainViewModel.BrewingState = systemState;
@@ -450,6 +476,16 @@ namespace BryggeprogramWPF
                         var ConSe = Regex.Split(item, ":");
                     }
 
+                    else if (item.StartsWith("TotEn"))
+                    {
+                        double value;
+                        
+                        value = double.Parse(item.Remove(0,5), CultureInfo.InvariantCulture);
+                        value = value / 1000;   //Konverting to KW
+                        value = value / 3600;   //Konverting to KW/h
+                        mainViewModel.TotaleUsedEnergy=value;
+                    }
+
 
                 }
 
@@ -756,12 +792,12 @@ namespace BryggeprogramWPF
 
         private void btnResetBoilFlowSensor_Click(object sender, RoutedEventArgs e)
         {
+            
+            if (mySerialPort.IsOpen)
             {
-                if (mySerialPort.IsOpen)
-                {
-                    mySerialPort.WriteLine("FLOW_REB");
-                }
+                mySerialPort.WriteLine("FLOW_REB");
             }
+            
         }
 
         public class MessengerInstanceWrappr : ViewModelBase
@@ -777,14 +813,26 @@ namespace BryggeprogramWPF
         {
            
             
-            hubClient = new HubClientStart();
-            hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
-            if (!mySerialPort.IsOpen)
-            {
-                hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));  
-            }
+            //hubClient = new HubClientStart();
+            //hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
+            //if (!mySerialPort.IsOpen)
+            //{
+            //    hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));  
+            //}
            
 
         }
+
+
+
+        private void btnResetSystem_Click(object sender, RoutedEventArgs e)
+        {
+            if (mySerialPort.IsOpen)
+            {
+                mySerialPort.WriteLine("RESETSYSTEM");
+            }
+        }
+
+
     }
 }
