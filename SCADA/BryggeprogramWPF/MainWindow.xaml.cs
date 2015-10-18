@@ -566,6 +566,8 @@ namespace BryggeprogramWPF
                 mySerialPort.Open();
                 mySerialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
                 mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
+
             }
             catch
             {
