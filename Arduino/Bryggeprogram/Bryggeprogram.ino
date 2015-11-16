@@ -21,7 +21,7 @@ unsigned long now = millis();
 #pragma region Constants
 
 const long prePumpeTimeSparge = 20;
-const int MashCirculationStartTreshold = 2;
+const int MashCirculationStartTreshold = 10;
 const float BoilTempThreshold = 97.0;
 const int SerialSendingRate = 500; // Milliseconds
 
@@ -312,7 +312,7 @@ void loop() {
 
 	MessageToUser = "";
 #pragma endregion Resetting outputs
-
+	// From User interface
 	if (input_0_StringComplete)
 	{
 		input_0_String.trim();
@@ -460,15 +460,20 @@ void loop() {
 				CleaningState = 20;
 			}
 		}
+		else if (input_0_String.startsWith("RESETSYSTEM"))
+		{
+			Serial1.println("x");
+			Serial3.println("x");
+		}
 
 		input_0_String = "";                                                       //clear the string:
 		input_0_StringComplete = false;                                            //reset the flag used to tell if we have received a completed string from the PC
 	}
-
+	// From Mash Tank flow conter
 	if (input_1_StringComplete)
 	{
 		input_1_String.trim();
-		String _totalVolume = input_1_String.substring(0, 4);
+		String _totalVolume = input_1_String.substring(0, 6);
 		_totalVolume.trim();
 		float _volume = _totalVolume.toFloat();
 		if (abs(lastTotVolumeHLT - _volume) < 0.5)
@@ -480,7 +485,7 @@ void loop() {
 		input_1_String = "";
 		input_1_StringComplete = false;
 	}
-
+	// From temprature collector
 	if (input_2_StringComplete)
 	{
 		int valueStartIndex = 0;
@@ -501,26 +506,26 @@ void loop() {
 			Hlt.TemperatureTank = _resiveArray[0].toFloat();
 		}
 
-		if (_resiveArray[1].toFloat() >= 0)
+		else if (_resiveArray[1].toFloat() >= 0)
 		{
 			MashTank.TemperatureTank = _resiveArray[1].toFloat();
 		}
 
-		if (_resiveArray[2].toFloat() >= 0)
+		else if (_resiveArray[2].toFloat() >= 0)
 		{
 			MashTank.TemperatureHeatingRetur = _resiveArray[2].toFloat();
 		}
 
-		if (_resiveArray[3].toFloat() >= 0)
+		else if (_resiveArray[3].toFloat() >= 0)
 		{
 			BoilTank.TemperatureTank = _resiveArray[3].toFloat();
 		}
 
-		if (_resiveArray[4].toFloat() >= 0)
+		else if (_resiveArray[4].toFloat() >= 0)
 		{
 			ambientTemperature = _resiveArray[4].toFloat();
 		}
-		if (_resiveArray[5].toFloat() >= 0)
+		else if (_resiveArray[5].toFloat() >= 0)
 		{
 			RimsOuteSideTemp = _resiveArray[5].toFloat();
 		}
@@ -528,11 +533,11 @@ void loop() {
 		input_2_String = "";
 		input_2_StringComplete = false;
 	}
-
+	// From Boil Tank flow conter
 	if (input_3_StringComplete)
 	{
 		input_3_String.trim();
-		String _totalVolume = input_3_String.substring(0, 4);
+		String _totalVolume = input_3_String.substring(0, 6);
 		_totalVolume.trim();
 		float _volume = _totalVolume.toFloat();
 		if (abs(lastTotVolumeBoil-_volume) < 0.5)
