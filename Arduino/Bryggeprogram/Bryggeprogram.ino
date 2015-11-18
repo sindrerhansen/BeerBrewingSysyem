@@ -1,15 +1,12 @@
 // This code is for a Arduino Mega. By Sindre
 //#include "Regulators.h"
 #include "Serial.h"
-#include <PID_v1.h>
+
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
 unsigned long Ts;
 unsigned long Tc;
-
-//Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, 900, 1, 0, DIRECT);
 
 int WindowSize = 5000;
 unsigned long windowStartTime;
@@ -163,11 +160,7 @@ void setup() {
 	//initialize the variables we're linked to
 	Setpoint = 100;
 
-	//tell the PID to range between 0 and the full window size
-	myPID.SetOutputLimits(0, WindowSize);
 
-	//turn the PID on
-	myPID.SetMode(AUTOMATIC);
 
 
 	Serial.begin(9600);
@@ -506,26 +499,26 @@ void loop() {
 			Hlt.TemperatureTank = _resiveArray[0].toFloat();
 		}
 
-		else if (_resiveArray[1].toFloat() >= 0)
+		 if (_resiveArray[1].toFloat() >= 0)
 		{
 			MashTank.TemperatureTank = _resiveArray[1].toFloat();
 		}
 
-		else if (_resiveArray[2].toFloat() >= 0)
+		if (_resiveArray[2].toFloat() >= 0)
 		{
 			MashTank.TemperatureHeatingRetur = _resiveArray[2].toFloat();
 		}
 
-		else if (_resiveArray[3].toFloat() >= 0)
+		if (_resiveArray[3].toFloat() >= 0)
 		{
 			BoilTank.TemperatureTank = _resiveArray[3].toFloat();
 		}
 
-		else if (_resiveArray[4].toFloat() >= 0)
+		if (_resiveArray[4].toFloat() >= 0)
 		{
 			ambientTemperature = _resiveArray[4].toFloat();
 		}
-		else if (_resiveArray[5].toFloat() >= 0)
+		if (_resiveArray[5].toFloat() >= 0)
 		{
 			RimsOuteSideTemp = _resiveArray[5].toFloat();
 		}
@@ -1236,7 +1229,7 @@ void loop() {
 			
 			MashTank.CirculationPump.Value = true;
 
-			if (BoilTank.TemperatureTank > 97)
+			if (BoilTank.TemperatureTank > 96)
 			{
 				CleaningState = 51;
 			}
