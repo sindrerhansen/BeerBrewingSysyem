@@ -1,7 +1,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 static int ONE_WIRE_BUS = 2;
-
+static char systemDevider = '_';
+static char valueDevider = ':';
 
 
 // Setup a oneWire instance to communicate with any OneWire devices 
@@ -13,19 +14,11 @@ DallasTemperature TemperatureSensors(&oneWire);
 
 bool Serial1_Input_stringcomplete;
 String AllInfoString;
-float maxtemperature;
-float mintemperature;
-float temperature;
 void setup()
 {
-  
-  
 	Serial.begin(9600);
 	TemperatureSensors.begin();
-  TemperatureSensors.requestTemperatures();
-  temperature=TemperatureSensors.getTempCByIndex(0);
-  maxtemperature=temperature;
-  mintemperature=temperature;
+
 }
 
 void serialEvent() {
@@ -40,24 +33,26 @@ void loop()
 {
 	// Getting Temperatures
 	TemperatureSensors.requestTemperatures();
+	AllInfoString = "";
+	int numberOfSensors = TemperatureSensors.getDeviceCount();
+	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(1);
+	AllInfoString += String(HltTemperatureTank) + valueDevider;
 
-	float temperature = TemperatureSensors.getTempCByIndex(0);
-  if(temperature < mintemperature)
-  {
-   mintemperature=temperature; 
-    }
-  
-  
-  if(temperature > maxtemperature)
-  {
-   maxtemperature = temperature;
-  } 
-   
-    
-	//Serial.println(temperature);
-  Serial.print("Max ");
-  Serial.println(maxtemperature);
-  Serial.print("Min ");
-  Serial.println(mintemperature);
-  Serial.println();
+	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(3);
+	AllInfoString += String(MashTankTemperatureTank) + valueDevider;
+
+	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
+	AllInfoString += String(MashTankTemperatureHeatingRetur) + valueDevider;
+
+	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(5);
+	AllInfoString += String(BoilTankTemperatureTank) + valueDevider;
+
+	float ambientTemperature = TemperatureSensors.getTempCByIndex(4);
+	AllInfoString += String(ambientTemperature) + valueDevider;
+
+	float rimsOutesideTemperature = TemperatureSensors.getTempCByIndex(0);
+	AllInfoString += String(rimsOutesideTemperature) + valueDevider;
+
+	Serial.println(AllInfoString);
+	//Serial.println(numberOfSensors);
 }

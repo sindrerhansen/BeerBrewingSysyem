@@ -12,7 +12,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
 #define F_CPU 16000000L
-#define ARDUINO 165
+#define ARDUINO 10605
 #define ARDUINO_AVR_MEGA2560
 #define ARDUINO_ARCH_AVR
 #define __cplusplus
@@ -83,11 +83,11 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portOutputRegister(P)
 #define portInputRegister(P)
 #define portModeRegister(P)
-#include <Bryggeprogram.ino>
-#include <Regulators.c>
-#include <Regulators.h>
-#include <Serial.cpp>
-#include <Serial.h>
-#include <Tank.cpp>
-#include <Tank.h>
+#include <..\Bryggeprogram\Bryggeprogram.ino>
+#include <..\Bryggeprogram\Regulators.c>
+#include <..\Bryggeprogram\Regulators.h>
+#include <..\Bryggeprogram\Serial.cpp>
+#include <..\Bryggeprogram\Serial.h>
+#include <..\Bryggeprogram\Tank.cpp>
+#include <..\Bryggeprogram\Tank.h>
 #endif

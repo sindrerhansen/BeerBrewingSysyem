@@ -14,16 +14,16 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="_core">
-      <UniqueIdentifier>{797355f7-2f63-4fbf-abce-1f0208114c9e}</UniqueIdentifier>
+      <UniqueIdentifier>{1097648d-b039-4217-90d6-e6b3d0dfc360}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries">
-      <UniqueIdentifier>{fb55b29a-a728-4a88-bfb4-acbb31228ddc}</UniqueIdentifier>
+      <UniqueIdentifier>{f8cbf7a5-5bd0-4a72-a742-660949d38511}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\DallasTemperature">
-      <UniqueIdentifier>{c7f67845-ada6-4ef3-80b2-3a99329cb787}</UniqueIdentifier>
+      <UniqueIdentifier>{4905cb28-95e7-4a10-ad4c-f5e12315634d}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\OneWire">
-      <UniqueIdentifier>{c69c3cf0-52a2-4b8b-a6b0-1d1963d2d5ba}</UniqueIdentifier>
+      <UniqueIdentifier>{5d98f067-34b5-4cb4-94ad-fad7d96904a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.TemperatureCollector.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="__vm\.TemperatureCollector.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Arduino.h">
@@ -90,13 +93,13 @@
     <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.h">
       <Filter>_core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\variants\micro\pins_arduino.h">
+    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h">
       <Filter>_core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\DallasTemperature\DallasTemperature.h">
+    <ClInclude Include="..\..\..\..\Arduino\libraries\DallasTemperature\DallasTemperature.h">
       <Filter>_libraries\DallasTemperature</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\OneWire\OneWire.h">
+    <ClInclude Include="..\..\..\..\Arduino\libraries\OneWire\OneWire.h">
       <Filter>_libraries\OneWire</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,10 +176,10 @@
     <ClCompile Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.cpp">
       <Filter>_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\DallasTemperature\DallasTemperature.cpp">
+    <ClCompile Include="..\..\..\..\Arduino\libraries\DallasTemperature\DallasTemperature.cpp">
       <Filter>_libraries\DallasTemperature</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\OneWire\OneWire.cpp">
+    <ClCompile Include="..\..\..\..\Arduino\libraries\OneWire\OneWire.cpp">
       <Filter>_libraries\OneWire</Filter>
     </ClCompile>
   </ItemGroup>
