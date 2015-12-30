@@ -13,6 +13,7 @@ unsigned long windowStartTime;
 bool ElementOnOff = false;
 String element = "";
 unsigned long now = millis();
+unsigned long TotalEnergyUsed = 0;
 
 
 #pragma region Constants

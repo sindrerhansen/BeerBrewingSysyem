@@ -19,6 +19,8 @@ namespace BryggeprogramWPF
 
     public class MainViewModel : ViewModelBase
     {
+        public RelayCommand ResetGraphCommand { get; private set; }
+
         private PlotModel plotModel;
         public PlotModel PlotModel
         {
@@ -282,6 +284,30 @@ namespace BryggeprogramWPF
             SetUpModel();
             LoadData();
             CreatePoenProsessViewCommand();
+            ResetGraphCommand = new RelayCommand(ResetGraph, CanResetGraph);
+
+        }
+
+        private bool CanResetGraph()
+        {
+            if (PlotModel!=null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ResetGraph()
+        {
+            PlotModel.Series.Clear();
+            PlotModel.Axes.Clear();
+            PlotModel.ResetAllAxes();
+            SetUpModel();
+            LoadData();
+         //   PlotModel.InvalidatePlot(true);
 
         }
 
@@ -337,6 +363,7 @@ namespace BryggeprogramWPF
 
                 // data.ToList().ForEach(d=>lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime),d.Value)));
                 PlotModel.Series.Add(lineSerie);
+                
             }
 
         }
