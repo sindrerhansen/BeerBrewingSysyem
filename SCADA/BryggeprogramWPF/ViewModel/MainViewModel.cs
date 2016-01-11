@@ -334,9 +334,9 @@ namespace BryggeprogramWPF
             PlotModel.LegendBackground = OxyColor.FromAColor(200, OxyColors.LightGray);
             PlotModel.LegendBorder = OxyColors.Black;
 
-            var dateAxis = new DateTimeAxis(AxisPosition.Bottom, "Date", "HH:mm") { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, IntervalLength = 80 };
+            var dateAxis = new DateTimeAxis() { Position= AxisPosition.Bottom, MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, IntervalLength = 80 };
             PlotModel.Axes.Add(dateAxis);
-            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "C/dm3" };
+            var valueAxis = new LinearAxis() {Position= AxisPosition.Left, MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "C/dm3" };
             PlotModel.Axes.Add(valueAxis);
 
         }
