@@ -52,23 +52,19 @@ namespace BryggeprogramWPF
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
         HubClientStart hubClient;
         Simulate simulator;
+        Dictionary<string, Tag> DictionaryOfTags = new Dictionary<string, Classes.Tag>();
 
         public MainWindow()
         {
-
-
-
             mainViewModel = new MainViewModel();
             InitializeComponent();
             this.DataContext = mainViewModel;
 
- 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
-            FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
-            List<Tag> TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
-
-
-
+            Init();
+          
+        }
+        private void Init()
+        {
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -79,12 +75,33 @@ namespace BryggeprogramWPF
             cbHubIp.Items.Add("192.168.3.103");
             cbHubIp.Items.Add("93.89.117.144");
             cbHubIp.SelectedItem = "192.168.3.103";
-            DropDownComPorts.ItemsSource=SerialPort.GetPortNames();
+            DropDownComPorts.ItemsSource = SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
             simulator = new Simulate();
-            
+            ReadTags();
+
+
         }
 
+        private void ReadTags()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
+            FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
+            var TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
+            try
+            {
+                foreach (var t in TagList)
+                {
+                    DictionaryOfTags.Add(t.Id, t);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Retriving taglist faild. " + ex);
+            }
+
+        }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             x++;
