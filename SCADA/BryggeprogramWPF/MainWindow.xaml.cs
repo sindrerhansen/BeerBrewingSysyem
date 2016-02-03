@@ -52,7 +52,7 @@ namespace BryggeprogramWPF
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
         HubClientStart hubClient;
         Simulate simulator;
-        Dictionary<string, Tag> DictionaryOfTags = new Dictionary<string, Classes.Tag>();
+        //Dictionary<string, Tag> DictionaryOfTags = new Dictionary<string, Classes.Tag>();
 
         public MainWindow()
         {
@@ -78,30 +78,30 @@ namespace BryggeprogramWPF
             DropDownComPorts.ItemsSource = SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
             simulator = new Simulate();
-            ReadTags();
+            //ReadTags();
 
 
         }
 
-        private void ReadTags()
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
-            FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
-            var TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
-            try
-            {
-                foreach (var t in TagList)
-                {
-                    DictionaryOfTags.Add(t.Id, t);
-                }
-            }
-            catch (Exception ex)
-            {
+        //private void ReadTags()
+        //{
+        //    XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
+        //    FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
+        //    var TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
+        //    try
+        //    {
+        //        foreach (var t in TagList)
+        //        {
+        //            DictionaryOfTags.Add(t.Id, t);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                MessageBox.Show("Retriving taglist faild. " + ex);
-            }
+        //        MessageBox.Show("Retriving taglist faild. " + ex);
+        //    }
 
-        }
+        //}
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             x++;
@@ -326,13 +326,21 @@ namespace BryggeprogramWPF
                         mainViewModel.MeshTankTemperature = value;
                         _prosessData.MashTank.Temperature = value;
                     }
-                    else if (item.StartsWith("RimsO"))
+                    else if (item.StartsWith("RimRO"))
                     {
                         double value;
                         value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
-                        mainViewModel.MeshTankRimsOutesideTemperature = value;
-                        _prosessData.MashTank.RIMS.OutesideTemperature = value;
+                        mainViewModel.MeshTankRimsRightOutesideTemperature = value;
+                        _prosessData.MashTank.RimsRight.OutesideTemperature = value;
                         plotValues.Add(value);
+                    }
+                    else if (item.StartsWith("RimLO"))
+                    {
+                     
+                        var value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        mainViewModel.MeshTankRimsLeftOutesideTemperature = value;
+                        _prosessData.MashTank.RimsLeft.OutesideTemperature = value;
+
                     }
                     else if (item.StartsWith("MarTe"))
                     {
@@ -341,7 +349,7 @@ namespace BryggeprogramWPF
                         mashTank.HeatingElementReturTemperature.SensorValue = value;
                         mainViewModel.MeshTankRimsReturTemperature = value;
                         MashTank.txtTemperatureAfterHeate.Text = value.ToString();
-                        _prosessData.MashTank.RIMS.OutTeperature = value;
+                        _prosessData.MashTank.RimsRight.OutTeperature = value;
                     }
                     else if (item.StartsWith("MatSp"))
                     {
@@ -359,13 +367,13 @@ namespace BryggeprogramWPF
                         {
                             mashTank.HeatingElement.On = true;
                             MashTank.indicatorHeatingElementOn.Fill = myRedBrush;
-                            _prosessData.MashTank.RIMS.ElementOn = true;
+                            _prosessData.MashTank.RimsRight.ElementOn = true;
                         }
                         else
                         {
                             mashTank.HeatingElement.On = false;
                             MashTank.indicatorHeatingElementOn.Fill = myGrayBrush;
-                            _prosessData.MashTank.RIMS.ElementOn = false;
+                            _prosessData.MashTank.RimsRight.ElementOn = false;
                         }
                     }
                     else if (item.StartsWith("MatCp"))
@@ -499,6 +507,13 @@ namespace BryggeprogramWPF
                         mainViewModel.BoilTankVolume = value;
                         BoilTank.TxtTankVolume.Text = value.ToString();
                         _prosessData.BoilTank.CurrentVolume = value;
+                    }
+                    else if (item.StartsWith("BoCoT"))
+                    {
+                        var value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        boilTank.HeatingElementReturTemperature.SensorValue = value;
+                        mainViewModel.BoilTankRetureCoolingElementTemperature = value;
+                        _prosessData.BoilTank.TemperatureAfterCooler = value;
                     }
 
                     else if (item.StartsWith("ConSe"))

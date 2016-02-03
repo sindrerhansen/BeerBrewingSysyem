@@ -54,10 +54,10 @@ void loop()
 	float rimsRightOutesideTemperature = TemperatureSensors.getTempCByIndex(0);
 	AllInfoString += String(rimsRightOutesideTemperature) + valueDevider;
 
-	float rimsLeftOutesideTemperature = TemperatureSensors.getTempCByIndex(5);
+	float rimsLeftOutesideTemperature = TemperatureSensors.getTempCByIndex(7);
 	AllInfoString += String(rimsLeftOutesideTemperature) + valueDevider;
 
-	float coolerReturnTemperature = TemperatureSensors.getTempCByIndex(7);
+	float coolerReturnTemperature = TemperatureSensors.getTempCByIndex(5);
 	AllInfoString += String(coolerReturnTemperature) + valueDevider;
 
 	Serial.println(AllInfoString);

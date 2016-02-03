@@ -144,8 +144,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BrewingData.cs" />
-    <Compile Include="Classes\SampleValue.cs" />
-    <Compile Include="Classes\Tag.cs" />
     <Compile Include="Classes\TagDatasett.cs" />
     <Compile Include="Converters\BoolToGrayGreenConverter.cs" />
     <Compile Include="Converters\BoolToGrayRedConverter.cs" />

@@ -92,8 +92,23 @@ namespace BryggeprogramWPF
         private double meshTankTemperature;
         public double MeshTankTemperature { get { return meshTankTemperature; } set { meshTankTemperature = value; RaisePropertyChanged("MeshTankTemperature"); ValueOfIntrestUpdate(); } }
 
-        private double meshTankRimsOutesideTemperature;
-        public double MeshTankRimsOutesideTemperature { get { return meshTankRimsOutesideTemperature; } set { meshTankRimsOutesideTemperature = value; RaisePropertyChanged("MeshTankRimsOutesideTemperature"); } }
+        private double meshTankRimsRightOutesideTemperature;
+        public double MeshTankRimsRightOutesideTemperature {
+            get {
+                return meshTankRimsRightOutesideTemperature;
+            }
+            set {
+                if (value!=meshTankRimsRightOutesideTemperature)
+                {
+                    meshTankRimsRightOutesideTemperature = value;
+                    RaisePropertyChanged(() => MeshTankRimsRightOutesideTemperature);
+                }
+
+            }
+        }
+
+        private double meshTankRimsLeftOutesideTemperature;
+        public double MeshTankRimsLeftOutesideTemperature { get { return meshTankRimsLeftOutesideTemperature; } set { meshTankRimsLeftOutesideTemperature = value; RaisePropertyChanged(() => MeshTankRimsLeftOutesideTemperature); } }
 
         private double meshTankRimsReturTemperature;
         public double MeshTankRimsReturTemperature { get { return meshTankRimsReturTemperature; } set { meshTankRimsReturTemperature = value; RaisePropertyChanged("MeshTankRimsReturTemperature"); } }
@@ -118,6 +133,20 @@ namespace BryggeprogramWPF
 
         private double boilTankVolume;
         public double BoilTankVolume { get { return boilTankVolume; } set { boilTankVolume = value; RaisePropertyChanged("BoilTankVolume"); ValueOfIntrestUpdate(); } }
+
+        private double boilTankRetureCoolingElementTemperature;
+        public double BoilTankRetureCoolingElementTemperature
+        {
+            get { return boilTankRetureCoolingElementTemperature; }
+            set
+            {
+                if (value!=boilTankRetureCoolingElementTemperature)
+                {
+                    boilTankRetureCoolingElementTemperature = value;
+                    RaisePropertyChanged(() => BoilTankRetureCoolingElementTemperature);
+                }
+            }
+        }
 
         private string timer;
         public string Timer

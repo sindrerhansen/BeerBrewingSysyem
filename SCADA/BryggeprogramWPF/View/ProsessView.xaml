@@ -18,7 +18,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Canvas Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="10,0,10,187" Width="1472" Grid.RowSpan="2">
-            <TextBox HorizontalAlignment="Left" Height="60" FontSize="50" TextWrapping="Wrap" Text="{Binding State}" VerticalAlignment="Top" Width="120" Canvas.Left="1240" Canvas.Top="10"/>
+            <TextBox HorizontalAlignment="Left" Height="60" FontSize="50" TextWrapping="Wrap" Text="{Binding State}" VerticalAlignment="Top" Width="120" Canvas.Left="830" Canvas.Top="10"/>
             <Canvas x:Name="canvHlt" HorizontalAlignment="Center" Margin="0,0,792,203">
                 <Rectangle x:Name="recTankHlt" Fill="LightGray" Opacity="100"  HorizontalAlignment="Left" Height="465" Margin="135,60,0,0" Stroke="Black" VerticalAlignment="Top" Width="215" />
                 <TextBox x:Name="txtBoxHltVolume" Width="130" Canvas.Left="175" Canvas.Top="100" Height="60" Text="{Binding ProsessData.HLT.CurrentVolume}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap"/>
@@ -35,34 +35,44 @@
                 <Label Content="Temprature" HorizontalContentAlignment="Center" FontSize="25" FontWeight="Bold" Canvas.Left="135" Canvas.Top="360" Width="215"/>
                 <Rectangle x:Name="recHltHeatingElement" Fill="{Binding ProsessData.HLT.HeatingElementOn, Converter={StaticResource BoolToGrayRedConverter}}" Height="20" Canvas.Left="135" Stroke="Black" Canvas.Top="485" Width="170"/>
             </Canvas>
-            <Canvas x:Name="canvMash" HorizontalAlignment="Center" Margin="418,0,374,203">
+            <Canvas x:Name="canvMash" HorizontalAlignment="Center" Margin="500,0,374,203">
                 <Rectangle x:Name="recTankHlt1" Fill="LightGray" Opacity="100"  HorizontalAlignment="Left" Height="465" Margin="135,60,0,0" Stroke="Black" VerticalAlignment="Top" Width="215" />
                 <TextBox x:Name="txtBoxHltVolume1" Width="130" Canvas.Left="175" Canvas.Top="100" Height="60" Text="{Binding ProsessData.MashTank.CurrentVolume}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap"/>
                 <TextBox x:Name="txtBoxHltTemperature1" Width="130" Height="60" Canvas.Left="175" Canvas.Top="400" Text="{Binding ProsessData.MashTank.Temperature}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap" />
                 <Line X1="0" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="5" Canvas.Left="240" Canvas.Top="525" Height="80" Width="5" RenderTransformOrigin="0.5,0.5"/>
                 <Ellipse Height="46" Canvas.Left="195" Stroke="Black" Fill="{Binding ProsessData.MashTank.CirculationPump.Running, Converter={StaticResource BoolToGrayGreenConverter}}" StrokeThickness="5" Canvas.Top="535" Width="46"/>
                 <Ellipse Height="46" Canvas.Left="239" Stroke="Black" Fill="{Binding ProsessData.MashTank.TransferPump.Running, Converter={StaticResource BoolToGrayGreenConverter}}" StrokeThickness="5" Canvas.Top="535" Width="46"/>
-                <Line X1="0" Y1="0" X2="100" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="96" Canvas.Top="558" Height="12" Width="119" RenderTransformOrigin="0.5,0.5"/>
-                <Line X1="0" Y1="0" X2="0" Y2="450" Stroke="Black" StrokeThickness="5" Canvas.Left="98" Canvas.Top="108" Height="450" Width="21" RenderTransformOrigin="0.5,0.5"/>
-                <Line X1="0" Y1="0" X2="40" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="96" Canvas.Top="108" Height="12" Width="119" RenderTransformOrigin="0.5,0.5"/>
-                <Line X1="0" Y1="0" X2="100" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="284" Canvas.Top="558" Height="12" Width="119" RenderTransformOrigin="0.5,0.5"/>
-                <Line X1="0" Y1="0" X2="0" Y2="450" Stroke="Black" StrokeThickness="5" Canvas.Left="382" Canvas.Top="109" Height="450" Width="21" RenderTransformOrigin="0.5,0.5"/>
-                <Line X1="0" Y1="0" X2="175" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="-39" Canvas.Top="85" Height="12" Width="224" RenderTransformOrigin="0.5,0.5"/>
-                <Rectangle x:Name="recRIMS" Height="190" Canvas.Left="72" Stroke="Black" Fill="{Binding ProsessData.MashTank.RIMS.ElementOn, Converter={StaticResource BoolToGrayRedConverter}}" StrokeThickness="5" Canvas.Top="230" Width="50"/>
+                <Line X1="0" Y1="0" X2="190" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="8" Canvas.Top="558" Height="12" Width="207" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="0" Y2="80" Stroke="Black" StrokeThickness="5" Canvas.Left="8" Canvas.Top="106" Height="80" Width="21" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="130" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="8" Canvas.Top="106" Height="20" Width="146" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="120" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="284" Canvas.Top="558" Height="12" Width="152" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="0" Y2="450" Stroke="Black" StrokeThickness="5" Canvas.Left="401" Canvas.Top="106" Height="450" Width="21" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="250" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="-113" Canvas.Top="85" Height="12" Width="324" RenderTransformOrigin="0.5,0.5"/>
+                <Rectangle x:Name="recRimsRight" Height="190" Canvas.Left="40" Stroke="Black" Fill="{Binding ProsessData.MashTank.RimsRight.ElementOn, Converter={StaticResource BoolToGrayRedConverter}}" StrokeThickness="5" Canvas.Top="213" Width="50"/>
                 <TextBox x:Name="txtBoxMeshAddedVolume_Copy" Width="130" Canvas.Left="175" Canvas.Top="200" Height="59" Text="{Binding ProsessData.MashTank.AddedVolume}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap"/>
-                <TextBox x:Name="txtBoxMeshRimsTemp" Width="112" Canvas.Top="300" Height="60" Text="{Binding ProsessData.MashTank.RIMS.OutesideTemperature}" FontSize="40" BorderThickness="5" Canvas.Left="-19"/>
-                <TextBox x:Name="txtBoxMeshHeaterReturnTemp_Copy1" Width="112" Canvas.Top="100" Height="60" Text="{Binding ProsessData.MashTank.RIMS.OutTeperature}" FontSize="40" BorderThickness="5" Canvas.Left="-19"/>
+                <TextBox x:Name="txtBoxMeshRimsRightTemp" Width="112" Canvas.Top="271" Height="60" Text="{Binding ProsessData.MashTank.RimsRight.OutesideTemperature}" FontSize="40" BorderThickness="5" Canvas.Left="11"/>
                 <Label Content="Volume" HorizontalContentAlignment="Center" FontSize="25" FontWeight="Bold" Canvas.Left="135" Canvas.Top="67" Width="215"/>
                 <Label Content="Added Volume" HorizontalContentAlignment="Center" FontSize="25" FontWeight="Bold" Canvas.Left="135" Canvas.Top="160" Width="215"/>
                 <Label Content="Temprature" HorizontalContentAlignment="Center" FontSize="25" FontWeight="Bold" Canvas.Left="135" Canvas.Top="360" Width="215"/>
+                <Rectangle x:Name="recRimsLeft" Height="190" Stroke="Black" Fill="{Binding ProsessData.MashTank.RimsLeft.ElementOn, Converter={StaticResource BoolToGrayRedConverter}}" StrokeThickness="5" Canvas.Top="213" Width="50" Canvas.Left="-76"/>
+                <TextBox x:Name="txtBoxMeshHeaterReturnTemp" Width="112" Canvas.Top="114" Height="60" Text="{Binding ProsessData.MashTank.RimsRight.OutTeperature}" FontSize="40" BorderThickness="5" Canvas.Left="19"/>
+                <TextBox x:Name="txtBoxMeshRimsLeftTemp" Width="112" Canvas.Top="273" Height="60" Text="{Binding ProsessData.MashTank.RimsLeft.OutesideTemperature}" FontSize="40" BorderThickness="5" Canvas.Left="-107"/>
+                <Line X1="0" Y1="0" X2="120" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="-52" Canvas.Top="188" Height="20" Width="146" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="0" Y2="30" Stroke="Black" StrokeThickness="5" Canvas.Top="188" Height="37" Width="21" RenderTransformOrigin="0.5,0.5" Canvas.Left="-52"/>
+                <Line X1="0" Y1="0" X2="0" Y2="30" Stroke="Black" StrokeThickness="5" Canvas.Top="188" Height="37" Width="21" RenderTransformOrigin="0.5,0.5" Canvas.Left="66"/>
+                <Line X1="0" Y1="0" X2="0" Y2="30" Stroke="Black" StrokeThickness="5" Canvas.Top="402" Height="37" Width="21" RenderTransformOrigin="0.5,0.5" Canvas.Left="66"/>
+                <Line X1="0" Y1="0" X2="0" Y2="30" Stroke="Black" StrokeThickness="5" Canvas.Top="402" Height="37" Width="21" RenderTransformOrigin="0.5,0.5" Canvas.Left="-50"/>
+                <Line X1="0" Y1="0" X2="120" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="-52" Canvas.Top="430" Height="20" Width="146" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="0" Y2="130" Stroke="Black" StrokeThickness="5" Canvas.Left="8" Canvas.Top="430" Height="140" Width="21" RenderTransformOrigin="0.5,0.5"/>
             </Canvas>
-            <Canvas x:Name="canvBoil" HorizontalAlignment="Center" Margin="749,0,43,203">
+            <Canvas x:Name="canvBoil" HorizontalAlignment="Center" Margin="850,0,43,203">
+                <TextBox x:Name="txtBoxCoolerRetureTemperature" Width="130" Height="60" BorderThickness="5" Text="{Binding ProsessData.BoilTank.TemperatureAfterCooler}" Canvas.Top="60" Canvas.Left="355" FontSize="40" TextAlignment="Center" TextWrapping="Wrap"></TextBox>
                 <Rectangle x:Name="recTankHlt2" Fill="LightGray" Opacity="100"  HorizontalAlignment="Left" Height="465" Margin="135,60,0,0" Stroke="Black" VerticalAlignment="Top" Width="215" />
                 <TextBox x:Name="txtBoxBoilVolume" Width="130" Canvas.Left="175" Canvas.Top="100" Height="60" Text="{Binding ProsessData.BoilTank.CurrentVolume}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap"/>
                 <TextBox x:Name="txtBoxBoilTemperature" Width="130" Height="60" Canvas.Left="175" Canvas.Top="400" Text="{Binding ProsessData.BoilTank.Temperature}" FontSize="50" TextAlignment="Center" TextWrapping="Wrap" />
                 <Line X1="0" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="5" Canvas.Left="240" Canvas.Top="525" Height="80" Width="5" RenderTransformOrigin="0.5,0.5"/>
                 <Ellipse Height="46" Canvas.Left="217" Stroke="Black" Fill="{Binding ProsessData.BoilTank.Pump.Running, Converter={StaticResource BoolToGrayGreenConverter}}" StrokeThickness="5" Canvas.Top="535" Width="46"/>
-                <Line X1="0" Y1="0" X2="85" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="51" Canvas.Top="109" Height="12" Width="119" RenderTransformOrigin="0.5,0.5"/>
+                <Line X1="0" Y1="0" X2="90" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="48" Canvas.Top="104" Height="20" Width="239" RenderTransformOrigin="0.5,0.5"/>
                 <Line X1="0" Y1="0" X2="120" Y2="0" Stroke="Black" StrokeThickness="5" Canvas.Left="263" Canvas.Top="558" Height="12" Width="140" RenderTransformOrigin="0.5,0.5"/>
                 <Line X1="0" Y1="0" X2="0" Y2="450" Stroke="Black" StrokeThickness="5" Canvas.Left="382" Canvas.Top="109" Height="450" Width="21" RenderTransformOrigin="0.5,0.5"/>
                 <Label Content="Temprature" HorizontalContentAlignment="Center" FontSize="25" FontWeight="Bold" Canvas.Left="135" Canvas.Top="360" Width="215"/>
