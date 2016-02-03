@@ -144,7 +144,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BrewingData.cs" />
-    <Compile Include="Classes\ArduinoItem.cs" />
+    <Compile Include="Classes\SampleValue.cs" />
+    <Compile Include="Classes\Tag.cs" />
+    <Compile Include="Classes\TagDatasett.cs" />
     <Compile Include="Converters\BoolToGrayGreenConverter.cs" />
     <Compile Include="Converters\BoolToGrayRedConverter.cs" />
     <Compile Include="Converters\TemperatureToColor.cs" />
@@ -262,6 +264,9 @@
     <Content Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="TagList.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

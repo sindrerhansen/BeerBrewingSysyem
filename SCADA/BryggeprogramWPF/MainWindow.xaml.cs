@@ -15,6 +15,9 @@ using BryggeprogramWPF.Model;
 using BryggeprogramWPF.ViewModel;
 using Microsoft.AspNet.SignalR.Client;
 using System.Windows.Threading;
+using BryggeprogramWPF.Classes;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace BryggeprogramWPF
 {
@@ -52,11 +55,21 @@ namespace BryggeprogramWPF
 
         public MainWindow()
         {
+
+
+
             mainViewModel = new MainViewModel();
             InitializeComponent();
             this.DataContext = mainViewModel;
-                     
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+
+ 
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
+            FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
+            List<Tag> TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
+
+
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
