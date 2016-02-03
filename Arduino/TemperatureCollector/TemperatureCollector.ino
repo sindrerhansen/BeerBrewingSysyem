@@ -35,23 +35,30 @@ void loop()
 	TemperatureSensors.requestTemperatures();
 	AllInfoString = "";
 	int numberOfSensors = TemperatureSensors.getDeviceCount();
-	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(1);
+
+	float HltTemperatureTank = TemperatureSensors.getTempCByIndex(6);
 	AllInfoString += String(HltTemperatureTank) + valueDevider;
 
-	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(3);
+	float MashTankTemperatureTank = TemperatureSensors.getTempCByIndex(2);
 	AllInfoString += String(MashTankTemperatureTank) + valueDevider;
 
-	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(2);
+	float MashTankTemperatureHeatingRetur = TemperatureSensors.getTempCByIndex(1);
 	AllInfoString += String(MashTankTemperatureHeatingRetur) + valueDevider;
 
-	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(5);
+	float BoilTankTemperatureTank = TemperatureSensors.getTempCByIndex(4);
 	AllInfoString += String(BoilTankTemperatureTank) + valueDevider;
 
-	float ambientTemperature = TemperatureSensors.getTempCByIndex(4);
+	float ambientTemperature = TemperatureSensors.getTempCByIndex(3);
 	AllInfoString += String(ambientTemperature) + valueDevider;
 
-	float rimsOutesideTemperature = TemperatureSensors.getTempCByIndex(0);
-	AllInfoString += String(rimsOutesideTemperature) + valueDevider;
+	float rimsRightOutesideTemperature = TemperatureSensors.getTempCByIndex(0);
+	AllInfoString += String(rimsRightOutesideTemperature) + valueDevider;
+
+	float rimsLeftOutesideTemperature = TemperatureSensors.getTempCByIndex(5);
+	AllInfoString += String(rimsLeftOutesideTemperature) + valueDevider;
+
+	float coolerReturnTemperature = TemperatureSensors.getTempCByIndex(7);
+	AllInfoString += String(coolerReturnTemperature) + valueDevider;
 
 	Serial.println(AllInfoString);
 	//Serial.println(numberOfSensors);
