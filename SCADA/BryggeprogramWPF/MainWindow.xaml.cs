@@ -376,6 +376,23 @@ namespace BryggeprogramWPF
                             _prosessData.MashTank.RimsRight.ElementOn = false;
                         }
                     }
+
+                    else if (item.StartsWith("MatE2"))
+                    {
+                        if (item.Remove(0, 5).StartsWith("1"))
+                        {
+                            mashTank.HeatingElement.On = true;
+                            MashTank.indicatorHeatingElementOn.Fill = myRedBrush;
+                            _prosessData.MashTank.RimsLeft.ElementOn = true;
+                        }
+                        else
+                        {
+                            mashTank.HeatingElement.On = false;
+                            MashTank.indicatorHeatingElementOn.Fill = myGrayBrush;
+                            _prosessData.MashTank.RimsRight.ElementOn = false;
+                        }
+                    }
+
                     else if (item.StartsWith("MatCp"))
                     {
                         if (item.Remove(0, 5).StartsWith("1"))
