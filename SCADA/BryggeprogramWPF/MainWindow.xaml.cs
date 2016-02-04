@@ -233,8 +233,8 @@ namespace BryggeprogramWPF
                     }
                     else if (item.StartsWith("AmbTe"))
                     {
-                        double value;
-                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        
+                        var value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         
                         ambiantTemperature = value;
                         txtAmbientTemp.Text = value.ToString();
@@ -242,8 +242,8 @@ namespace BryggeprogramWPF
                     }                               
                     else if (item.StartsWith("HltSp"))
                     {
-                        double value;
-                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        
+                        var value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         hotLiqureTank.TemperatureSetpoint = value;
                         HLT.TextSetTemp.Text = value.ToString();
                         mainViewModel.HotLiquidTankTemperatureSetpoint = value;
@@ -251,8 +251,8 @@ namespace BryggeprogramWPF
                     }
                     else if (item.StartsWith("HltTe"))
                     {
-                        double value;
-                        value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
+                        
+                        var value = double.Parse(item.Remove(0, 5), CultureInfo.InvariantCulture);
                         plotValues.Add(value);
                         hotLiqureTank.TemperatureActual.SensorValue = value;
                         HLT.GauageActTemp.Value = value;
