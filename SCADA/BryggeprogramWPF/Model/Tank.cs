@@ -15,7 +15,8 @@ namespace BryggeprogramWPF.Model
         { get; set; }
         public double Temperature
         { get; set; }
-        public double TemperatureSetpoint;
+        public double TemperatureSetpoint
+        { get; set; }
 
         public Tank()
         {
@@ -27,14 +28,6 @@ namespace BryggeprogramWPF.Model
 
         }
 
-        public Tank(double addedVolume,double tappedVolume, double currentVolume, double temp, double tempSet)
-        {
-            AddedVolume = addedVolume;
-            TappedVolume = tappedVolume;
-            CurrentVolume = currentVolume;
-            Temperature = temp;
-            TemperatureSetpoint = tempSet;
-        }
     }
 
     
