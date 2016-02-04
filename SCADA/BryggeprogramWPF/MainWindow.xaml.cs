@@ -52,7 +52,7 @@ namespace BryggeprogramWPF
         SolidColorBrush myGreenBrush = new SolidColorBrush(Colors.Green);
         HubClientStart hubClient;
         Simulate simulator;
-        //Dictionary<string, Tag> DictionaryOfTags = new Dictionary<string, Classes.Tag>();
+        Dictionary<string, Tag> DictionaryOfTags = new Dictionary<string, Classes.Tag>();
 
         public MainWindow()
         {
@@ -78,30 +78,30 @@ namespace BryggeprogramWPF
             DropDownComPorts.ItemsSource = SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
             simulator = new Simulate();
-            //ReadTags();
+            ReadTags();
 
 
         }
 
-        //private void ReadTags()
-        //{
-        //    XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
-        //    FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
-        //    var TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
-        //    try
-        //    {
-        //        foreach (var t in TagList)
-        //        {
-        //            DictionaryOfTags.Add(t.Id, t);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
+        private void ReadTags()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Tag>));
+            FileStream ReadFileStream = new FileStream("TagList.xml", FileMode.Open, FileAccess.Read);
+            var TagList = (List<Tag>)serializer.Deserialize(ReadFileStream);
+            try
+            {
+                foreach (var t in TagList)
+                {
+                    DictionaryOfTags.Add(t.Id, t);
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //        MessageBox.Show("Retriving taglist faild. " + ex);
-        //    }
+                MessageBox.Show("Retriving taglist faild. " + ex);
+            }
 
-        //}
+        }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             x++;
