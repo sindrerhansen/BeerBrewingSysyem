@@ -1,9 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
-
-namespace BryggeprogramWPF
+﻿namespace BryggeprogramWPF
 {
-    [Serializable]
     public class BrewingData
     {
         
@@ -22,68 +18,28 @@ namespace BryggeprogramWPF
         public double SpargeVolume { get; set; }
         public int BoilTime { get; set; }
 
-        public void SaveData(BrewingData bd)
-        {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "BrewSession "+DateTime.Now.ToString("d M yyyy"); // Default file name
-            dlg.DefaultExt = ".brewdata"; // Default file extension
-            dlg.Filter = "Text documents (.brewdata)|*.brewdata"; // Filter files by extension
+        //public void SaveData(BrewingData bd)
+        //{
+        //    Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+        //    dlg.FileName = "BrewSession "+DateTime.Now.ToString("d M yyyy"); // Default file name
+        //    dlg.DefaultExt = ".brewdata"; // Default file extension
+        //    dlg.Filter = "Text documents (.brewdata)|*.brewdata"; // Filter files by extension
 
-            // Show save file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
+        //    // Show save file dialog box
+        //    Nullable<bool> result = dlg.ShowDialog();
 
-            // Process save file dialog box results
-            if (result == true)
-            {
-                // Save document
-                string filename = dlg.FileName;
-                String json = JsonConvert.SerializeObject(bd);
-                System.IO.File.WriteAllText(filename, json);
-            }
+        //    // Process save file dialog box results
+        //    if (result == true)
+        //    {
+        //        // Save document
+        //        string filename = dlg.FileName;
+        //        String json = JsonConvert.SerializeObject(bd);
+        //        System.IO.File.WriteAllText(filename, json);
+        //    }
 
 
-        }
+        //}
 
-        public BrewingData ReadData()
-        {
-
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".brewdata"; // Default file extension
-            dlg.Filter = "Text documents (.brewdata)|*.brewdata"; // Filter files by extension
-
-            // Show save file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-
-            // Process save file dialog box results
-            if (result == true)
-            {
-                // Save document
-                string filename = dlg.FileName;
-                BrewingData returnBrewingData = new BrewingData();
-                String file = System.IO.File.ReadAllText(@filename);
-                dynamic fileData = JsonConvert.DeserializeObject(file);
-
-                returnBrewingData.MashInTemperature = fileData.MashInTemperature;
-                returnBrewingData.MashInHltTemperature = fileData.MashInHltTemperature;
-                returnBrewingData.MashInVolume = fileData.MashInVolume;
-                returnBrewingData.MashStep1Temperature = fileData.MashStep1Temperature;
-                returnBrewingData.MashStep1Time = fileData.MashStep1Time;
-                returnBrewingData.MashStep2Temperature = fileData.MashStep2Temperature;
-                returnBrewingData.MashStep2Time = fileData.MashStep2Time;
-                returnBrewingData.MashStep3Temperature = fileData.MashStep3Temperature;
-                returnBrewingData.MashStep3Time = fileData.MashStep3Time;
-                returnBrewingData.MashStep4Temperature = fileData.MashStep4Temperature;
-                returnBrewingData.MashStep4Time = fileData.MashStep4Time;
-                returnBrewingData.SpargeTemperature = fileData.SpargeTemperature;
-                returnBrewingData.SpargeVolume = fileData.SpargeVolume;
-                returnBrewingData.BoilTime = fileData.BoilTime;
-                
-                return returnBrewingData;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
     }
 }
