@@ -399,20 +399,23 @@ namespace BryggeprogramWPF
 
         public void UpdateModel(List<double> values)
         {
-
-            List<Measurement> measurements = Data.UpdateData(values);
-            var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
-
-            foreach (var data in dataPerDetector)
+            if (brewingState!=0)
             {
-                var lineSerie = PlotModel.Series[data.Key] as LineSeries;
-                if (lineSerie != null)
-                {
+                List<Measurement> measurements = Data.UpdateData(values);
+                var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
 
-                    data.ToList()
-                        .ForEach(d => lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value)));
+                foreach (var data in dataPerDetector)
+                {
+                    var lineSerie = PlotModel.Series[data.Key] as LineSeries;
+                    if (lineSerie != null)
+                    {
+
+                        data.ToList()
+                            .ForEach(d => lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value)));
+                    }
                 }
             }
+
 
         }
 
