@@ -764,10 +764,24 @@ namespace BryggeprogramWPF
 
         private void btnStartBrewing_Click(object sender, RoutedEventArgs e)
         {
-            if (mySerialPort.IsOpen)
+            var mesBox = MessageBox.Show("Resett all flow conters?","Reset flow conters", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (mesBox == MessageBoxResult.Yes)
             {
-                mySerialPort.WriteLine("CMD20");
+                if (mySerialPort.IsOpen)
+                {
+                    mySerialPort.WriteLine("RESETSYSTEM");
+                    System.Threading.Thread.Sleep(100);
+                    mySerialPort.WriteLine("CMD20");
+                }
             }
+            else if (mesBox == MessageBoxResult.No)
+            {
+                if (mySerialPort.IsOpen)
+                {
+                    mySerialPort.WriteLine("CMD20");
+                }
+            }
+
         }
 
         private void btnSaveSettings_Click(object sender, RoutedEventArgs e)
@@ -917,6 +931,26 @@ namespace BryggeprogramWPF
                 var mBoxRes = MessageBox.Show("Sure you want to start cleaning sequence?", "Important Question", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
                 if (mBoxRes==MessageBoxResult.Yes)
                 {
+
+                    var mesBox = MessageBox.Show("Resett all flow conters?", "Reset flow conters", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (mesBox == MessageBoxResult.Yes)
+                    {
+                        if (mySerialPort.IsOpen)
+                        {
+                            mySerialPort.WriteLine("RESETSYSTEM");
+                            System.Threading.Thread.Sleep(100);
+                            mySerialPort.WriteLine("CLEAN");
+                        }
+                    }
+                    else if (mesBox == MessageBoxResult.No)
+                    {
+                        if (mySerialPort.IsOpen)
+                        {
+                            mySerialPort.WriteLine("CLEAN");
+                        }
+                    }
+
+
                     mySerialPort.WriteLine("CLEAN");
                 }
             }
