@@ -399,7 +399,7 @@ namespace BryggeprogramWPF
 
         public void UpdateModel(List<double> values)
         {
-            if (brewingState!=0)
+            if (brewingState>=20)
             {
                 List<Measurement> measurements = Data.UpdateData(values);
                 var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
