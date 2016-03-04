@@ -152,6 +152,7 @@
     <Compile Include="Converters\TemperatureToColor.cs" />
     <Compile Include="Converters\TimeToStringConverter.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="DataProvider\SerialDataProvider.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Simulate.cs" />
     <Compile Include="HubClientStart.cs" />
@@ -246,13 +247,15 @@
       <Project>{8209D4ED-1090-40ED-BE46-1F450D184C1C}</Project>
       <Name>Tech4WPF</Name>
     </ProjectReference>
+    <ProjectReference Include="Commen\Commen.csproj">
+      <Project>{a3b65171-058d-4560-b79a-247f9a9271a3}</Project>
+      <Name>Commen</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\favicon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataProvider\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

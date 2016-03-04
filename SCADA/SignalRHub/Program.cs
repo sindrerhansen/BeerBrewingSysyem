@@ -7,7 +7,7 @@ namespace SignalRHub
     {
         static void Main(string[] args)
         {
-            string url = "http://192.168.3.103:8088/";
+            string url = "http://localhost:8088/";
             WebApp.Start<Startup>(url);
             
                 Console.WriteLine(string.Format("Server running at {0}", url));

@@ -19,6 +19,7 @@ using BryggeprogramWPF.Classes;
 using System.Xml.Serialization;
 using System.IO;
 using Newtonsoft.Json;
+using Commen;
 
 namespace BryggeprogramWPF
 {
@@ -120,8 +121,9 @@ namespace BryggeprogramWPF
                 btnPrepareBrewing.IsEnabled = false;
                 if (tglSimulateArduino.IsChecked==true)
                 {
-                    var indata = simulator.GennerateSimulatedArduinoValues();
-                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
+                    //var indata = simulator.GennerateSimulatedArduinoValues();
+                    //hubClient.Hub.Invoke("MulticastBrewingData", indata);
+                    //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
             }
         }
@@ -138,7 +140,7 @@ namespace BryggeprogramWPF
                 try
                 {
                     string indata = sp.ReadLine();
-               //     hubClient.Hub.Invoke("MulticastBrewingData", indata);
+                    //hubClient.Hub.Invoke("MulticastBrewingData", indata);
                     Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), indata);
                 }
                 catch (Exception)
@@ -756,12 +758,12 @@ namespace BryggeprogramWPF
         }
         private void btnPrepareBrewing_Click(object sender, RoutedEventArgs e)
         {
+
             if (mySerialPort.IsOpen)
             {
                 mySerialPort.WriteLine("CMD10");
             }
         }
-
         private void btnStartBrewing_Click(object sender, RoutedEventArgs e)
         {
             var mesBox = MessageBox.Show("Resett all flow conters?","Reset flow conters", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -783,7 +785,6 @@ namespace BryggeprogramWPF
             }
 
         }
-
         private void btnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
             BrewingData brewingData = new BrewingData();
@@ -856,6 +857,12 @@ namespace BryggeprogramWPF
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            if (hubClient!=null)
+            {
+                TestClass ret = hubClient.Hub.Invoke<TestClass>("Get").Result;
+
+
+            }
             if (mySerialPort.IsOpen)
             {
                 mySerialPort.WriteLine("CMD0");
@@ -963,6 +970,8 @@ namespace BryggeprogramWPF
 
         private void btnPrepCleanSystem_Click(object sender, RoutedEventArgs e)
         {
+
+
             if (mySerialPort.IsOpen && mainViewModel.BrewingState == 0)
             {
                 mySerialPort.WriteLine("PREPCLEAN");
@@ -994,19 +1003,17 @@ namespace BryggeprogramWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           
-            
-            //hubClient = new HubClientStart();
-            //hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
-            //if (!mySerialPort.IsOpen)
-            //{
-            //    hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));  
-            //}
-           
+
+
+            hubClient = new HubClientStart();
+            hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
+            if (!mySerialPort.IsOpen)
+            {
+                hubClient.Hub.On("ReceiveMulticastBrewingData", data => Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(DecodeDataString), data));
+            }
+
 
         }
-
-
 
         private void btnResetSystem_Click(object sender, RoutedEventArgs e)
         {
@@ -1016,6 +1023,17 @@ namespace BryggeprogramWPF
             }
         }
 
+        private void tglSimulateArduino_Checked(object sender, RoutedEventArgs e)
+        {
+            if (tglSimulateArduino.IsChecked == true)
+            {
 
+                btnConnect.IsEnabled = false;
+            }
+            else
+            {
+                btnConnect.IsEnabled = true;
+            }
+        }
     }
 }

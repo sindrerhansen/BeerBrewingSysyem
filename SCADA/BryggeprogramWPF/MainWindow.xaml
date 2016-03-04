@@ -18,9 +18,9 @@
                     <Label Content="Baud Rate" HorizontalAlignment="Left" Margin="110,10,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="110,57,0,0" VerticalAlignment="Top" Width="85" Click="btnDisconnect_Click" RenderTransformOrigin="0.717,2.302"/>
                     <Button x:Name="btnResetFlowSensor" Content="Reset Mesh Tank Flowsensor" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="185" Click="btnResetFlowSensor_Click"/>
-                    <ToggleButton Name="tglSimulateArduino" Content="Simulate" HorizontalAlignment="Left" Margin="221,57,0,0" VerticalAlignment="Top" Width="105" IsThreeState="False" Click="tglSimulateArduino_Click"/>
+                    <ToggleButton Name="tglSimulateArduino" Content="Simulate" HorizontalAlignment="Left" Margin="221,57,0,0" VerticalAlignment="Top" Width="105" IsThreeState="False" Click="tglSimulateArduino_Click" Checked="tglSimulateArduino_Checked"/>
                     <Button x:Name="btnResetBoilFlowSensor" Content="Reset Boil Tank Flowsensor" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="185" Click="btnResetBoilFlowSensor_Click"/>
-                    <Button Content="Connect to HUB" HorizontalAlignment="Left" Margin="221,160,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click" IsEnabled="False"/>
+                    <Button Content="Connect to HUB" HorizontalAlignment="Left" Margin="221,160,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click" IsEnabled="True"/>
                     <ComboBox Name="cbHubIp" IsEnabled="False" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" Width="185"/>
                     <Button x:Name="btnResetSystem" Content="Reset System" HorizontalAlignment="Left" Margin="221,95,0,0" VerticalAlignment="Top" Width="105" Height="45" Click="btnResetSystem_Click"/>
                 </Grid>
