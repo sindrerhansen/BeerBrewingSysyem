@@ -625,8 +625,8 @@ void loop() {
 			if (MashTank.CurentVolume > MashCirculationStartTreshold)
 			{
 				MashTank.CirculationPump.Value = true;	
-				MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
-				MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
+				MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
+				MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
 			}
 			if (MashTank.CurentVolume < MashInn.AddVolumeSP)
 			{
@@ -695,8 +695,8 @@ void loop() {
 
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
-			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
+			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -754,8 +754,8 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
-			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
+			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -814,8 +814,8 @@ void loop() {
 			Hlt.Element1.Value = TankTemperaturOnOffRegulator(Hlt.TemperatureTankSetPoint, Hlt.TemperatureTank, Hlt.LevelOverHeatingElements.State);
 
 			MashTank.CirculationPump.Value = true;
-			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
-			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.6, RimsRightOuteSideTemp);
+			MashTank.Element1.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
+			MashTank.Element2.Value = RIMS_PWM_ReelayRegulator(MashTank.TemperatureTankSetPoint, MashTank.TemperatureTank, MashTank.TemperatureHeatingRetur, 0.8, RimsRightOuteSideTemp);
 
 			if (MashTank.TemperatureTank >= MashTank.TemperatureTankSetPoint)
 			{
@@ -878,12 +878,12 @@ void loop() {
 				BrewingState = 41;
 			}
 
-			if ((elapsedTimeSeconds - lastTime) >= 3)
-			{
+			if ((elapsedTimeSeconds - lastTime) >= 5)
+			{			
 				lastTime = elapsedTimeSeconds;
-				transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
+				transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 5;
 				lastBoilVolume = BoilTank.AddedVolume;
-				if (transferRate < 0.05)
+				if (transferRate < 0.01)
 				{
 					BrewingState = 41;
 				}
@@ -923,12 +923,12 @@ void loop() {
 				BoilTank.Element2.Value = true;
 			}
 
-			if ((elapsedTimeSeconds-lastTime) >= 3)
+			if ((elapsedTimeSeconds-lastTime) >= 5)
 			{
 				lastTime = elapsedTimeSeconds;
-				transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 3;
+				transferRate = (BoilTank.CurentVolume - lastBoilVolume) / 5;
 				lastBoilVolume = BoilTank.CurentVolume;
-				if ((transferRate < 0.05) && SpargeIsDone)
+				if ((transferRate < 0.01) && SpargeIsDone)
 				{
 					BrewingState = 42;
 				}
@@ -967,7 +967,7 @@ void loop() {
 					lastTime = elapsedTimeSeconds;
 					transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
 					lastBoilVolume = BoilTank.AddedVolume;
-					if (transferRate < 0.05)
+					if (transferRate < 0.01)
 					{
 						BrewingState = 43;
 					}
@@ -1007,7 +1007,7 @@ void loop() {
 					lastTime = elapsedTimeSeconds;
 					transferRate = (BoilTank.AddedVolume - lastBoilVolume) / 3;
 					lastBoilVolume = BoilTank.AddedVolume;
-					if (transferRate < 0.05)
+					if (transferRate < 0.01)
 					{
 						BrewingState = 50;
 					}
@@ -1495,7 +1495,7 @@ bool RIMS_PWM_ReelayRegulator(double setpoint, double tempInn, double tempOut, d
 
 	if (tempOut < (tempInn + 9.0) && tempOut < (setpoint + 5.0) && RIMS_outesideTemp < tempInn && RIMS_outesideTemp < setpoint)
 	{
-		output = PWM_Reelay(setpoint, tempInn, ratio);
+		output = PWM_Reelay(setpoint, tempInn, 0.9);
 	}
 	else
 	{
