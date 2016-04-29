@@ -74,9 +74,9 @@ namespace BryggeprogramWPF
 
             DropDownBaudRate.Items.Add("9600");
             DropDownBaudRate.SelectedItem = "9600";
-            cbHubIp.Items.Add("192.168.3.103");
+            cbHubIp.Items.Add("192.168.3.80");
             cbHubIp.Items.Add("93.89.117.144");
-            cbHubIp.SelectedItem = "192.168.3.103";
+cbHubIp.SelectedItem = "192.168.3.80";
             DropDownComPorts.ItemsSource = SerialPort.GetPortNames();
             btnConfirm.IsEnabled = false;
             simulator = new Simulate();
@@ -1005,7 +1005,7 @@ namespace BryggeprogramWPF
         {
 
 
-            hubClient = new HubClientStart();
+            hubClient = new HubClientStart(cbHubIp.SelectedValue.ToString());
             hubClient.Connection.Error += ex => MessageBox.Show("Hub error: {0}", ex.Message);
             if (!mySerialPort.IsOpen)
             {

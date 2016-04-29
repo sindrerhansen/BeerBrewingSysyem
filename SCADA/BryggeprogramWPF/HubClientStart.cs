@@ -14,7 +14,7 @@ namespace BryggeprogramWPF
             private set { _hub = value; }
         
         }
-        string url = @"http://localhost:8088/";
+        string url = @"http://192.168.3.80:8088/";
            
         private HubConnection connection;
         public HubConnection Connection
@@ -23,11 +23,12 @@ namespace BryggeprogramWPF
             private set { connection = value; }
         }    
         
-        public HubClientStart()
+        public HubClientStart(string ip)
         {
+            var connectingUrl = @"http://" + ip + ":8088/";
             try
             {
-                connection = new HubConnection(url);
+                connection = new HubConnection(connectingUrl);
                 _hub = connection.CreateHubProxy("BrewingHub");
                 connection.Start().Wait();
             }

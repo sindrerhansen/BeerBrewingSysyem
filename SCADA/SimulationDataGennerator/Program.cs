@@ -32,7 +32,7 @@ namespace SimulationDataGennerator
 
         static void _timer_Tick(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Timer Elapsed!");
+            Console.WriteLine(string.Format("Sending simulated brewing data to hub at time: {0}", DateTime.Now.ToString()));
             if (hubClient.Connection.State== Microsoft.AspNet.SignalR.Client.ConnectionState.Connected)
             {
                 var simData = sim.GennerateSimulatedArduinoValues();

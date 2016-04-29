@@ -12,7 +12,7 @@ namespace SimulationDataGennerator
             private set { _hub = value; }
 
         }
-        string url = @"http://localhost:8088/";
+        string url = @"http://192.168.3.80:8088/";
 
         private HubConnection connection;
         public HubConnection Connection
@@ -39,6 +39,7 @@ namespace SimulationDataGennerator
             catch (Exception e)
             {
                 Console.WriteLine("Hub error: {0}", e.Message.ToString());
+                
                 System.Threading.Thread.Sleep(1000);
                 Connect();
             }
