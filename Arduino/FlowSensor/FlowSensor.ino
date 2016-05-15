@@ -1,5 +1,5 @@
 
-volatile unsigned int  total_flow;
+volatile unsigned long  total_flow;
 float totalLiter;
 unsigned int  l_hour;          // Calculated litres/hour                      
 static int flowmeter = 2;  // Flow Meter Pin number
