@@ -605,6 +605,7 @@ cbHubIp.SelectedItem = "192.168.3.80";
             sendString += TxtSpargeTemperature.Text.Replace(',', '.') + "_";         //SpTe
             sendString += TxtSpargeVolume.Text.Replace(',', '.') + "_";              //SpVo
             sendString += TxtBoilTime.Text.Replace(',', '.') + "_";                  //BoTi
+            sendString += TxtNumberOfRuns.Text + "_";                                //NuRu
 
             if (mySerialPort.IsOpen)
             {
