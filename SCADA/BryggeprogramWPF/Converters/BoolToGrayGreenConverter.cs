@@ -7,16 +7,7 @@ namespace BryggeprogramWPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string ret;
-            if ((bool)value)
-            {
-                ret = "Green";
-            }
-            else
-            {
-                ret = "Gray";
-            }
-            return ret;
+            return (bool)value ? "Green" : "Gray";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

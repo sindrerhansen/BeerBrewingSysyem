@@ -1,12 +1,10 @@
 ﻿using System.Windows.Data;
 using System.Windows.Media;
 
-
 namespace BryggeprogramWPF.Converters
 {
     public class TemperatureToColor : IValueConverter
     {
-
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             double temp = (double)value;

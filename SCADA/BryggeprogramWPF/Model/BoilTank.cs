@@ -1,5 +1,4 @@
-﻿
-namespace BryggeprogramWPF.Model
+﻿namespace BryggeprogramWPF.Model
 {
     public class BoilTank:Tank
     {
@@ -10,7 +9,6 @@ namespace BryggeprogramWPF.Model
         public BoilTank()
         {
             Pump = new Pump();
-
         }
     }
 }

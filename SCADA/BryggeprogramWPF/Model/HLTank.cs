@@ -1,5 +1,4 @@
-﻿
-namespace BryggeprogramWPF.Model
+﻿namespace BryggeprogramWPF.Model
 {
     public class HLTank : Tank
     {
@@ -11,9 +10,6 @@ namespace BryggeprogramWPF.Model
         {
             CirculationPump = new Pump();
             TransferPump = new Pump();
-         
         }
     }
-
-    
 }
