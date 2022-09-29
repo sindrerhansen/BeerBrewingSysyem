@@ -1,0 +1,52 @@
+
+name: Build
+on:
+  push:
+    branches:
+      - releasing
+  pull_request:
+  workflow_dispatch:
+jobs:
+  Build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set assembly version
+        run: |
+          $version = ""
+          $assemblyInfoFiles = Get-ChildItem $dir -Recurse -Include "SharedAssemblyInfo.cs"
+          foreach($file in $assemblyInfoFiles)
+          {
+              $streamReader = New-Object System.IO.StreamReader($file, [System.Text.Encoding]::GetEncoding("utf-8"))
+              $content = $streamReader.ReadToEnd()
+              $streamReader.Close()
+              $buildNumber = [int]${{ github.run_number }}
+              $content = [Regex]::Replace($content, "(\d+)\.(\d+)\.(\d+)[\.(\d+)]*", '$1.$2.$3.' + $buildNumber);
+              $match = [Regex]::Match($content, "(\d+)\.(\d+)\.(\d+)." + $buildNumber)
+              if ($match.success)
+              {
+                  $version = $match.Value
+              }
+              $streamWriter = New-Object System.IO.StreamWriter($file, $false, [System.Text.Encoding]::GetEncoding("utf-8"))
+              $streamWriter.Write($content)
+              $streamWriter.Close()
+          }
+          Write-Output "RELEASE_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Restore nuget
+        run: nuget restore "./SCADA/BryggeprogramWPF/BryggeprogramWPF.sln"
+      - name: Build solution (Release)
+        run: msbuild src/RCI.sln -t:Build -p:Configuration=Release -p:Platform=x86
+        
+      - name: Zip Artifacts
+        run: Compress-Archive './SCADA/BryggeprogramWPF/bin/Release/*' 'BryggeprogramWPF_Binaries.zip'
+          
+      - name: Upload build artifact(s)
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifacts
+          path: ./*.zip
+          
